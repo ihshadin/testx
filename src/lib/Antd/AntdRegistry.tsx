@@ -26,7 +26,7 @@ const AntdProvider = ({ children }: React.PropsWithChildren) => {
   const theme = {
     token: {
       colorPrimary: "inherit",
-      colorPrimaryBg: "inherit",
+      colorPrimaryBg: "#edf2f9",
       fontFamily: "inherit",
     },
   };

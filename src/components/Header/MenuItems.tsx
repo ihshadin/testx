@@ -5,12 +5,13 @@ import { usePathname } from "next/navigation";
 
 const menuItems = [
   { label: "Dashboard", slug: "/" },
-  { label: "Database Management", slug: "/database-management" },
-  { label: "Add New Question", slug: "/add-new-question" },
-  { label: "All Questions", slug: "/all-questions" },
+  { label: "Add Question", slug: "/add-question" },
+  { label: "Question Assignment.", slug: "/question-assignment" },
   { label: "Users Management", slug: "/users-management" },
+  { label: "Database Management", slug: "/database-management" },
+  { label: "All Questions", slug: "/all-questions" },
   { label: "Questions From Teacher", slug: "/questions-from-teacher" },
-  { label: "Your Profile", slug: "/profile" },
+  // { label: "Your Profile", slug: "/profile" },
 ];
 
 const MenuItems = () => {

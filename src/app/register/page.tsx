@@ -1,25 +1,30 @@
 "use client";
 import React, { useState } from "react";
-import { Col, Form, Input, Row, Select } from "antd";
+import { Checkbox, Col, Form, Input, Row, Select } from "antd";
 import logo from "@/assets/sites/logo.png";
 import Image from "next/image";
 import Link from "next/link";
 const SignUpPage = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedRole, setSelectedRole] = useState("");
   const [form] = Form.useForm();
 
   const onSubmit = async (data: any) => {
+    console.log(data);
     console.log("submit button is work");
   };
-
+  console.log(selectedRole);
   const userRole = [
     {
       value: "teacher",
       label: "Teacher",
+      resDesc: "Teachers will be assigned to various courses.",
     },
     {
-      value: "copywriter",
-      label: "Copy Writer",
+      value: "coordinator",
+      label: "Coordinator",
+      resDesc:
+        "Each coordinator is responsible for overseeing the quality and progress of the content development.",
     },
   ];
 
@@ -42,7 +47,7 @@ const SignUpPage = () => {
             <Col span={12}>
               <Form.Item
                 label="First Name"
-                name="firstName"
+                name="first_name"
                 rules={[{ required: true, message: "First Name is required" }]}
               >
                 <Input
@@ -55,7 +60,7 @@ const SignUpPage = () => {
             <Col span={12}>
               <Form.Item
                 label="Last Name"
-                name="lastName"
+                name="last_name"
                 rules={[{ required: true, message: "Last Name is required" }]}
               >
                 <Input
@@ -70,9 +75,11 @@ const SignUpPage = () => {
           <Row gutter={15}>
             <Col span={14}>
               <Form.Item
-                label="Password"
-                name="password"
-                rules={[{ required: true, message: "Password is required" }]}
+                label="Email Address"
+                name="email_address"
+                rules={[
+                  { required: true, message: "Email Address is required" },
+                ]}
               >
                 <Input
                   type="text"
@@ -83,9 +90,9 @@ const SignUpPage = () => {
             </Col>
             <Col span={10}>
               <Form.Item
-                label="Username"
-                name="username"
-                rules={[{ required: true, message: "Username is required" }]}
+                label="Contact No"
+                name="contact_no"
+                rules={[{ required: true, message: "Contact no is required" }]}
               >
                 <Input
                   type="text"
@@ -97,10 +104,21 @@ const SignUpPage = () => {
           </Row>
 
           <Row gutter={15}>
-            <Col span={24}>
+            <Col span={10}>
+              {/* <Form.Item
+                label="Username"
+                name="username"
+                rules={[{ required: true, message: "Username is required" }]}
+              >
+                <Input
+                  type="text"
+                  placeholder="Write here..."
+                  className="h-10 border border-[#C4CAD4] !rounded-lg"
+                />
+              </Form.Item> */}
               <Form.Item
                 label="Select Your Role"
-                name="userRole"
+                name="user_role"
                 rules={[{ required: true, message: "User Role is required" }]}
               >
                 <Select
@@ -108,8 +126,78 @@ const SignUpPage = () => {
                   showSearch
                   placeholder="Select from here..."
                   options={userRole}
+                  onChange={(value) => setSelectedRole(value)}
                   className="!h-10 *:!rounded-lg !bg-transparent"
                 />
+              </Form.Item>
+            </Col>
+            <Col span={14}>
+              <Form.Item
+                label="Select Subject"
+                name="user_subject"
+                rules={[{ required: true, message: "Subject is required" }]}
+              >
+                <Select
+                  // loading={isDataLoading}
+                  showSearch
+                  placeholder="Select from here..."
+                  options={userRole}
+                  onChange={(value) => setSelectedRole(value)}
+                  className="!h-10 *:!rounded-lg !bg-transparent"
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+
+          {selectedRole ? (
+            <Row gutter={15}>
+              <Col span={24}>
+                <p className="mb-6 text-sm text-accent/70">
+                  {
+                    userRole.find((role) => role.value === selectedRole)
+                      ?.resDesc
+                  }
+                </p>
+              </Col>
+            </Row>
+          ) : (
+            ""
+          )}
+
+          <Row gutter={15}>
+            <Col span={24}>
+              <Form.Item
+                label="Password"
+                name="password"
+                rules={[{ required: true, message: "Password is required" }]}
+              >
+                <Input.Password
+                  type="password"
+                  placeholder="Write here..."
+                  className="h-10 border border-[#C4CAD4] !rounded-lg"
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+
+          <Row>
+            <Col span={24}>
+              <Form.Item
+                name="agreement"
+                valuePropName="checked"
+                rules={[
+                  {
+                    validator: (_, value) =>
+                      value
+                        ? Promise.resolve()
+                        : Promise.reject(new Error("Should accept agreement")),
+                  },
+                ]}
+              >
+                <Checkbox>
+                  I agree to <a href="">Terms & Conditions</a> and
+                  <a href=""> Privacy Policy</a>
+                </Checkbox>
               </Form.Item>
             </Col>
           </Row>

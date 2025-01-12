@@ -1,0 +1,5 @@
+.ant-table-tbody
+  .ant-table-row.ant-table-row-selected
+  > .ant-table-cell-row-hover {
+  background-color: white !important;
+}

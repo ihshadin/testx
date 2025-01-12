@@ -2,53 +2,72 @@
 import { useState } from "react";
 import { Table } from "antd";
 import { toast } from "sonner";
-import { getUsersColumns } from "@/utils/AntdTableColumn/Users";
+import { getUsersColumns } from "@/utils/AntdTableColumn/TableColumns";
+import { TableRowSelection } from "antd/es/table/interface";
 
 const data = [
   {
     key: "1",
     userFullName: "John Doe",
+    course: "Web Development",
+    subject: "Frontend Frameworks",
     userRole: "Admin",
-    status: "visited",
+    status: "approve",
     _id: "abc123",
   },
   {
     key: "2",
     userFullName: "Jane Smith",
-    userRole: "User",
+    course: "Web Development",
+    subject: "Frontend Frameworks",
+    userRole: "Coordinator",
     status: "pending",
     _id: "def456",
   },
   {
     key: "3",
     userFullName: "Michael Brown",
-    userRole: "Moderator",
-    status: "canceled",
+    course: "Web Development",
+    subject: "Frontend Frameworks",
+    userRole: "Teacher",
+    status: "reject",
     _id: "ghi789",
   },
   {
     key: "4",
     userFullName: "Emily Davis",
-    userRole: "User",
-    status: "visited",
+    course: "Web Development",
+    subject: "Frontend Frameworks",
+    userRole: "Teacher",
+    status: "reject",
     _id: "jkl012",
   },
   {
     key: "5",
     userFullName: "Chris Johnson",
-    userRole: "Admin",
-    status: "pending",
+    course: "Web Development",
+    subject: "Frontend Frameworks",
+    userRole: "Coordinator",
+    status: "approve",
     _id: "mno345",
   },
 ];
 
 const AllUsersList = () => {
   // TODO: type any fix
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [viewDetailsModalOpen, setViewDetailsModalOpen] = useState(false);
   const [appointmentData, setAppointmentData] = useState<any>();
 
   //   const [deleteAppointment] = useDeleteAppointmentMutation();
   //   const [updateAppointmentStatus] = useUpdateAppointmentStatusMutation();
+
+  const rowSelection: TableRowSelection<any> = {
+    selectedRowKeys,
+    onChange: (newSelectedRowKeys: React.Key[]) => {
+      setSelectedRowKeys(newSelectedRowKeys);
+    },
+  };
 
   // Delete Appointment
   const handleDelete = async (id: string) => {
@@ -94,6 +113,7 @@ const AllUsersList = () => {
   return (
     <>
       <Table
+        rowSelection={rowSelection}
         columns={columns}
         dataSource={result}
         // scroll={{ x: 1000 }}
