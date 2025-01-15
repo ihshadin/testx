@@ -1,4 +1,5 @@
 "use client";
+
 import React from "react";
 import { createCache, extractStyle, StyleProvider } from "@ant-design/cssinjs";
 import type Entity from "@ant-design/cssinjs/es/Cache";
@@ -25,8 +26,8 @@ const AntdProvider = ({ children }: React.PropsWithChildren) => {
   // Custom theme settings
   const theme = {
     token: {
-      colorPrimary: "inherit",
-      colorPrimaryBg: "#edf2f9",
+      colorPrimary: "#00263E",
+      colorPrimaryBg: "#F6F7F9",
       fontFamily: "inherit",
     },
   };
