@@ -1,28 +1,37 @@
 "use client";
 import React, { useState } from "react";
 import { Col, Form, Input, Row, Select } from "antd";
+import { useGetAllCourseQuery } from "@/redux/features/course/courseApi";
+import { TCourse } from "@/types/course.type";
+import { TSubject } from "@/types/subject.type";
+import { toast } from "sonner";
+import { useAddSubjectMutation } from "@/redux/features/subject/subjectApi";
+import onsubmitErrorHandler from "@/utils/errors/onsubmitErrorHandler";
 
 const AddSubjectPage = () => {
+  const [addSubject] = useAddSubjectMutation();
+  const { data: courses, isLoading } = useGetAllCourseQuery(undefined);
   const [form] = Form.useForm();
 
-  const onSubmit = async (data: any) => {
-    console.log(data);
-    console.log("submit button is work");
-  };
+  const mapToOptions = (data: TCourse[]) =>
+    data?.map(({ _id, name }) => ({ value: _id, label: name }));
 
-  const userRole = [
-    {
-      value: "teacher",
-      label: "Teacher",
-      resDesc: "Teachers will be assigned to various courses.",
-    },
-    {
-      value: "coordinator",
-      label: "Coordinator",
-      resDesc:
-        "Each coordinator is responsible for overseeing the quality and progress of the content development.",
-    },
-  ];
+  const onSubmit = async (data: TSubject) => {
+    const toastId = toast.loading("Appointment Creating...");
+
+    try {
+      const res = await addSubject(data).unwrap();
+
+      if (res?.success) {
+        toast.success("Subject added successfully", { id: toastId });
+        form.resetFields();
+      } else {
+        toast.error("Something went wrong!", { id: toastId });
+      }
+    } catch (error: any) {
+      onsubmitErrorHandler(error, toastId);
+    }
+  };
 
   return (
     <section>
@@ -41,7 +50,7 @@ const AddSubjectPage = () => {
               <Col span={24}>
                 <Form.Item
                   label="Subject Title"
-                  name="subject_title"
+                  name="name"
                   rules={[
                     { required: true, message: "Subject Title is required" },
                   ]}
@@ -59,7 +68,7 @@ const AddSubjectPage = () => {
               <Col span={24}>
                 <Form.Item
                   label="Subject Description (Optional)"
-                  name="subject_desc"
+                  name="description"
                 >
                   <Input.TextArea
                     rows={4}
@@ -73,16 +82,17 @@ const AddSubjectPage = () => {
               <Col span={24}>
                 <Form.Item
                   label="Select Course"
-                  name="course"
+                  name="courses"
                   rules={[
                     { required: true, message: "Course Selection is required" },
                   ]}
                 >
                   <Select
-                    // loading={isDataLoading}
+                    loading={isLoading}
+                    mode="multiple"
                     showSearch
                     placeholder="Select from here..."
-                    options={userRole}
+                    options={mapToOptions(courses?.data)}
                     // onChange={(value) => setSelectedRole(value)}
                     className="!h-10 *:!rounded-lg !bg-transparent"
                   />

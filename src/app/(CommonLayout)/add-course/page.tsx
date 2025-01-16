@@ -1,12 +1,30 @@
 "use client";
 import React, { useState } from "react";
 import { Col, Form, Input, Row } from "antd";
+import { useAddCourseMutation } from "@/redux/features/course/courseApi";
+import { toast } from "sonner";
+import onsubmitErrorHandler from "@/utils/errors/onsubmitErrorHandler";
+import { TCourse } from "@/types/course.type";
 
 const AddCoursePage = () => {
+  const [addCourse] = useAddCourseMutation();
   const [form] = Form.useForm();
 
-  const onSubmit = async (data: any) => {
-    console.log("submit button is work");
+  const onSubmit = async (data: TCourse) => {
+    const toastId = toast.loading("Appointment Creating...");
+
+    try {
+      const res = await addCourse(data).unwrap();
+
+      if (res?.success) {
+        toast.success("Course added successfully", { id: toastId });
+        form.resetFields();
+      } else {
+        toast.error("Something went wrong!", { id: toastId });
+      }
+    } catch (error: any) {
+      onsubmitErrorHandler(error, toastId);
+    }
   };
 
   return (
@@ -26,7 +44,7 @@ const AddCoursePage = () => {
               <Col span={24}>
                 <Form.Item
                   label="Course Title"
-                  name="course_title"
+                  name="name"
                   rules={[
                     { required: true, message: "Course Title is required" },
                   ]}
@@ -44,7 +62,7 @@ const AddCoursePage = () => {
               <Col span={24}>
                 <Form.Item
                   label="Course Description (Optional)"
-                  name="course_desc"
+                  name="description"
                 >
                   <Input.TextArea
                     rows={4}

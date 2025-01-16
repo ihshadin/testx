@@ -1,6 +1,7 @@
 import React from "react";
 
-import { Col, Form, Row, Select, Table } from "antd";
+import { Col, Form, Row, Select } from "antd";
+import { TCourse } from "@/types/course.type";
 
 const QuesAssignFilter = ({
   onSubmit,
@@ -15,8 +16,8 @@ const QuesAssignFilter = ({
   setIsBtnDisabled,
 }: any) => {
   const [form] = Form.useForm();
-  const mapToOptions = (data: any) =>
-    data.map(({ _id, label }: any) => ({ value: _id, label }));
+  const mapToOptions = (data: TCourse[]) =>
+    data?.map(({ _id, name }) => ({ value: _id, label: name }));
 
   return (
     <>
@@ -36,6 +37,7 @@ const QuesAssignFilter = ({
             >
               <Select
                 showSearch
+                mode="multiple"
                 placeholder="Select from here..."
                 options={mapToOptions(courses)}
                 className="!h-10 !bg-transparent *:!rounded-lg "
