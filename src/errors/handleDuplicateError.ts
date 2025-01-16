@@ -1,7 +1,4 @@
-import {
-  TErrorSources,
-  TGenericErrorResponse,
-} from "@/types/serverTypes/error";
+import { TErrorSources, TGenericErrorResponse } from "@/types/error.type";
 
 const handleDuplicateError = (err: any): TGenericErrorResponse => {
   // Extract value within double quotes using regex

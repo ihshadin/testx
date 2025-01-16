@@ -1,7 +1,4 @@
-import {
-  TErrorSources,
-  TGenericErrorResponse,
-} from "@/types/serverTypes/error";
+import { TErrorSources, TGenericErrorResponse } from "@/types/error.type";
 import { ZodError, ZodIssue } from "zod";
 
 const handleZodError = (err: ZodError): TGenericErrorResponse => {

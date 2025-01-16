@@ -1,7 +1,4 @@
-import {
-  TErrorSources,
-  TGenericErrorResponse,
-} from "@/types/serverTypes/error";
+import { TErrorSources, TGenericErrorResponse } from "@/types/error.type";
 import mongoose from "mongoose";
 
 const handleCastError = (

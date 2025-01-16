@@ -78,7 +78,7 @@ const AddQuestion = () => {
                   {(fields, { add, remove }) => (
                     <>
                       {fields.map(({ key, name, ...restField }, index) => (
-                        <div className="flex items-center gap-3 mb-4">
+                        <div key={key} className="flex items-center gap-3 mb-4">
                           <span className="bg-primary/5 h-10 flex justify-center items-center px-4 rounded-lg">
                             {String.fromCharCode(65 + index)}
                           </span>
