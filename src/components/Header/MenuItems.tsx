@@ -8,6 +8,7 @@ const menuItems = [
   // { label: "Add Question", slug: "/add-question" },
   { label: "Question Assignment", slug: "/question-assignment" },
   { label: "Users Management", slug: "/users-management" },
+  { label: "Coordinator Assignment", slug: "/coordinator-assignment" },
   { label: "Question Reassignment", slug: "/question-reassignment" },
   { label: "Database Management", slug: "/database-management" },
   { label: "Completed Questions", slug: "/completed-questions" },
