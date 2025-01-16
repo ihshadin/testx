@@ -12,11 +12,11 @@ import { userUpdateValidationSchema } from "./userModule/user.validation";
 
 export async function GET(req: NextRequest) {
   try {
-    const adminVerify = verifyAdmin(req);
+    // const adminVerify = verifyAdmin(req);
 
-    if (!adminVerify) {
-      throw new ApiError(401, "Your are Unauthorized!");
-    }
+    // if (!adminVerify) {
+    //   throw new ApiError(401, "Your are Unauthorized!");
+    // }
 
     await dbConnect();
 

@@ -1,13 +1,12 @@
-import { cookies } from "next/headers";
 import dbConnect from "@/lib/dbConnect";
 import { NextRequest, NextResponse } from "next/server";
 import * as bcrypt from "bcrypt";
 import { jwtHelpers } from "@/helpers/jwtHelpers";
 import { Secret } from "jsonwebtoken";
-import ApiError from "@/errors/handleApiError";
-import { handleError } from "@/shared/handleError";
-import sendApiResponse from "@/shared/sendResponse";
-import { UserModel } from "@/models/user.model";
+import { ApiError } from "next/dist/server/api-utils";
+import { UserModel } from "../../userModule/user.model";
+import sendApiResponse from "@/utils/Response/sendResponse";
+import { handleError } from "@/utils/errors/handleError";
 
 export async function POST(request: NextRequest) {
   try {

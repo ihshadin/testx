@@ -23,6 +23,8 @@ export async function POST(request: Request) {
     const user = new UserModel(validateUser);
     const result = await user.save();
 
+    //TODO: remove password from data
+
     return sendApiResponse(NextResponse, {
       statusCode: 200,
       success: true,

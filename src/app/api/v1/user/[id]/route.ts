@@ -1,10 +1,10 @@
 import dbConnect from "@/lib/dbConnect";
 import { NextRequest, NextResponse } from "next/server";
-import ApiError from "@/errors/handleApiError";
 import { verifyAdmin } from "@/helpers/verifyAdmin";
-import sendApiResponse from "@/shared/sendResponse";
-import { handleError } from "@/shared/handleError";
-import { UserModel } from "@/models/user.model";
+import { ApiError } from "next/dist/server/api-utils";
+import { UserModel } from "../userModule/user.model";
+import sendApiResponse from "@/utils/Response/sendResponse";
+import { handleError } from "@/utils/errors/handleError";
 
 export async function GET(
   req: NextRequest,

@@ -36,6 +36,9 @@ export async function POST(request: Request) {
       process.env.JWT_EXPIRES_IN as string
     );
 
+    //TODO: hide this password
+    user.password = null;
+
     const response = NextResponse.json({
       message: "Login success!",
       success: true,

@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import seedSuperAdmin from "./supperAdmin";
-import {seedCounter} from "@/helpers/seedCounter";
 
 type ConnectionObject = {
   isConnected?: boolean;
@@ -18,7 +17,6 @@ async function dbConnect(): Promise<void> {
     await mongoose.connect(process.env.DATABASE_URL || "", {});
 
     await seedSuperAdmin();
-    await seedCounter();
 
     connection.isConnected = true;
 

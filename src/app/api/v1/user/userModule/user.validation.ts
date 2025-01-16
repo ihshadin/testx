@@ -6,15 +6,7 @@ export const userValidationSchema = z.object({
   //   password: z.string().min(1, { message: "Password is required" }),
   password: z
     .string()
-    .min(6, { message: "Password must be at least 6 characters long" })
-    .refine(
-      (password) =>
-        /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]+$/.test(password),
-      {
-        message:
-          "Password must contain at least one number and one special character",
-      }
-    ),
+    .min(6, { message: "Password must be at least 6 characters long" }),
   email: z.string().email().optional(),
   photo: z.string().optional(),
   role: z.enum(["admin", "superAdmin"]).optional(),
