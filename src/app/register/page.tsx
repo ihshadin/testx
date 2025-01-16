@@ -4,16 +4,60 @@ import { Checkbox, Col, Form, Input, Row, Select } from "antd";
 import logo from "@/assets/sites/logo.png";
 import Image from "next/image";
 import Link from "next/link";
+import { toast } from "sonner";
+import useToken from "antd/es/theme/useToken";
+import { useRouter } from "next/navigation";
 const SignUpPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedRole, setSelectedRole] = useState("");
+  // const { token } = useToken();
   const [form] = Form.useForm();
+  const router = useRouter();
 
   const onSubmit = async (data: any) => {
-    console.log(data);
-    console.log("submit button is work");
+    setIsLoading(true);
+    const toastId = toast.loading("User Register Request...");
+
+    try {
+      const { agreement, ...dataWithoutAgreement } = data;
+      console.log({ dataWithoutAgreement });
+      // delete userData.photoFile;
+
+      // console.log("userData--=>", userData);
+
+      // const userInfo = await register(userData).unwrap();
+
+      // if (userInfo.success) {
+      //   form.resetFields();
+      //   toast.success("Register Request Send", { id: toastId });
+      //   navigate("/login");
+      // }
+
+      const response = await fetch("/api/v1/user/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(dataWithoutAgreement),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Registration failed");
+      }
+
+      toast.success("Registration successful!", { id: toastId });
+      router.push("/");
+    } catch (error: any) {
+      // console.log("Error: ", error);
+      toast.error(error.message || "An error occurred during registration.", {
+        id: toastId,
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
-  console.log(selectedRole);
+
   const userRole = [
     {
       value: "teacher",
@@ -25,6 +69,20 @@ const SignUpPage = () => {
       label: "Coordinator",
       resDesc:
         "Each coordinator is responsible for overseeing the quality and progress of the content development.",
+    },
+  ];
+  const subjects = [
+    {
+      value: "math",
+      label: "Math",
+    },
+    {
+      value: "english",
+      label: "English",
+    },
+    {
+      value: "bangla",
+      label: "Bangla",
     },
   ];
 
@@ -76,7 +134,7 @@ const SignUpPage = () => {
             <Col span={14}>
               <Form.Item
                 label="Email Address"
-                name="email_address"
+                name="email"
                 rules={[
                   { required: true, message: "Email Address is required" },
                 ]}
@@ -118,7 +176,7 @@ const SignUpPage = () => {
               </Form.Item> */}
               <Form.Item
                 label="Select Your Role"
-                name="user_role"
+                name="role"
                 rules={[{ required: true, message: "User Role is required" }]}
               >
                 <Select
@@ -141,8 +199,7 @@ const SignUpPage = () => {
                   // loading={isDataLoading}
                   showSearch
                   placeholder="Select from here..."
-                  options={userRole}
-                  onChange={(value) => setSelectedRole(value)}
+                  options={subjects}
                   className="!h-10 *:!rounded-lg !bg-transparent"
                 />
               </Form.Item>

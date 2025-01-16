@@ -31,13 +31,13 @@ const AddQuestion = () => {
   return (
     <section>
       <div className="max-w-7xl mx-auto py-8 px-2 ">
-        <div className="flex flex-col md:flex-row justify-between md:items-end bg-secondary/10 border border-secondary/30 rounded-xl px-5 pt-12 pb-5 mb-5">
+        {/* <div className="flex flex-col md:flex-row justify-between md:items-end bg-secondary/10 border border-secondary/30 rounded-xl px-5 pt-12 pb-5 mb-5">
           <div className="justify-start items-center rounded-xl">
-            {/* <h6 className="text-base md:text-xl text-myColor mb-1 md:mb-2 font-archivo">
-              Add Question
-            </h6> */}
             <h4 className="text-2xl lg:text-4xl font-bold">Add Question</h4>
           </div>
+        </div> */}
+        <div className="mb-8 text-center">
+          <h4 className="text-2xl lg:text-4xl font-bold">Add Question</h4>
         </div>
         <div>
           <Form
@@ -88,7 +88,7 @@ const AddQuestion = () => {
               <Col span={10}>
                 <Form.Item
                   label="Select Your Role"
-                  name="user_role"
+                  name="role"
                   rules={[{ required: true, message: "User Role is required" }]}
                 >
                   <Select

@@ -26,8 +26,8 @@ const AntdProvider = ({ children }: React.PropsWithChildren) => {
   // Custom theme settings
   const theme = {
     token: {
-      colorPrimary: "#00263E",
-      colorPrimaryBg: "#F6F7F9",
+      colorPrimary: "inherit",
+      colorPrimaryBg: "#edf2f9",
       fontFamily: "inherit",
     },
   };

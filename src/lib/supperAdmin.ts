@@ -3,14 +3,13 @@ import { UserModel } from "@/app/api/v1/user/userModule/user.model";
 import * as bcrypt from "bcrypt";
 
 let superUser = {
-  firstName: "Super",
-  lastName: "Admin",
+  first_name: "Super",
+  last_name: "Admin",
   password: "superAdmin00@11",
   email: "superAdmin@gmail.com",
   role: USER_ROLE.superAdmin,
-  gender: "male",
-  dateOfBirth: "09-5-2024",
-  location: "New York",
+  user_subject: "English",
+  contact_no: "123456789",
 };
 
 const seedSuperAdmin = async () => {

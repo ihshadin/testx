@@ -2,27 +2,25 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { TMenu } from "@/types/menu.type";
 
-const menuItems = [
-  { label: "Dashboard", slug: "/" },
-  // { label: "Add Question", slug: "/add-question" },
-  { label: "Question Assignment", slug: "/question-assignment" },
-  { label: "Users Management", slug: "/users-management" },
-  { label: "Coordinator Assignment", slug: "/coordinator-assignment" },
-  { label: "Question Reassignment", slug: "/question-reassignment" },
-  { label: "Database Management", slug: "/database-management" },
-  { label: "Completed Questions", slug: "/completed-questions" },
-  // { label: "Questions From Teacher", slug: "/questions-from-teacher" },
-  // { label: "Your Profile", slug: "/profile" },
-];
-
-const MenuItems = () => {
+const Menu = ({ items }: { items: TMenu[] }) => {
   const currentSlug = usePathname();
   const [activeMenu, setActiveMenu] = useState(currentSlug);
 
+  const getMenuItemsByRole = (role: string) => {
+    if (role === "superAdmin") {
+      return items;
+    }
+
+    return items.filter((item) => item.roles.includes(role));
+  };
+
+  const filteredMenu = getMenuItemsByRole("superAdmin");
+
   return (
     <div className="pt-4 flex flex-wrap justify-between items-center">
-      {menuItems.map((item) => (
+      {filteredMenu.map((item) => (
         <Link
           href={item?.slug}
           key={item?.slug}
@@ -38,4 +36,4 @@ const MenuItems = () => {
   );
 };
 
-export default MenuItems;
+export default Menu;

@@ -4,15 +4,43 @@ import { Col, Form, Input, Row, theme } from "antd";
 import logo from "@/assets/sites/logo.png";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 // const { useToken } = theme;
 
 const SignInPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [form] = Form.useForm();
+  const router = useRouter();
 
   const onSubmit = async (data: any) => {
-    console.log("submit button is work");
+    setIsLoading(true);
+    try {
+      // Make the login request
+      const response = await fetch("/api/v1/user/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      // Handle non-OK responses
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Login failed");
+      }
+
+      // On success, navigate to the dashboard
+      toast.success("Login successful!");
+      router.push("/");
+    } catch (error: any) {
+      // Show error message
+      toast.error(error.message || "An error occurred during login.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -68,7 +96,7 @@ const SignInPage = () => {
             <Col span={24}>
               <div className="">
                 <button
-                  className="cursor-pointer text-base font-medium block w-full bg-primary/5 hover:bg-primary text-primary hover:text-white border border-primary/30 hover:border-primary/60 px-4 py-2 rounded-xl transition duration-150"
+                  className="cursor-pointer disabled:cursor-not-allowed text-base font-medium block w-full bg-primary/5 hover:bg-primary disabled:bg-primary/5 text-primary hover:text-white disabled:text-primary/50 border border-primary/30 hover:border-primary/60 disabled:border-primary//30 px-4 py-1.5 h-10 rounded-lg transition duration-150"
                   type="submit"
                   disabled={isLoading ? true : false}
                 >

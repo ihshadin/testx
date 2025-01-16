@@ -4,11 +4,11 @@ import { TUser } from "../../../../../types/user.type";
 
 const userSchema = new Schema<TUser>(
   {
-    firstName: {
+    first_name: {
       type: String,
       required: true,
     },
-    lastName: {
+    last_name: {
       type: String,
       required: true,
     },
@@ -20,16 +20,22 @@ const userSchema = new Schema<TUser>(
       type: String,
       required: true,
     },
-    photo: {
+    contact_no: {
       type: String,
+      required: true,
     },
-
     role: {
       type: String,
       enum: Object.values(USER_ROLE),
       required: true,
     },
-
+    user_subject: {
+      type: String,
+      required: true,
+    },
+    photo: {
+      type: String,
+    },
     isDeleted: {
       type: Boolean,
       default: false,

@@ -1,6 +1,8 @@
 export const USER_ROLE = {
   superAdmin: "superAdmin",
   admin: "admin",
+  teacher: "teacher",
+  coordinator: "coordinator",
 } as const;
 
 // Exclude 'superAdmin' and 'admin'
@@ -9,8 +11,8 @@ export const Filtered_Roles = Object.values(USER_ROLE).filter(
 ) as [string, ...string[]];
 
 export const UserSearchableFields = [
-  "firstName",
-  "lastName",
+  "first_name",
+  "last_name",
   "email",
-  "number",
+  "contact_no",
 ];
