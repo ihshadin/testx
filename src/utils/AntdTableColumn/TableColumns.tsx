@@ -62,7 +62,7 @@ export const getUsersColumns = ({
       title: "Status",
       key: "status",
       fixed: "right",
-      width: 150,
+      width: 140,
       render: (record: any) => {
         return (
           <Dropdown
@@ -178,7 +178,9 @@ export const getUnassignColumns = ({
       dataIndex: "status",
       align: "center",
       width: 100,
-      render: (_, item: any) => <p className="line-clamp-1">{item?.status}</p>,
+      render: (_, item: any) => (
+        <p className="line-clamp-1 capitalize">{item?.status}</p>
+      ),
     },
     {
       title: "Action",

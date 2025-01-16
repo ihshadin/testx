@@ -14,7 +14,7 @@ const data = [
     course: "Web Development",
     subject: "Frontend Frameworks",
     topic: "React Basics",
-    status: "Active",
+    status: "unassign",
     action: "",
   },
   {
@@ -25,7 +25,7 @@ const data = [
     course: "Web Development",
     subject: "State Management",
     topic: "Redux Concepts",
-    status: "Inactive",
+    status: "assign",
     action: "",
   },
   {
@@ -36,7 +36,7 @@ const data = [
     course: "Programming",
     subject: "Core Programming",
     topic: "JavaScript Introduction",
-    status: "Active",
+    status: "assign",
     action: "",
   },
   {
@@ -47,7 +47,7 @@ const data = [
     course: "Web Design",
     subject: "Styling",
     topic: "CSS Basics",
-    status: "Active",
+    status: "unassign",
     action: "",
   },
   {
@@ -58,7 +58,7 @@ const data = [
     course: "Backend Development",
     subject: "API Design",
     topic: "API Basics",
-    status: "Inactive",
+    status: "unassign",
     action: "",
   },
 ];
