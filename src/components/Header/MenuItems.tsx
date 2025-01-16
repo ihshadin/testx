@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 
 const menuItems = [
   { label: "Dashboard", slug: "/" },
-  { label: "Add Question", slug: "/add-question" },
+  // { label: "Add Question", slug: "/add-question" },
   { label: "Question Assignment.", slug: "/question-assignment" },
   { label: "Users Management", slug: "/users-management" },
   { label: "Database Management", slug: "/database-management" },
