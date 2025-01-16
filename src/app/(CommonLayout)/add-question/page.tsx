@@ -107,15 +107,13 @@ const AddQuestion = () => {
                         </div>
                       ))}
                       <Form.Item>
-                        {/* <Button type="dashed" onClick={() => add()} block>
-                          Add field
-                        </Button> */}
-                        <span
+                        <Button
+                          type="dashed"
                           onClick={() => add()}
-                          className="cursor-pointer text-base font-medium text-center block w-full bg-primary/5 hover:bg-primary text-primary hover:text-white border border-primary/30 hover:border-primary/60 px-4 py-2 rounded-xl transition duration-150"
+                          disabled={fields.length >= 4}
                         >
                           Add Option
-                        </span>
+                        </Button>
                       </Form.Item>
                     </>
                   )}
