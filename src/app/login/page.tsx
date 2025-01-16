@@ -5,7 +5,7 @@ import logo from "@/assets/sites/logo.png";
 import Image from "next/image";
 import Link from "next/link";
 
-const { useToken } = theme;
+// const { useToken } = theme;
 
 const SignInPage = () => {
   const [isLoading, setIsLoading] = useState(false);
