@@ -5,6 +5,8 @@ import { createCache, extractStyle, StyleProvider } from "@ant-design/cssinjs";
 import type Entity from "@ant-design/cssinjs/es/Cache";
 import { useServerInsertedHTML } from "next/navigation";
 import { ConfigProvider } from "antd";
+import { Provider } from "react-redux";
+import { store } from "@/redux/store";
 
 const AntdProvider = ({ children }: React.PropsWithChildren) => {
   const cache = React.useMemo<Entity>(() => createCache(), []);
@@ -34,7 +36,9 @@ const AntdProvider = ({ children }: React.PropsWithChildren) => {
 
   return (
     <StyleProvider cache={cache}>
-      <ConfigProvider theme={theme}>{children}</ConfigProvider>
+      <Provider store={store}>
+        <ConfigProvider theme={theme}>{children}</ConfigProvider>
+      </Provider>
     </StyleProvider>
   );
 };

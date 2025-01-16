@@ -6,10 +6,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { useGetAllCourseQuery } from "@/redux/features/course/courseApi";
 
 // const { useToken } = theme;
 
 const SignInPage = () => {
+  const { data } = useGetAllCourseQuery(undefined);
+
+  console.log("data--=>", data);
+
   const [isLoading, setIsLoading] = useState(false);
   const [form] = Form.useForm();
   const router = useRouter();
