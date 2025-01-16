@@ -21,6 +21,9 @@ import { CiSquareMinus } from "react-icons/ci";
 const AddQuestion = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedRole, setSelectedRole] = useState("");
+  const [courses, setCourses] = useState([]);
+  const [subjects, setSubjects] = useState([]);
+  const [topics, setTopics] = useState([]);
   const [form] = Form.useForm();
 
   const onSubmit = async (data: any) => {
@@ -41,6 +44,10 @@ const AddQuestion = () => {
         "Each coordinator is responsible for overseeing the quality and progress of the content development.",
     },
   ];
+
+  const mapToOptions = (data: any) =>
+    data.map(({ _id, label }: any) => ({ value: _id, label }));
+
   return (
     <section>
       <div className="max-w-7xl mx-auto py-8 px-2 ">
@@ -151,6 +158,55 @@ const AddQuestion = () => {
                 </Form.Item>
               </Col>
             </Row>
+
+            <Row gutter={15} align="bottom">
+              <Col span={9}>
+                <Form.Item
+                  label="Courses"
+                  name="courses"
+                  // rules={[{ required: true, message: "Courses is required" }]}
+                  // style={{ marginBottom: 0 }}
+                >
+                  <Select
+                    showSearch
+                    placeholder="Select from here..."
+                    options={mapToOptions(courses)}
+                    className="!h-10 !bg-transparent *:!rounded-lg "
+                  />
+                </Form.Item>
+              </Col>
+              <Col span={6}>
+                <Form.Item
+                  label="Subjects"
+                  name="subjects"
+                  // rules={[{ required: true, message: "Subjects is required" }]}
+                  // style={{ marginBottom: 0 }}
+                >
+                  <Select
+                    showSearch
+                    placeholder="Select from here..."
+                    options={mapToOptions(subjects)}
+                    className="!h-10 !bg-transparent *:!rounded-lg "
+                  />
+                </Form.Item>
+              </Col>
+              <Col span={9}>
+                <Form.Item
+                  label="Topics"
+                  name="topics"
+                  rules={[{ required: true, message: "Topics is required" }]}
+                  // style={{ marginBottom: 0 }}
+                >
+                  <Select
+                    showSearch
+                    placeholder="Select from here..."
+                    options={mapToOptions(topics)}
+                    className="!h-10 !bg-transparent *:!rounded-lg "
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
+
             <Row gutter={15}>
               <Col span={24}>
                 <Form.Item

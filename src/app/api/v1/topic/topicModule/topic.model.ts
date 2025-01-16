@@ -19,4 +19,4 @@ const TopicSchema: Schema = new Schema<TTopic>(
   }
 );
 
-export const TopicModel = models.topic || model<TTopic>("Topic", TopicSchema);
+export const TopicModel = models.Topic || model<TTopic>("Topic", TopicSchema);
