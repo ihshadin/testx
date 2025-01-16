@@ -35,8 +35,8 @@ export async function POST(req: NextRequest) {
     const validatedData = createTopicValidationSchema.parse(payload);
 
     // Create the new Topic
-    const topic = new TopicModel(validatedData);
-    const createdTopic = await topic.save();
+    const Topic = new TopicModel(validatedData);
+    const createdTopic = await Topic.save();
 
     // Send a successful response
     return sendApiResponse(NextResponse, {

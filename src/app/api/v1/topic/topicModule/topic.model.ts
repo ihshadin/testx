@@ -9,6 +9,12 @@ const TopicSchema: Schema = new Schema<TTopic>(
       trim: true,
     },
 
+    description: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
     subjects: {
       type: [{ type: Schema.Types.ObjectId, ref: "Subject" }],
       required: true,

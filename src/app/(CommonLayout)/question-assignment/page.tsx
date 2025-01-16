@@ -5,40 +5,23 @@ import UnassignQuestions from "@/components/Questions/UnassignQuestions";
 import QuesAssignFilter from "@/components/Questions/QuesAssignFilter";
 import { useGetAllCourseQuery } from "@/redux/features/course/courseApi";
 import { useGetAllSubjectQuery } from "@/redux/features/subject/subjectApi";
+import { useGetAllTopicQuery } from "@/redux/features/topic/topicApi";
 
 const QuestionAssignmentPage = () => {
-  // const [subjects, setSubjects] = useState([]);
   const { data: courses, isLoading: isCourseLoading } =
     useGetAllCourseQuery(undefined);
   const { data: subjects, isLoading: isSubjectLoading } =
     useGetAllSubjectQuery(undefined);
+  const { data: topics, isLoading: isTopicLoading } =
+    useGetAllTopicQuery(undefined);
 
-  // console.log("Course", courses?.data);
-  const [topics, setTopics] = useState([]);
   const [isSubDisabled, setIsSubDisabled] = useState(true);
   const [isTopDisabled, setIsTopDisabled] = useState(true);
   const [isBtnDisabled, setIsBtnDisabled] = useState(true);
   const [form] = Form.useForm();
-  // TODO: type problem
-
-  const topicsData: any = [
-    { _id: "1", label: "Cardiovascular", subjectId: "3" },
-    { _id: "2", label: "Musculoskeletal", subjectId: "3" },
-    { _id: "3", label: "Cellular Functions", subjectId: "1" },
-    { _id: "4", label: "Nervous System", subjectId: "4" },
-    { _id: "5", label: "Probability", subjectId: "4" },
-    { _id: "6", label: "Geometry", subjectId: "1" },
-    { _id: "7", label: "Grammar", subjectId: "1" },
-    { _id: "8", label: "Vocabulary", subjectId: "2" },
-    { _id: "9", label: "Physics", subjectId: "5" },
-    { _id: "10", label: "Chemistry", subjectId: "2" },
-    { _id: "11", label: "World War II", subjectId: "5" },
-    { _id: "12", label: "Industrial Revolution", subjectId: "6" },
-  ];
 
   const handleCourseChange = (courseId: string) => {
     form.resetFields(["subjects", "topics"]);
-    // setTopics([]);
     setIsSubDisabled(false);
     setIsTopDisabled(true);
     setIsBtnDisabled(true);
@@ -46,7 +29,6 @@ const QuestionAssignmentPage = () => {
 
   const handleSubjectChange = (subjectId: string) => {
     form.resetFields(["topics"]);
-    setTopics(topicsData.filter((topic: any) => topic.subjectId === subjectId));
     setIsTopDisabled(false);
     setIsBtnDisabled(true);
   };
@@ -63,7 +45,7 @@ const QuestionAssignmentPage = () => {
             onSubmit={onSubmit}
             courses={courses?.data}
             subjects={subjects?.data}
-            topics={topics}
+            topics={topics?.data}
             handleCourseChange={handleCourseChange}
             handleSubjectChange={handleSubjectChange}
             isSubDisabled={isSubDisabled}

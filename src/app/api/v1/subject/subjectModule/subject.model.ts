@@ -9,6 +9,11 @@ const SubjectSchema: Schema = new Schema<TSubject>(
       trim: true,
     },
 
+    description: {
+      type: String,
+      trim: true,
+    },
+
     courses: {
       type: [{ type: Schema.Types.ObjectId, ref: "Course" }],
       required: true,

@@ -54,6 +54,7 @@ const QuesAssignFilter = ({
             >
               <Select
                 showSearch
+                mode="multiple"
                 placeholder="Select from here..."
                 options={mapToOptions(subjects)}
                 className="!h-10 !bg-transparent *:!rounded-lg "
@@ -66,11 +67,12 @@ const QuesAssignFilter = ({
             <Form.Item
               label="Topics"
               name="topics"
-              rules={[{ required: true, message: "Topics is required" }]}
+              // rules={[{ required: true, message: "Topics is required" }]}
               style={{ marginBottom: 0 }}
             >
               <Select
                 showSearch
+                mode="multiple"
                 placeholder="Select from here..."
                 options={mapToOptions(topics)}
                 className="!h-10 !bg-transparent *:!rounded-lg "

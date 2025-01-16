@@ -1,28 +1,37 @@
 "use client";
 import React, { useState } from "react";
 import { Col, Form, Input, Row, Select } from "antd";
+import { TTopic } from "@/types/topic.type";
+import { toast } from "sonner";
+import onsubmitErrorHandler from "@/utils/errors/onsubmitErrorHandler";
+import { useAddTopicMutation } from "@/redux/features/topic/topicApi";
+import { useGetAllSubjectQuery } from "@/redux/features/subject/subjectApi";
+import { TSubject } from "@/types/subject.type";
 
 const AddTopicPage = () => {
+  const [addTopic] = useAddTopicMutation();
+  const { data: subjects, isLoading } = useGetAllSubjectQuery(undefined);
   const [form] = Form.useForm();
 
-  const onSubmit = async (data: any) => {
-    console.log(data);
-    console.log("submit button is work");
-  };
+  const mapToOptions = (data: TSubject[]) =>
+    data?.map(({ _id, name }) => ({ value: _id, label: name }));
 
-  const userRole = [
-    {
-      value: "teacher",
-      label: "Teacher",
-      resDesc: "Teachers will be assigned to various courses.",
-    },
-    {
-      value: "coordinator",
-      label: "Coordinator",
-      resDesc:
-        "Each coordinator is responsible for overseeing the quality and progress of the content development.",
-    },
-  ];
+  const onSubmit = async (data: TTopic) => {
+    const toastId = toast.loading("Appointment Creating...");
+
+    try {
+      const res = await addTopic(data).unwrap();
+
+      if (res?.success) {
+        toast.success("Topic added successfully", { id: toastId });
+        form.resetFields();
+      } else {
+        toast.error("Something went wrong!", { id: toastId });
+      }
+    } catch (error: any) {
+      onsubmitErrorHandler(error, toastId);
+    }
+  };
 
   return (
     <section>
@@ -41,7 +50,7 @@ const AddTopicPage = () => {
               <Col span={24}>
                 <Form.Item
                   label="Topic Title"
-                  name="topic_title"
+                  name="name"
                   rules={[
                     { required: true, message: "Topic Title is required" },
                   ]}
@@ -59,7 +68,7 @@ const AddTopicPage = () => {
               <Col span={24}>
                 <Form.Item
                   label="Topic Description (Optional)"
-                  name="topic_desc"
+                  name="description"
                 >
                   <Input.TextArea
                     rows={4}
@@ -73,7 +82,7 @@ const AddTopicPage = () => {
               <Col span={24}>
                 <Form.Item
                   label="Select Subject"
-                  name="subject"
+                  name="subjects"
                   rules={[
                     {
                       required: true,
@@ -82,10 +91,11 @@ const AddTopicPage = () => {
                   ]}
                 >
                   <Select
-                    // loading={isDataLoading}
+                    loading={isLoading}
+                    mode="multiple"
                     showSearch
                     placeholder="Select from here..."
-                    options={userRole}
+                    options={mapToOptions(subjects?.data)}
                     // onChange={(value) => setSelectedRole(value)}
                     className="!h-10 *:!rounded-lg !bg-transparent"
                   />
