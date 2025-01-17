@@ -1,30 +1,15 @@
 "use client";
+import { Logout } from "@/redux/features/auth/authSlice";
+import { useAppDispatch } from "@/redux/hooks";
 import { useRouter } from "next/navigation";
-import React from "react";
-import { toast } from "sonner";
 
 const LogOut = () => {
+  const dispatch = useAppDispatch();
   const router = useRouter();
 
   const handleLogOut = async () => {
-    try {
-      const response = await fetch("/api/logout", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      if (!response.ok) {
-        throw new Error(`Logout failed: ${response.statusText}`);
-      }
-
-      // Display success message and redirect to login
-      toast.success("Logout successful!");
-      router.push("/login"); // Use router navigation for better SPA handling
-    } catch (error: any) {
-      // Handle errors gracefully
-      toast.error(error.message || "An error occurred during logout.");
-    }
+    dispatch(Logout());
+    router.push("/login");
   };
 
   return (

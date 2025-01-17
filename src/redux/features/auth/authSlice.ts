@@ -38,7 +38,6 @@ export const { setUser, Logout } = authSlice.actions;
 
 export default authSlice.reducer;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const useCurrentToken = (state: any) => state.auth.token;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 export const useSelectCurrentUser = (state: any) => state.auth.user;

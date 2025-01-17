@@ -9,7 +9,12 @@ export const userValidationSchema = z.object({
     .min(6, { message: "Password must be at least 6 characters long" }),
   contact_no: z.string().min(1, { message: "Contact Number is required" }),
   role: z.enum(["admin", "superAdmin", "teacher", "coordinator"]).optional(),
-  user_subject: z.string().min(1, { message: "Subject is required" }),
+  courses: z
+    .array(z.string().min(1, "Invalid course ID"))
+    .nonempty("Courses are required"),
+  subjects: z
+    .array(z.string().min(1, "Invalid course ID"))
+    .nonempty("Subjects are required"),
   photo: z.string().optional(),
 });
 

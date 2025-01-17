@@ -29,8 +29,12 @@ const userSchema = new Schema<TUser>(
       enum: Object.values(USER_ROLE),
       required: true,
     },
-    user_subject: {
-      type: String,
+    courses: {
+      type: [{ type: Schema.Types.ObjectId, ref: "Course" }],
+      required: true,
+    },
+    subjects: {
+      type: [{ type: Schema.Types.ObjectId, ref: "Subject" }],
       required: true,
     },
     photo: {

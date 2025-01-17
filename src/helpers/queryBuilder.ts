@@ -32,34 +32,35 @@ class QueryBuilder<T> {
     const excludeFields = ["searchTerm", "sort", "limit", "page", "fields"];
     excludeFields.forEach((el) => delete queryObj[el]);
 
-    // for filtering in createdAt like ---=> 2024-05-05 to 2024-06-06
-    if (queryObj.createdAt && typeof queryObj.createdAt === "string") {
-      const { createdAt, ...restQueryObj } = queryObj;
-
-      const createdAtNew = createdAt.split(",");
-
-      const desiredDate = new Date(createdAtNew[0]);
-      desiredDate.setHours(0, 0, 0, 0);
-      let nextDay;
-
-      if (createdAtNew.length > 1) {
-        nextDay = new Date(createdAtNew[1]);
-        nextDay.setHours(23, 59, 59, 999);
-        restQueryObj.createdAt = {
-          $gte: desiredDate,
-          $lte: nextDay,
-        };
-      } else {
-        nextDay = new Date(desiredDate);
-        nextDay.setDate(desiredDate.getDate() + 1);
-        nextDay.setHours(0, 0, 0, 0);
-        restQueryObj.createdAt = {
-          $gte: desiredDate,
-          $lt: nextDay,
-        };
+    // Handle filtering by `courses`
+    if (queryObj.courses && typeof queryObj.courses === "string") {
+      try {
+        const parsedCourses = JSON.parse(queryObj.courses); // Parse courses as JSON
+        if (Array.isArray(parsedCourses)) {
+          queryObj.courses = { $in: parsedCourses }; // Use $in for array matching
+        } else {
+          throw new Error("Courses parameter must be an array");
+        }
+      } catch (err) {
+        throw new Error(
+          "Invalid courses parameter: must be a valid JSON array"
+        );
       }
+    }
 
-      queryObj = restQueryObj;
+    if (queryObj.subjects && typeof queryObj.subjects === "string") {
+      try {
+        const parsedCourses = JSON.parse(queryObj.subjects); // Parse courses as JSON
+        if (Array.isArray(parsedCourses)) {
+          queryObj.subjects = { $in: parsedCourses }; // Use $in for array matching
+        } else {
+          throw new Error("Subjects parameter must be an array");
+        }
+      } catch (err) {
+        throw new Error(
+          "Invalid subjects parameter: must be a valid JSON array"
+        );
+      }
     }
 
     this.modelQuery = this.modelQuery.find(queryObj as FilterQuery<T>);

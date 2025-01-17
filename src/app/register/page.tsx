@@ -5,56 +5,46 @@ import logo from "@/assets/sites/logo.png";
 import Image from "next/image";
 import Link from "next/link";
 import { toast } from "sonner";
-import useToken from "antd/es/theme/useToken";
 import { useRouter } from "next/navigation";
+import { useGetAllCourseQuery } from "@/redux/features/course/courseApi";
+import { convertParams, mapToOptions } from "@/utils";
+import { useGetAllSubjectQuery } from "@/redux/features/subject/subjectApi";
+import { useUserRegisterRequestMutation } from "@/redux/features/auth/authApi";
+import onsubmitErrorHandler from "@/utils/errors/onsubmitErrorHandler";
+import { TUser } from "@/types/user.type";
+
 const SignUpPage = () => {
-  const [isLoading, setIsLoading] = useState(false);
   const [selectedRole, setSelectedRole] = useState("");
-  // const { token } = useToken();
+  const [selCourses, setSelCourses] = useState<string[]>([]);
   const [form] = Form.useForm();
   const router = useRouter();
 
-  const onSubmit = async (data: any) => {
-    setIsLoading(true);
+  const { data: courses, isLoading: isCouLoading } =
+    useGetAllCourseQuery(undefined);
+  const { data: subjects, isLoading: isSubLoading } = useGetAllSubjectQuery(
+    convertParams("courses", selCourses)
+  );
+  const [register, { isLoading }] = useUserRegisterRequestMutation();
+
+  const handleCourseChange = (courseIds: string[]) => {
+    form.setFieldsValue({ subjects: [] });
+    setSelCourses(courseIds);
+  };
+
+  const onSubmit = async (data: TUser & { agreement: boolean }) => {
     const toastId = toast.loading("User Register Request...");
 
     try {
       const { agreement, ...dataWithoutAgreement } = data;
-      console.log({ dataWithoutAgreement });
-      // delete userData.photoFile;
 
-      // console.log("userData--=>", userData);
-
-      // const userInfo = await register(userData).unwrap();
-
-      // if (userInfo.success) {
-      //   form.resetFields();
-      //   toast.success("Register Request Send", { id: toastId });
-      //   navigate("/login");
-      // }
-
-      const response = await fetch("/api/v1/user/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(dataWithoutAgreement),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Registration failed");
+      const userInfo = await register(dataWithoutAgreement).unwrap();
+      if (userInfo.success) {
+        form.resetFields();
+        toast.success("Register Request Send", { id: toastId });
+        router.push("/");
       }
-
-      toast.success("Registration successful!", { id: toastId });
-      router.push("/");
     } catch (error: any) {
-      // console.log("Error: ", error);
-      toast.error(error.message || "An error occurred during registration.", {
-        id: toastId,
-      });
-    } finally {
-      setIsLoading(false);
+      onsubmitErrorHandler(error, toastId);
     }
   };
 
@@ -69,20 +59,6 @@ const SignUpPage = () => {
       label: "Coordinator",
       resDesc:
         "Each coordinator is responsible for overseeing the quality and progress of the content development.",
-    },
-  ];
-  const subjects = [
-    {
-      value: "math",
-      label: "Math",
-    },
-    {
-      value: "english",
-      label: "English",
-    },
-    {
-      value: "bangla",
-      label: "Bangla",
     },
   ];
 
@@ -162,6 +138,43 @@ const SignUpPage = () => {
           </Row>
 
           <Row gutter={15}>
+            <Col span={12}>
+              <Form.Item
+                label="Select Course"
+                name="courses"
+                rules={[{ required: true, message: "Course is required" }]}
+              >
+                <Select
+                  loading={isCouLoading}
+                  showSearch
+                  mode="multiple"
+                  placeholder="Select from here..."
+                  className="[&_.ant-select-selector]:!min-h-10 *:!rounded-lg !bg-transparent"
+                  options={mapToOptions(courses?.data)}
+                  onChange={handleCourseChange}
+                />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                label="Select Subject"
+                name="subjects"
+                rules={[{ required: true, message: "Subject is required" }]}
+              >
+                <Select
+                  loading={isSubLoading}
+                  showSearch
+                  mode="multiple"
+                  placeholder="Select from here..."
+                  className="[&_.ant-select-selector]:!min-h-10 *:!rounded-lg !bg-transparent"
+                  options={mapToOptions(subjects?.data)}
+                  disabled={selCourses.length === 0}
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+
+          <Row gutter={15}>
             <Col span={10}>
               {/* <Form.Item
                 label="Username"
@@ -191,16 +204,14 @@ const SignUpPage = () => {
             </Col>
             <Col span={14}>
               <Form.Item
-                label="Select Subject"
-                name="user_subject"
-                rules={[{ required: true, message: "Subject is required" }]}
+                label="Password"
+                name="password"
+                rules={[{ required: true, message: "Password is required" }]}
               >
-                <Select
-                  // loading={isDataLoading}
-                  showSearch
-                  placeholder="Select from here..."
-                  options={subjects}
-                  className="!h-10 *:!rounded-lg !bg-transparent"
+                <Input.Password
+                  type="password"
+                  placeholder="Write here..."
+                  className="h-10 border border-[#C4CAD4] !rounded-lg"
                 />
               </Form.Item>
             </Col>
@@ -220,22 +231,6 @@ const SignUpPage = () => {
           ) : (
             ""
           )}
-
-          <Row gutter={15}>
-            <Col span={24}>
-              <Form.Item
-                label="Password"
-                name="password"
-                rules={[{ required: true, message: "Password is required" }]}
-              >
-                <Input.Password
-                  type="password"
-                  placeholder="Write here..."
-                  className="h-10 border border-[#C4CAD4] !rounded-lg"
-                />
-              </Form.Item>
-            </Col>
-          </Row>
 
           <Row>
             <Col span={24}>

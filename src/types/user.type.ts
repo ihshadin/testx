@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { USER_ROLE } from "../app/api/v1/user/userModule/user.constant";
 
 export type TUser = {
@@ -8,7 +9,8 @@ export type TUser = {
   email: string;
   contact_no: string;
   role: keyof typeof USER_ROLE;
-  user_subject: string;
+  courses: Types.ObjectId[]; //FK
+  subjects: Types.ObjectId[]; //FK
   photo?: string;
   isDeleted: boolean;
 };

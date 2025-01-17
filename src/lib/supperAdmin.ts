@@ -8,7 +8,6 @@ let superUser = {
   password: "superAdmin00@11",
   email: "superAdmin@gmail.com",
   role: USER_ROLE.superAdmin,
-  user_subject: "English",
   contact_no: "123456789",
 };
 

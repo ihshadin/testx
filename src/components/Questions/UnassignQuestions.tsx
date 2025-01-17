@@ -161,7 +161,7 @@ const UnassignQuestions = () => {
                   mode="multiple"
                   placeholder="Select from here..."
                   options={mapToOptions(teachers)}
-                  className="!h-10 !bg-transparent *:!rounded-lg "
+                  className="[&_.ant-select-selector]:!min-h-10 !bg-transparent *:!rounded-lg "
                   onChange={() => setIsBtnDisabled(false)}
                   disabled={selectedRowKeys.length > 0 ? false : true}
                 />
