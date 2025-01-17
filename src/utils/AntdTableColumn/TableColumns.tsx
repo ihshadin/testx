@@ -1,3 +1,6 @@
+import { TCourse } from "@/types/course.type";
+import { TQuestion } from "@/types/question.type";
+import { TSubject } from "@/types/subject.type";
 import { MenuProps } from "antd";
 import { TableColumnsType } from "antd";
 import { Dropdown, Button, Popconfirm, Grid } from "antd";
@@ -144,34 +147,54 @@ export const getUnassignColumns = ({
       title: "Q. ID",
       key: "question_id",
       width: 80,
-      render: (_, item: any) => <p>{item?.question_id}</p>,
+      render: (_, item: TQuestion) => <p>Q{item?.question_id}</p>,
     },
     {
       title: "Question Name",
-      dataIndex: "question_name",
+      key: "title",
       width: 250,
+      render: (_, item: TQuestion) => (
+        <p className="line-clamp-2">{item?.title}</p>
+      ),
     },
     {
       title: "Question Description",
-      dataIndex: "question_desc",
+      key: "desc",
+      render: (_, item: TQuestion) => (
+        <p className="line-clamp-2">{item?.desc}</p>
+      ),
     },
     {
       title: "Course",
       key: "course",
       width: 150,
-      render: (_, item: any) => <p className="line-clamp-1">{item?.course}</p>,
+      render: (_, item: any) =>
+        item?.courses?.map((course: TCourse, index: number) => (
+          <p key={index} className="line-clamp-1">
+            {course.name}
+          </p>
+        )),
     },
     {
       title: "Subject",
-      // key: "subject",
+      key: "subjects",
       width: 120,
-      render: (_, item: any) => <p className="line-clamp-1">{item?.subject}</p>,
+      render: (_, item: any) =>
+        item?.subjects?.map((subject: TSubject, index: number) => (
+          <p key={index} className="line-clamp-1">
+            {subject.name}
+          </p>
+        )),
     },
     {
       title: "Topic",
-      dataIndex: "topic",
       width: 150,
-      render: (_, item: any) => <p className="line-clamp-1">{item?.topic}</p>,
+      render: (_, item: any) =>
+        item?.topics?.map((topic: TCourse, index: number) => (
+          <p key={index} className="line-clamp-1">
+            {topic.name}
+          </p>
+        )),
     },
     {
       title: "Status",

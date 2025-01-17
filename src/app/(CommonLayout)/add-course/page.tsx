@@ -11,7 +11,7 @@ const AddCoursePage = () => {
   const [form] = Form.useForm();
 
   const onSubmit = async (data: TCourse) => {
-    const toastId = toast.loading("Appointment Creating...");
+    const toastId = toast.loading("Course Creating...");
 
     try {
       const res = await addCourse(data).unwrap();

@@ -3,8 +3,12 @@ import React, { useState } from "react";
 import { Col, Form, Input, Row, Select } from "antd";
 import UnassignQuestions from "@/components/Questions/UnassignQuestions";
 import QuesAssignFilter from "@/components/Questions/QuesAssignFilter";
+import { useGetAllUnassignQuestionQuery } from "@/redux/features/question/questionApi";
 
 const QuestionAssignmentPage = () => {
+  const { data: questions, isLoading: isQuesLoading } =
+    useGetAllUnassignQuestionQuery(undefined);
+
   const onSubmit = (data: any) => {
     console.log("Form submitted with data:", data);
   };
@@ -16,7 +20,10 @@ const QuestionAssignmentPage = () => {
           <QuesAssignFilter onSubmit={onSubmit} />
         </div>
         <div className="mt-10">
-          <UnassignQuestions />
+          <UnassignQuestions
+            questions={questions?.data}
+            isQuesLoading={isQuesLoading}
+          />
         </div>
       </div>
     </section>
