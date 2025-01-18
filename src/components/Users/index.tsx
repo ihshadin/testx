@@ -7,65 +7,11 @@ import { TableRowSelection } from "antd/es/table/interface";
 import { useGetRolesUserQuery } from "@/redux/features/user/userApi";
 import FilterUsers from "./FilterUsers";
 
-// const data = [
-//   {
-//     key: "1",
-//     userFullName: "John Doe",
-//     course: "Web Development",
-//     subject: "Frontend Frameworks",
-//     userRole: "Admin",
-//     status: "approve",
-//     _id: "abc123",
-//   },
-//   {
-//     key: "2",
-//     userFullName: "Jane Smith",
-//     course: "Web Development",
-//     subject: "Frontend Frameworks",
-//     userRole: "Coordinator",
-//     status: "pending",
-//     _id: "def456",
-//   },
-//   {
-//     key: "3",
-//     userFullName: "Michael Brown",
-//     course: "Web Development",
-//     subject: "Frontend Frameworks",
-//     userRole: "Teacher",
-//     status: "reject",
-//     _id: "ghi789",
-//   },
-//   {
-//     key: "4",
-//     userFullName: "Emily Davis",
-//     course: "Web Development",
-//     subject: "Frontend Frameworks",
-//     userRole: "Teacher",
-//     status: "reject",
-//     _id: "jkl012",
-//   },
-//   {
-//     key: "5",
-//     userFullName: "Chris Johnson",
-//     course: "Web Development",
-//     subject: "Frontend Frameworks",
-//     userRole: "Coordinator",
-//     status: "approve",
-//     _id: "mno345",
-//   },
-// ];
-
 const AllUsersList = () => {
   const [params, setParams] = useState<any>([]);
   const { data } = useGetRolesUserQuery(params);
 
-  // TODO: type any fix
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-  const [viewDetailsModalOpen, setViewDetailsModalOpen] = useState(false);
-  const [appointmentData, setAppointmentData] = useState<any>();
-
-  //   const [deleteAppointment] = useDeleteAppointmentMutation();
-  //   const [updateAppointmentStatus] = useUpdateAppointmentStatusMutation();
 
   const rowSelection: TableRowSelection<any> = {
     selectedRowKeys,

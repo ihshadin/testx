@@ -10,6 +10,9 @@ import { createQuestionValidationSchema } from "./questionModule/question.valida
 import { QuestionModel } from "./questionModule/question.model";
 import { questionSearchableFields } from "./questionModule/question.constant";
 import { SubjectModel } from "../subject/subjectModule/subject.model";
+import { CourseModel } from "../course/courseModule/course.model";
+import { TopicModel } from "../topic/topicModule/topic.model";
+import { UserModel } from "../user/userModule/user.model";
 
 export async function POST(req: NextRequest) {
   try {
@@ -62,13 +65,23 @@ export async function POST(req: NextRequest) {
 
 export async function GET(req: NextRequest) {
   try {
+    const adminVerify = verifyAdmin(req);
+    if (!adminVerify) {
+      throw new ApiError(401, "Unauthorized");
+    }
+
     await dbConnect();
+    await CourseModel;
     await SubjectModel;
+    await UserModel;
 
     const allQueries = queryHelpers(req);
 
     const questionQuery = new QueryBuilder(
-      QuestionModel.find().populate("subjects"),
+      QuestionModel.find()
+        .populate("courses")
+        .populate("subjects")
+        .populate("teachers"),
       allQueries
     )
       .search(questionSearchableFields)
@@ -77,7 +90,7 @@ export async function GET(req: NextRequest) {
       .paginate()
       .fields();
 
-    const result = await questionQuery.modelQuery;
+    const data = await questionQuery.modelQuery;
     const meta = await questionQuery.countTotal();
 
     return sendApiResponse(NextResponse, {
@@ -85,7 +98,7 @@ export async function GET(req: NextRequest) {
       success: true,
       message: "Retrieve all question successfully",
       meta,
-      data: result,
+      data,
     });
   } catch (error: any) {
     return handleError(error, NextResponse);

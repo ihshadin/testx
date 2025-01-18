@@ -67,7 +67,7 @@ export async function PATCH(req: NextRequest) {
     // Get the payload from the request
     const payload = await req.json();
 
-    const { questionIds, teachers } = payload;
+    const { questionIds, teachers, status } = payload;
 
     if (
       !questionIds ||
@@ -96,7 +96,7 @@ export async function PATCH(req: NextRequest) {
         update: {
           $set: {
             teacher: teachers,
-            status: "assigned",
+            status: status,
             ...validateData,
           },
         },

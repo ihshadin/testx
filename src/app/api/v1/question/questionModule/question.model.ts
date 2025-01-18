@@ -43,7 +43,7 @@ const QuestionSchema: Schema = new Schema<TQuestion>(
       type: [String],
     },
     teachers: {
-      type: [String],
+      type: [{ type: Schema.Types.ObjectId, ref: "User" }],
     },
     status: {
       type: String,

@@ -52,7 +52,7 @@ const QuestionAssignmentPage = () => {
 
     setParams(convertToCustomArray(data));
   };
-  console.log(params);
+
   useEffect(() => {}, [params]);
 
   return (
