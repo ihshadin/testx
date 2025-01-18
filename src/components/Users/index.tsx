@@ -4,7 +4,8 @@ import { Table } from "antd";
 import { toast } from "sonner";
 import { getUsersColumns } from "@/utils/AntdTableColumn/TableColumns";
 import { TableRowSelection } from "antd/es/table/interface";
-import { useGetAllUserQuery } from "@/redux/features/user/userApi";
+import { useGetRolesUserQuery } from "@/redux/features/user/userApi";
+import FilterUsers from "./FilterUsers";
 
 // const data = [
 //   {
@@ -55,8 +56,8 @@ import { useGetAllUserQuery } from "@/redux/features/user/userApi";
 // ];
 
 const AllUsersList = () => {
-  const [params, setParams] = useState([]);
-  const { data } = useGetAllUserQuery(params);
+  const [params, setParams] = useState<any>([]);
+  const { data } = useGetRolesUserQuery(params);
 
   console.log("data--=>", data);
 
@@ -108,6 +109,19 @@ const AllUsersList = () => {
     // }
   };
 
+  const onSubmit = (data: Record<string, unknown>) => {
+    const convertToCustomArray = (filters: any) => {
+      return Object.entries(filters)
+        .filter(([_, value]: any) => value.length > 0)
+        .map(([key, value]) => ({
+          name: key,
+          value: JSON.stringify(value),
+        }));
+    };
+
+    setParams(convertToCustomArray(data));
+  };
+
   const columns = getUsersColumns({
     handleUpdateStatus,
     handleDelete,
@@ -118,11 +132,14 @@ const AllUsersList = () => {
 
   return (
     <>
+      <div className="mb-10">
+        <FilterUsers onSubmit={onSubmit} />
+      </div>
       <Table
         rowSelection={rowSelection}
         columns={columns}
         dataSource={result}
-        // scroll={{ x: 1000 }}
+        // scroll={{ x: 1200 }}
         pagination={false}
       />
     </>

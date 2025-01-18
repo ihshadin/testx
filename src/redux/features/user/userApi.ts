@@ -22,6 +22,25 @@ const userApi = baseApi.injectEndpoints({
       providesTags: ["user"],
     }),
 
+    getRolesUser: builder.query({
+      query: (args) => {
+        const params = new URLSearchParams();
+
+        if (args) {
+          args?.forEach((item: TQueryParam) => {
+            params?.append(item.name, item.value as string);
+          });
+        }
+
+        return {
+          url: "/user/roles",
+          method: "GET",
+          params,
+        };
+      },
+      providesTags: ["user"],
+    }),
+
     getUser: builder.query({
       query: () => {
         return {
@@ -67,6 +86,7 @@ const userApi = baseApi.injectEndpoints({
 
 export const {
   useGetUserQuery,
+  useGetRolesUserQuery,
   useUpdateUserMutation,
   useAddNewUserMutation,
   useGetAllUserQuery,

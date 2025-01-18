@@ -3,7 +3,7 @@ import { TQuestion } from "@/types/question.type";
 import { TSubject } from "@/types/subject.type";
 import { MenuProps } from "antd";
 import { TableColumnsType } from "antd";
-import { Dropdown, Button, Popconfirm, Grid } from "antd";
+import { Dropdown, Button, Popconfirm } from "antd";
 import { AiFillDelete } from "react-icons/ai";
 import { IoIosArrowDown } from "react-icons/io";
 
@@ -42,6 +42,7 @@ export const getUsersColumns = ({
     },
     {
       title: "User Full Name",
+
       dataIndex: "userFullName",
       render: (_, item: any) => (
         <p className="line-clamp-1">
@@ -82,7 +83,7 @@ export const getUsersColumns = ({
       title: "Status",
       key: "status",
       fixed: "right",
-      width: 140,
+      width: 150,
       render: (record: any) => {
         return (
           <Dropdown

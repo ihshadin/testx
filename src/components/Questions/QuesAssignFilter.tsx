@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 
 import { Col, Form, Row, Select } from "antd";
-import { TCourse } from "@/types/course.type";
 import { useGetAllCourseQuery } from "@/redux/features/course/courseApi";
 import { useGetAllSubjectQuery } from "@/redux/features/subject/subjectApi";
 import { useGetAllTopicQuery } from "@/redux/features/topic/topicApi";

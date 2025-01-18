@@ -1,5 +1,4 @@
 import AllUsersList from "@/components/Users";
-import FilterUsers from "@/components/Users/FilterUsers";
 import React from "react";
 
 const UserManagementPage = () => {
@@ -17,10 +16,8 @@ const UserManagementPage = () => {
             </h4>
           </div>
         </div> */}
+
         <div>
-          <FilterUsers />
-        </div>
-        <div className="mt-10">
           <AllUsersList />
         </div>
       </div>
