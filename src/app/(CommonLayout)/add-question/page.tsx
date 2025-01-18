@@ -6,6 +6,7 @@ import {
   Col,
   Form,
   Input,
+  InputNumber,
   Radio,
   Row,
   Select,
@@ -17,41 +18,91 @@ import Link from "next/link";
 import { FaRegMinusSquare } from "react-icons/fa";
 import { PiMinusLight, PiMinusSquareThin } from "react-icons/pi";
 import { CiSquareMinus } from "react-icons/ci";
+import { optional } from "zod";
+import { TQuestion } from "@/types/question.type";
+import { useAddQuestionMutation } from "@/redux/features/question/questionApi";
+import { toast } from "sonner";
+import onsubmitErrorHandler from "@/utils/errors/onsubmitErrorHandler";
+import { useGetAllCourseQuery } from "@/redux/features/course/courseApi";
+import { useGetAllSubjectQuery } from "@/redux/features/subject/subjectApi";
+import { useGetAllTopicQuery } from "@/redux/features/topic/topicApi";
+import { convertParams, mapToOptions } from "@/utils";
 
 const AddQuestion = () => {
+  const [selCourses, setSelCourses] = useState<string[]>([]);
+  const [selSubjects, setSelSubjects] = useState<string[]>([]);
+  const [selTopics, setSelTopics] = useState<string[]>([]);
+
+  const [addQuestion] = useAddQuestionMutation();
   const [isLoading, setIsLoading] = useState(false);
   const [selectedRole, setSelectedRole] = useState("");
-  const [courses, setCourses] = useState([]);
-  const [subjects, setSubjects] = useState([]);
-  const [topics, setTopics] = useState([]);
+  // const [courses, setCourses] = useState([]);
+  // const [subjects, setSubjects] = useState([]);
+  // const [topics, setTopics] = useState([]);
   const [form] = Form.useForm();
 
-  const onSubmit = async (data: any) => {
-    console.log(data);
-    console.log("submit button is work");
-  };
-  console.log(selectedRole);
-  const userRole = [
-    {
-      value: "teacher",
-      label: "Teacher",
-      resDesc: "Teachers will be assigned to various courses.",
-    },
-    {
-      value: "coordinator",
-      label: "Coordinator",
-      resDesc:
-        "Each coordinator is responsible for overseeing the quality and progress of the content development.",
-    },
-  ];
+  const { data: courses, isLoading: isCouLoading } =
+    useGetAllCourseQuery(undefined);
+  const { data: subjects, isLoading: isSubLoading } = useGetAllSubjectQuery(
+    convertParams("courses", selCourses)
+  );
+  const { data: topics, isLoading: isToLoading } = useGetAllTopicQuery(
+    convertParams("subjects", selSubjects)
+  );
 
-  const mapToOptions = (data: any) =>
-    data.map(({ _id, label }: any) => ({ value: _id, label }));
+  const handleCourseChange = (courseIds: string[]) => {
+    form.setFieldsValue({ subjects: [], topics: [] });
+    setSelCourses(courseIds);
+    setSelSubjects([]);
+    setSelTopics([]);
+  };
+
+  const handleSubjectChange = (courseIds: string[]) => {
+    form.setFieldsValue({ topics: [] });
+    setSelSubjects(courseIds);
+    setSelTopics([]);
+  };
+
+  const onSubmit = async (data: TQuestion) => {
+    // const { options, ...rest } = data;
+    // Transform options array into the desired object format
+    // const formattedOptions = options.reduce(
+    //   (
+    //     acc: Record<string, string>,
+    //     curr: { option: string },
+    //     index: number
+    //   ) => {
+    //     acc[`option-${String.fromCharCode(65 + index)}`] = curr.option;
+    //     return acc;
+    //   },
+    //   {}
+    // );
+
+    // const finalData = {
+    //   ...rest,
+    //   options: formattedOptions,
+    // };
+
+    const toastId = toast.loading("Question Creating...");
+
+    try {
+      const res = await addQuestion(data).unwrap();
+
+      if (res?.success) {
+        toast.success("Question added successfully", { id: toastId });
+        form.resetFields();
+      } else {
+        toast.error("Something went wrong!", { id: toastId });
+      }
+    } catch (error: any) {
+      onsubmitErrorHandler(error, toastId);
+    }
+  };
 
   return (
     <section>
       <div className="max-w-7xl mx-auto py-8 px-2 ">
-        <div className="mb-8 text-left">
+        <div className="mb-5 text-left">
           <h4 className="text-xl lg:text-2xl font-bold">Add Question</h4>
         </div>
         <div>
@@ -65,7 +116,7 @@ const AddQuestion = () => {
               <Col span={24}>
                 <Form.Item
                   label="Question Title"
-                  name="question_title"
+                  name="title"
                   rules={[
                     { required: true, message: "Question Title is required" },
                   ]}
@@ -81,7 +132,7 @@ const AddQuestion = () => {
 
             <Row gutter={30}>
               <Col span={17}>
-                <Form.List name="users">
+                <Form.List name="options">
                   {(fields, { add, remove }) => (
                     <>
                       {fields.map(({ key, name, ...restField }, index) => (
@@ -91,7 +142,7 @@ const AddQuestion = () => {
                           </span>
                           <Form.Item
                             {...restField}
-                            name={[name, "first"]}
+                            name={[name]}
                             rules={[
                               {
                                 required: true,
@@ -129,6 +180,22 @@ const AddQuestion = () => {
 
               <Col span={7}>
                 <Form.Item
+                  label="Question ID"
+                  name="question_id"
+                  rules={[
+                    { required: true, message: "Question ID is required" },
+                  ]}
+                  style={{ marginBottom: "10px" }}
+                >
+                  <InputNumber
+                    placeholder="Write here..."
+                    className="h-10 border border-[#C4CAD4] !rounded-lg !w-full"
+                    minLength={3}
+                    maxLength={5}
+                    prefix="Q"
+                  />
+                </Form.Item>
+                <Form.Item
                   label="Domain (Optional)"
                   name="domain"
                   style={{ marginBottom: "10px" }}
@@ -142,18 +209,12 @@ const AddQuestion = () => {
                 <Form.Item
                   name="difficulty_level"
                   label="Difficulty Level"
-                  rules={[{ required: true, message: "Please pick an item!" }]}
+                  rules={[{ required: true, message: "Please select a level" }]}
                 >
-                  <Radio.Group defaultValue={"easy"} size="large">
-                    <Radio.Button value="easy" className="">
-                      Easy
-                    </Radio.Button>
-                    <Radio.Button value="medium" className="h-10">
-                      Medium
-                    </Radio.Button>
-                    <Radio.Button value="hard" className="h-10">
-                      Hard
-                    </Radio.Button>
+                  <Radio.Group size="large">
+                    <Radio.Button value="easy">Easy</Radio.Button>
+                    <Radio.Button value="medium">Medium</Radio.Button>
+                    <Radio.Button value="hard">Hard</Radio.Button>
                   </Radio.Group>
                 </Form.Item>
               </Col>
@@ -161,47 +222,43 @@ const AddQuestion = () => {
 
             <Row gutter={15} align="bottom">
               <Col span={9}>
-                <Form.Item
-                  label="Courses"
-                  name="courses"
-                  // rules={[{ required: true, message: "Courses is required" }]}
-                  // style={{ marginBottom: 0 }}
-                >
+                <Form.Item label="Courses" name="courses">
                   <Select
+                    loading={isCouLoading}
                     showSearch
+                    mode="multiple"
                     placeholder="Select from here..."
-                    options={mapToOptions(courses)}
-                    className="!h-10 !bg-transparent *:!rounded-lg "
+                    options={mapToOptions(courses?.data)}
+                    className="[&_.ant-select-selector]:!min-h-10 !bg-transparent *:!rounded-lg "
+                    onChange={handleCourseChange}
                   />
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item
-                  label="Subjects"
-                  name="subjects"
-                  // rules={[{ required: true, message: "Subjects is required" }]}
-                  // style={{ marginBottom: 0 }}
-                >
+                <Form.Item label="Subjects" name="subjects">
                   <Select
+                    loading={isSubLoading}
                     showSearch
+                    mode="multiple"
                     placeholder="Select from here..."
-                    options={mapToOptions(subjects)}
-                    className="!h-10 !bg-transparent *:!rounded-lg "
+                    options={mapToOptions(subjects?.data)}
+                    className="[&_.ant-select-selector]:!min-h-10 !bg-transparent *:!rounded-lg "
+                    onChange={handleSubjectChange}
+                    disabled={selCourses.length === 0}
                   />
                 </Form.Item>
               </Col>
               <Col span={9}>
-                <Form.Item
-                  label="Topics"
-                  name="topics"
-                  rules={[{ required: true, message: "Topics is required" }]}
-                  // style={{ marginBottom: 0 }}
-                >
+                <Form.Item label="Topics" name="topics">
                   <Select
+                    loading={isToLoading}
                     showSearch
+                    mode="multiple"
                     placeholder="Select from here..."
-                    options={mapToOptions(topics)}
-                    className="!h-10 !bg-transparent *:!rounded-lg "
+                    options={mapToOptions(topics?.data)}
+                    className="[&_.ant-select-selector]:!min-h-10 !bg-transparent *:!rounded-lg"
+                    disabled={selSubjects.length === 0}
+                    onChange={(topicsIds) => setSelTopics(topicsIds)}
                   />
                 </Form.Item>
               </Col>
@@ -211,7 +268,7 @@ const AddQuestion = () => {
               <Col span={24}>
                 <Form.Item
                   label="Question Description"
-                  name="question_desc"
+                  name="desc"
                   rules={[
                     {
                       required: true,
@@ -227,75 +284,6 @@ const AddQuestion = () => {
                 </Form.Item>
               </Col>
             </Row>
-
-            {/* <Row gutter={15}>
-              <Col span={10}>
-                <Form.Item
-                  label="Select Your Role"
-                  name="role"
-                  rules={[{ required: true, message: "User Role is required" }]}
-                >
-                  <Select
-                    // loading={isDataLoading}
-                    showSearch
-                    placeholder="Select from here..."
-                    options={userRole}
-                    onChange={(value) => setSelectedRole(value)}
-                    className="!h-10 *:!rounded-lg !bg-transparent"
-                  />
-                </Form.Item>
-              </Col>
-              <Col span={14}>
-                <Form.Item
-                  label="Password"
-                  name="password"
-                  rules={[{ required: true, message: "Password is required" }]}
-                >
-                  <Input.TextArea
-                    placeholder="Write here..."
-                    className="h-10 border border-[#C4CAD4] !rounded-lg"
-                  />
-                </Form.Item>
-              </Col>
-            </Row> */}
-            {/* {selectedRole ? (
-              <Row gutter={15}>
-                <Col span={24}>
-                  <p className="mb-6 text-sm text-accent/70">
-                    {
-                      userRole.find((role) => role.value === selectedRole)
-                        ?.resDesc
-                    }
-                  </p>
-                </Col>
-              </Row>
-            ) : (
-              ""
-            )} */}
-
-            {/* <Row>
-              <Col span={24}>
-                <Form.Item
-                  name="agreement"
-                  valuePropName="checked"
-                  rules={[
-                    {
-                      validator: (_, value) =>
-                        value
-                          ? Promise.resolve()
-                          : Promise.reject(
-                              new Error("Should accept agreement")
-                            ),
-                    },
-                  ]}
-                >
-                  <Checkbox>
-                    I agree to <a href="">Terms & Conditions</a> and
-                    <a href=""> Privacy Policy</a>
-                  </Checkbox>
-                </Form.Item>
-              </Col>
-            </Row> */}
 
             <Row>
               <Col span={24}>

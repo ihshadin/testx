@@ -31,11 +31,11 @@ const menuItems = [
     slug: "/question-reassignment",
     roles: ["admin"],
   },
-  {
-    label: "Database Management",
-    slug: "/database-management",
-    roles: ["admin", "coordinator"],
-  },
+  // {
+  //   label: "Database Management",
+  //   slug: "/database-management",
+  //   roles: ["admin", "coordinator"],
+  // },
   {
     label: "Completed Questions",
     slug: "/completed-questions",

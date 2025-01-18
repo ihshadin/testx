@@ -13,8 +13,7 @@ export async function POST(request: Request) {
     const { email, password } = await request.json();
 
     // find the user
-    const user = await UserModel.findOne({ email, isDeleted: false });
-
+    const user = await UserModel.findOne({ email });
     if (!user) {
       throw new ApiError(404, "User not found!");
     }
@@ -42,7 +41,10 @@ export async function POST(request: Request) {
     const response = NextResponse.json({
       message: "Login success!",
       success: true,
-      data: user,
+      data: {
+        user,
+        accessToken,
+      },
     });
 
     response.cookies.set("accessToken", accessToken, {

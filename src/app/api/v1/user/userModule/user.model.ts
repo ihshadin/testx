@@ -1,5 +1,5 @@
 import { Schema, model, models } from "mongoose";
-import { USER_ROLE } from "./user.constant";
+import { USER_ROLE, USER_STATUS } from "./user.constant";
 import { TUser } from "../../../../../types/user.type";
 
 const userSchema = new Schema<TUser>(
@@ -29,8 +29,17 @@ const userSchema = new Schema<TUser>(
       enum: Object.values(USER_ROLE),
       required: true,
     },
-    user_subject: {
+    status: {
       type: String,
+      enum: Object.values(USER_STATUS),
+      required: true,
+    },
+    courses: {
+      type: [{ type: Schema.Types.ObjectId, ref: "Course" }],
+      required: true,
+    },
+    subjects: {
+      type: [{ type: Schema.Types.ObjectId, ref: "Subject" }],
       required: true,
     },
     photo: {

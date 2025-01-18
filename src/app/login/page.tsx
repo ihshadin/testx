@@ -1,50 +1,36 @@
 "use client";
-import React, { useState } from "react";
-import { Col, Form, Input, Row, theme } from "antd";
+import { Col, Form, Input, Row } from "antd";
 import logo from "@/assets/sites/logo.png";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { useGetAllCourseQuery } from "@/redux/features/course/courseApi";
-
-// const { useToken } = theme;
+import { useLoginMutation } from "@/redux/features/auth/authApi";
+import { verifyToken } from "@/utils/VerifyToken";
+import { useAppDispatch } from "@/redux/hooks";
+import { setUser } from "@/redux/features/auth/authSlice";
+import onsubmitErrorHandler from "@/utils/errors/onsubmitErrorHandler";
 
 const SignInPage = () => {
-  const { data } = useGetAllCourseQuery(undefined);
-
-  console.log("data--=>", data);
-
-  const [isLoading, setIsLoading] = useState(false);
+  const [login] = useLoginMutation();
   const [form] = Form.useForm();
   const router = useRouter();
+  const dispatch = useAppDispatch();
 
   const onSubmit = async (data: any) => {
-    setIsLoading(true);
+    const toastId = toast.loading("login User...");
+
     try {
-      // Make the login request
-      const response = await fetch("/api/v1/user/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+      const res = await login(data).unwrap();
+      const user = verifyToken(res?.data?.accessToken);
+      dispatch(setUser({ user: user, token: res?.data?.accessToken }));
 
-      // Handle non-OK responses
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Login failed");
+      if (user) {
+        toast.success("Logged In successful!", { id: toastId });
+        router.push(`/`);
       }
-
-      // On success, navigate to the dashboard
-      toast.success("Login successful!");
-      router.push("/");
     } catch (error: any) {
-      // Show error message
-      toast.error(error.message || "An error occurred during login.");
-    } finally {
-      setIsLoading(false);
+      onsubmitErrorHandler(error, toastId);
     }
   };
 
@@ -67,7 +53,6 @@ const SignInPage = () => {
               <Form.Item
                 label="Enter your email"
                 name="email"
-                // initialValue={"jahidmorol2@gmail.com"}
                 tooltip="Here you have to input  your email."
                 rules={[{ required: true, message: "Email is required" }]}
               >
@@ -84,7 +69,6 @@ const SignInPage = () => {
               <Form.Item
                 label="Your Password"
                 name="password"
-                // initialValue={"Jahid00@11"}
                 tooltip="Here you have to input your Password."
                 rules={[{ required: true, message: "Password is Required!" }]}
               >
@@ -103,9 +87,8 @@ const SignInPage = () => {
                 <button
                   className="cursor-pointer disabled:cursor-not-allowed text-base font-medium block w-full bg-primary/5 hover:bg-primary disabled:bg-primary/5 text-primary hover:text-white disabled:text-primary/50 border border-primary/30 hover:border-primary/60 disabled:border-primary//30 px-4 py-1.5 h-10 rounded-lg transition duration-150"
                   type="submit"
-                  disabled={isLoading ? true : false}
                 >
-                  {isLoading ? "Loading..." : "Login"}
+                  Login
                 </button>
               </div>
             </Col>

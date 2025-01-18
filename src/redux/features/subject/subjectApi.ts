@@ -12,6 +12,7 @@ const subjectApi = baseApi.injectEndpoints({
             params?.append(item.name, item.value as string);
           });
         }
+
         return {
           url: "/subject",
           method: "GET",
