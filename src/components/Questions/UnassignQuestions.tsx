@@ -54,14 +54,13 @@ const UnassignQuestions = ({ questions, isQuesLoading }: TQuestions) => {
     handleDelete,
   });
 
-  const result = questions;
-
   const onSubmit = async (data: any) => {
     const toastId = toast.loading("Assigning teacher...");
 
     const filteredData = {
       questionIds: selectedRowKeys,
       teachers: data?.teachers,
+      status: "assigned",
     };
 
     try {
@@ -127,7 +126,7 @@ const UnassignQuestions = ({ questions, isQuesLoading }: TQuestions) => {
         loading={isQuesLoading}
         rowSelection={rowSelection}
         columns={columns}
-        dataSource={result}
+        dataSource={questions}
         scroll={{ x: 1500 }}
         pagination={false}
       />

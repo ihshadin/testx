@@ -1,26 +1,27 @@
 "use client";
 import React, { useState } from "react";
-import { Col, Form, Input, Row, Select } from "antd";
-import UnassignQuestions from "@/components/Questions/UnassignQuestions";
 import { useGetAllQuestionQuery } from "@/redux/features/question/questionApi";
 import AssignQuestions from "@/components/Questions/AssignQuestions";
 
 const QuestionReassignmentPage = () => {
-  const [searchTeacher, setSearchTeacher] = useState("");
+  const [searchTeacher, setSearchTeacher] = useState([]);
   const [params, setParams] = useState<any>([
     { name: "status", value: "assigned" },
   ]);
   const { data: questions, isLoading: isQuesLoading } =
     useGetAllQuestionQuery(params);
 
-  console.log(searchTeacher);
   const handleTeacher = () => {
-    if (searchTeacher) {
-      setParams((prevParams: any) => [
-        ...prevParams,
-        { name: "teacher", value: searchTeacher },
-      ]);
-    }
+    setParams((prevParams: any) => {
+      const updatedParams =
+        searchTeacher.length > 0
+          ? [
+              ...prevParams.filter((param: any) => param.name !== "teachers"),
+              { name: "teachers", value: JSON.stringify(searchTeacher) },
+            ]
+          : [{ name: "status", value: "assigned" }];
+      return updatedParams;
+    });
   };
 
   return (

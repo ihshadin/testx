@@ -1,6 +1,7 @@
 import { TCourse } from "@/types/course.type";
 import { TQuestion } from "@/types/question.type";
 import { TSubject } from "@/types/subject.type";
+import { TUser } from "@/types/user.type";
 import { MenuProps } from "antd";
 import { TableColumnsType } from "antd";
 import { Dropdown, Button, Popconfirm } from "antd";
@@ -245,5 +246,103 @@ export const getUnassignColumns = ({
         </div>
       ),
     },
+  ];
+};
+
+export const getAssignColumns = ({
+  handleDelete,
+}: any): TableColumnsType<any> => {
+  return [
+    {
+      title: "SL",
+      width: 50,
+      align: "center",
+      render: (_, __: any, index: number) => <p>{index + 1}</p>,
+    },
+    {
+      title: "Q. ID",
+      key: "question_id",
+      width: 80,
+      render: (_, item: TQuestion) => <p>Q{item?.question_id}</p>,
+    },
+    {
+      title: "Teachers",
+      key: "teachers",
+      width: 150,
+      render: (_, item: any) =>
+        item?.teachers?.map((teacher: TUser, index: number) => (
+          <p key={index} className="line-clamp-1">
+            {teacher?.first_name + " " + teacher?.last_name}
+          </p>
+        )),
+    },
+    {
+      title: "Question Name",
+      key: "title",
+      width: 250,
+      render: (_, item: TQuestion) => (
+        <p className="line-clamp-2">{item?.title}</p>
+      ),
+    },
+    {
+      title: "Question Description",
+      key: "desc",
+      render: (_, item: TQuestion) => (
+        <p className="line-clamp-2">{item?.desc}</p>
+      ),
+    },
+    {
+      title: "Course",
+      key: "course",
+      width: 170,
+      render: (_, item: any) =>
+        item?.courses?.map((course: TCourse, index: number) => (
+          <p key={index} className="line-clamp-1">
+            {course.name}
+          </p>
+        )),
+    },
+    {
+      title: "Subject",
+      key: "subjects",
+      width: 150,
+      render: (_, item: any) =>
+        item?.subjects?.map((subject: TSubject, index: number) => (
+          <p key={index} className="line-clamp-1">
+            {subject.name}
+          </p>
+        )),
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      align: "center",
+      width: 120,
+      render: (_, item: any) => (
+        <p className="line-clamp-1 capitalize">{item?.status}</p>
+      ),
+    },
+    // {
+    //   title: "Action",
+    //   align: "center",
+    //   fixed: "right",
+    //   width: 80,
+    //   render: (_, record) => (
+    //     <div className="flex justify-center gap-2">
+    //       <Popconfirm
+    //         title="Delete the user"
+    //         description="Are you sure to delete this user?"
+    //         placement="topRight"
+    //         onConfirm={() => handleDelete(record._id)}
+    //         okText="Yes"
+    //         cancelText="No"
+    //       >
+    //         <Button>
+    //           <AiFillDelete fontSize={16} />
+    //         </Button>
+    //       </Popconfirm>
+    //     </div>
+    //   ),
+    // },
   ];
 };

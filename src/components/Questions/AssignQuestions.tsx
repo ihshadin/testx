@@ -2,7 +2,10 @@
 import { Dispatch, useState } from "react";
 import { Col, Form, Row, Select, Table } from "antd";
 import { toast } from "sonner";
-import { getUnassignColumns } from "@/utils/AntdTableColumn/TableColumns";
+import {
+  getAssignColumns,
+  getUnassignColumns,
+} from "@/utils/AntdTableColumn/TableColumns";
 import { TableRowSelection } from "antd/es/table/interface";
 import { TQuestion, TQuestions } from "@/types/question.type";
 import onsubmitErrorHandler from "@/utils/errors/onsubmitErrorHandler";
@@ -20,6 +23,7 @@ const AssignQuestions = ({
   setSearchTeacher,
 }: TQuestions) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+  const [reassignTeacher, setReassignTeacher] = useState([]);
   const [isBtnDisabled, setIsBtnDisabled] = useState(true);
   const [form] = Form.useForm();
 
@@ -50,18 +54,17 @@ const AssignQuestions = ({
     }
   };
 
-  const columns = getUnassignColumns({
+  const columns = getAssignColumns({
     handleDelete,
   });
 
-  const result = questions;
-
-  const onSubmit = async (data: any) => {
+  const handleReassignTeacher = async () => {
     const toastId = toast.loading("Assigning teacher...");
 
     const filteredData = {
       questionIds: selectedRowKeys,
-      teachers: data?.teachers,
+      teachers: reassignTeacher,
+      status: "assigned",
     };
 
     try {
@@ -89,7 +92,7 @@ const AssignQuestions = ({
             <p className="mb-1">Search Teacher</p>
             <Select
               showSearch
-              //   mode="multiple"
+              mode="multiple"
               placeholder="Select from here..."
               options={mapToOptions(teachers?.data)}
               className="!h-10 !bg-transparent *:!rounded-lg w-[300px]"
@@ -115,13 +118,17 @@ const AssignQuestions = ({
               placeholder="Select from here..."
               options={mapToOptions(teachers?.data)}
               className="[&_.ant-select-selector]:!min-h-10 !bg-transparent *:!rounded-lg w-[300px]"
-              onChange={() => setIsBtnDisabled(false)}
+              onChange={(teachers) => {
+                setReassignTeacher(teachers), setIsBtnDisabled(false);
+              }}
+              disabled={selectedRowKeys.length <= 0}
             />
           </div>
           <div>
             <button
               className="cursor-pointer disabled:cursor-not-allowed text-base font-medium block w-full bg-primary/5 hover:bg-primary disabled:bg-primary/5 text-primary hover:text-white disabled:text-primary/50 border border-primary/30 hover:border-primary/60 disabled:border-primary//30 px-4 py-1.5 h-10 rounded-lg transition duration-150"
               type="submit"
+              onClick={() => handleReassignTeacher()}
               disabled={isBtnDisabled || selectedRowKeys.length === 0}
             >
               Assign
@@ -134,7 +141,7 @@ const AssignQuestions = ({
         loading={isQuesLoading}
         rowSelection={rowSelection}
         columns={columns}
-        dataSource={result}
+        dataSource={questions}
         scroll={{ x: 1500 }}
         pagination={false}
       />

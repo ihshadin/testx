@@ -76,6 +76,21 @@ class QueryBuilder<T> {
       }
     }
 
+    if (queryObj.teachers && typeof queryObj.teachers === "string") {
+      try {
+        const parsedCourses = JSON.parse(queryObj.teachers); // Parse courses as JSON
+        if (Array.isArray(parsedCourses)) {
+          queryObj.teachers = { $in: parsedCourses }; // Use $in for array matching
+        } else {
+          throw new Error("Teachers parameter must be an array");
+        }
+      } catch (err) {
+        throw new Error(
+          "Invalid Teachers parameter: must be a valid JSON array"
+        );
+      }
+    }
+
     this.modelQuery = this.modelQuery.find(queryObj as FilterQuery<T>);
 
     return this;
