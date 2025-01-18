@@ -105,7 +105,7 @@ const QuesAssignFilter = ({ onSubmit }: any) => {
               <button
                 className="cursor-pointer disabled:cursor-not-allowed text-base font-medium block w-full bg-primary/5 hover:bg-primary disabled:bg-primary/5 text-primary hover:text-white disabled:text-primary/50 border border-primary/30 hover:border-primary/60 disabled:border-primary//30 px-4 py-1.5 h-10 rounded-lg transition duration-150"
                 type="submit"
-                disabled={selTopics.length <= 0}
+                // disabled={false}
               >
                 Search
               </button>
