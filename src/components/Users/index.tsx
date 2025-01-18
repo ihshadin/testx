@@ -59,8 +59,6 @@ const AllUsersList = () => {
   const [params, setParams] = useState<any>([]);
   const { data } = useGetRolesUserQuery(params);
 
-  console.log("data--=>", data);
-
   // TODO: type any fix
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [viewDetailsModalOpen, setViewDetailsModalOpen] = useState(false);
@@ -127,7 +125,6 @@ const AllUsersList = () => {
     handleDelete,
   });
 
-  //   const meta = data?.data?.meta;
   const result = data?.data;
 
   return (
@@ -139,7 +136,6 @@ const AllUsersList = () => {
         rowSelection={rowSelection}
         columns={columns}
         dataSource={result}
-        // scroll={{ x: 1200 }}
         pagination={false}
       />
     </>
