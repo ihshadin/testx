@@ -1,71 +1,93 @@
 "use client";
 import React, { useState } from "react";
-import { Col, Form, Input, Row, Select } from "antd";
 
-const FilterUsers = () => {
-  const [subjects, setSubjects] = useState([]);
-  const [isBtnDisabled, setIsBtnDisabled] = useState(true);
+import { Col, Form, Row, Select } from "antd";
+import { useGetAllCourseQuery } from "@/redux/features/course/courseApi";
+import { useGetAllSubjectQuery } from "@/redux/features/subject/subjectApi";
+import { convertParams, mapToOptions } from "@/utils";
+
+const FilterUsers = ({ onSubmit }: any) => {
+  const [selCourses, setSelCourses] = useState<string[]>([]);
+  const [selSubjects, setSelSubjects] = useState<string[]>([]);
   const [form] = Form.useForm();
-  // TODO: type problem
 
-  const subjectsData: any = [
-    { _id: "1", label: "Anatomy", courseId: "2" },
-    { _id: "2", label: "Physiology", courseId: "1" },
-    { _id: "3", label: "Math", courseId: "1" },
-    { _id: "4", label: "English", courseId: "2" },
-    { _id: "5", label: "Science", courseId: "1" },
-    { _id: "6", label: "History", courseId: "3" },
-  ];
+  const { data: courses, isLoading: isCouLoading } =
+    useGetAllCourseQuery(undefined);
 
-  const mapToOptions = (data: any) =>
-    data.map(({ _id, label }: any) => ({ value: _id, label }));
+  const { data: subjects, isLoading: isSubLoading } = useGetAllSubjectQuery(
+    convertParams("courses", selCourses)
+  );
 
-  const handleSubjectChange = (subjectId: string) => {
-    setIsBtnDisabled(false);
+  const handleCourseChange = (courseIds: string[]) => {
+    form.setFieldsValue({ subjects: [], topics: [] });
+    setSelCourses(courseIds);
+    setSelSubjects([]);
   };
 
-  const onSubmit = (data: any) => {
-    console.log("Form submitted with data:", data);
+  const handleSubjectChange = (courseIds: string[]) => {
+    form.setFieldsValue({ topics: [] });
+    setSelSubjects(courseIds);
   };
+
   return (
-    <div>
-      <Form
-        form={form}
-        onFinish={onSubmit}
-        requiredMark={false}
-        layout="vertical"
-      >
-        <Row gutter={15} align="bottom">
-          <Col span={20}>
-            <Form.Item
-              label="Subjects"
-              name="subjects"
-              // rules={[{ required: true, message: "Subjects is required" }]}
-              style={{ marginBottom: 0 }}
+    <Form
+      form={form}
+      onFinish={onSubmit}
+      requiredMark={false}
+      layout="vertical"
+    >
+      <Row gutter={15} align="bottom">
+        <Col span={10}>
+          <Form.Item
+            label="Courses"
+            name="courses"
+            // rules={[{ required: true, message: "Courses is required" }]}
+            style={{ marginBottom: 0 }}
+          >
+            <Select
+              loading={isCouLoading}
+              showSearch
+              mode="multiple"
+              placeholder="Select from here..."
+              options={mapToOptions(courses?.data)}
+              className="[&_.ant-select-selector]:!min-h-10 !bg-transparent *:!rounded-lg "
+              onChange={handleCourseChange}
+            />
+          </Form.Item>
+        </Col>
+        <Col span={8}>
+          <Form.Item
+            label="Subjects"
+            name="subjects"
+            // rules={[{ required: true, message: "Subjects is required" }]}
+            style={{ marginBottom: 0 }}
+          >
+            <Select
+              loading={isSubLoading}
+              showSearch
+              mode="multiple"
+              placeholder="Select from here..."
+              options={mapToOptions(subjects?.data)}
+              className="[&_.ant-select-selector]:!min-h-10 !bg-transparent *:!rounded-lg "
+              onChange={handleSubjectChange}
+              disabled={selCourses.length === 0}
+            />
+          </Form.Item>
+        </Col>
+
+        <Col span={6}>
+          <div>
+            <button
+              className="cursor-pointer disabled:cursor-not-allowed text-base font-medium block w-full bg-primary/5 hover:bg-primary disabled:bg-primary/5 text-primary hover:text-white disabled:text-primary/50 border border-primary/30 hover:border-primary/60 disabled:border-primary//30 px-4 py-1.5 h-10 rounded-lg transition duration-150"
+              type="submit"
+              // disabled={false}
             >
-              <Select
-                showSearch
-                placeholder="Select from here..."
-                options={mapToOptions(subjectsData)}
-                className="!h-10 !bg-transparent *:!rounded-lg "
-                onChange={handleSubjectChange}
-              />
-            </Form.Item>
-          </Col>
-          <Col span={4}>
-            <div>
-              <button
-                className="cursor-pointer disabled:cursor-not-allowed text-base font-medium block w-full bg-primary/5 hover:bg-primary disabled:bg-primary/5 text-primary hover:text-white disabled:text-primary/50 border border-primary/30 hover:border-primary/60 disabled:border-primary//30 px-4 py-1.5 h-10 rounded-lg transition duration-150"
-                type="submit"
-                disabled={isBtnDisabled}
-              >
-                Search
-              </button>
-            </div>
-          </Col>
-        </Row>
-      </Form>
-    </div>
+              Search
+            </button>
+          </div>
+        </Col>
+      </Row>
+    </Form>
   );
 };
 
