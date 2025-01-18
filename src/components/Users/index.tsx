@@ -4,56 +4,62 @@ import { Table } from "antd";
 import { toast } from "sonner";
 import { getUsersColumns } from "@/utils/AntdTableColumn/TableColumns";
 import { TableRowSelection } from "antd/es/table/interface";
+import { useGetAllUserQuery } from "@/redux/features/user/userApi";
 
-const data = [
-  {
-    key: "1",
-    userFullName: "John Doe",
-    course: "Web Development",
-    subject: "Frontend Frameworks",
-    userRole: "Admin",
-    status: "approve",
-    _id: "abc123",
-  },
-  {
-    key: "2",
-    userFullName: "Jane Smith",
-    course: "Web Development",
-    subject: "Frontend Frameworks",
-    userRole: "Coordinator",
-    status: "pending",
-    _id: "def456",
-  },
-  {
-    key: "3",
-    userFullName: "Michael Brown",
-    course: "Web Development",
-    subject: "Frontend Frameworks",
-    userRole: "Teacher",
-    status: "reject",
-    _id: "ghi789",
-  },
-  {
-    key: "4",
-    userFullName: "Emily Davis",
-    course: "Web Development",
-    subject: "Frontend Frameworks",
-    userRole: "Teacher",
-    status: "reject",
-    _id: "jkl012",
-  },
-  {
-    key: "5",
-    userFullName: "Chris Johnson",
-    course: "Web Development",
-    subject: "Frontend Frameworks",
-    userRole: "Coordinator",
-    status: "approve",
-    _id: "mno345",
-  },
-];
+// const data = [
+//   {
+//     key: "1",
+//     userFullName: "John Doe",
+//     course: "Web Development",
+//     subject: "Frontend Frameworks",
+//     userRole: "Admin",
+//     status: "approve",
+//     _id: "abc123",
+//   },
+//   {
+//     key: "2",
+//     userFullName: "Jane Smith",
+//     course: "Web Development",
+//     subject: "Frontend Frameworks",
+//     userRole: "Coordinator",
+//     status: "pending",
+//     _id: "def456",
+//   },
+//   {
+//     key: "3",
+//     userFullName: "Michael Brown",
+//     course: "Web Development",
+//     subject: "Frontend Frameworks",
+//     userRole: "Teacher",
+//     status: "reject",
+//     _id: "ghi789",
+//   },
+//   {
+//     key: "4",
+//     userFullName: "Emily Davis",
+//     course: "Web Development",
+//     subject: "Frontend Frameworks",
+//     userRole: "Teacher",
+//     status: "reject",
+//     _id: "jkl012",
+//   },
+//   {
+//     key: "5",
+//     userFullName: "Chris Johnson",
+//     course: "Web Development",
+//     subject: "Frontend Frameworks",
+//     userRole: "Coordinator",
+//     status: "approve",
+//     _id: "mno345",
+//   },
+// ];
 
 const AllUsersList = () => {
+  const [params, setParams] = useState([]);
+  const { data } = useGetAllUserQuery(params);
+
+  console.log("data--=>", data);
+
   // TODO: type any fix
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [viewDetailsModalOpen, setViewDetailsModalOpen] = useState(false);
@@ -108,7 +114,7 @@ const AllUsersList = () => {
   });
 
   //   const meta = data?.data?.meta;
-  const result = data;
+  const result = data?.data;
 
   return (
     <>

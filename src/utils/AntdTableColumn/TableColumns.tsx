@@ -43,22 +43,39 @@ export const getUsersColumns = ({
     {
       title: "User Full Name",
       dataIndex: "userFullName",
+      render: (_, item: any) => (
+        <p className="line-clamp-1">
+          {item?.first_name + " " + item?.last_name}
+        </p>
+      ),
     },
     {
-      title: "Course",
-      key: "course",
+      title: "Courses",
+      key: "courses",
+      dataIndex: "courses",
       width: 250,
-      render: (_, item: any) => <p className="line-clamp-1">{item?.course}</p>,
+      render: (_, item: any) =>
+        item?.courses?.map((course: TCourse, index: number) => (
+          <p key={index} className="line-clamp-1">
+            {course.name}
+          </p>
+        )),
     },
     {
-      title: "Subject",
-      // key: "subject",
+      title: "Subjects",
+      key: "subject",
       width: 200,
-      render: (_, item: any) => <p className="line-clamp-1">{item?.subject}</p>,
+      render: (_, item: any) =>
+        item?.subjects?.map((subject: TCourse, index: number) => (
+          <p key={index} className="line-clamp-1">
+            {subject.name}
+          </p>
+        )),
     },
     {
       title: "Role",
-      dataIndex: "userRole",
+      key: "role",
+      dataIndex: "role",
       width: 130,
     },
     {

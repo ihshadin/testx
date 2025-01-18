@@ -12,6 +12,8 @@ import { userUpdateValidationSchema } from "./userModule/user.validation";
 import { queryHelpers } from "@/helpers/queryHelpers";
 import QueryBuilder from "@/helpers/queryBuilder";
 import { UserSearchableFields } from "./userModule/user.constant";
+import { CourseModel } from "../course/courseModule/course.model";
+import { SubjectModel } from "../subject/subjectModule/subject.model";
 
 export async function GET(req: NextRequest) {
   try {
@@ -22,11 +24,16 @@ export async function GET(req: NextRequest) {
     }
 
     await dbConnect();
+    await CourseModel;
+    await SubjectModel;
 
     const allQueries = queryHelpers(req);
 
     const userQuery = new QueryBuilder(
-      UserModel.find().select("-password"),
+      UserModel.find()
+        .select("-password")
+        .populate("courses")
+        .populate("subjects"),
       allQueries
     )
       .search(UserSearchableFields)
