@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Col, Form, Input, Row, Select } from "antd";
 import UnassignQuestions from "@/components/Questions/UnassignQuestions";
 import QuesAssignFilter from "@/components/Questions/QuesAssignFilter";
@@ -13,12 +13,11 @@ const QuestionAssignmentPage = () => {
   const [selCourses, setSelCourses] = useState<string[]>([]);
   const [selSubjects, setSelSubjects] = useState<string[]>([]);
   const [selTopics, setSelTopics] = useState<string[]>([]);
+  const [params, setParams] = useState<any>([]);
   const [form] = Form.useForm();
 
   const { data: questions, isLoading: isQuesLoading } =
-    useGetAllUnassignQuestionQuery(
-      convertParams("courses", ["67895f0553cf40ddc35c22ab"])
-    );
+    useGetAllUnassignQuestionQuery(params);
   const { data: courses, isLoading: isCouLoading } =
     useGetAllCourseQuery(undefined);
   const { data: subjects, isLoading: isSubLoading } = useGetAllSubjectQuery(
@@ -41,9 +40,20 @@ const QuestionAssignmentPage = () => {
     setSelTopics([]);
   };
 
-  const onSubmit = (data: any) => {
-    console.log("Form submitted with data:", data);
+  const onSubmit = (data: Record<string, unknown>) => {
+    const convertToCustomArray = (filters: any) => {
+      return Object.entries(filters)
+        .filter(([_, value]: any) => value.length > 0)
+        .map(([key, value]) => ({
+          name: key,
+          value: JSON.stringify(value),
+        }));
+    };
+
+    setParams(convertToCustomArray(data));
   };
+  console.log(params);
+  useEffect(() => {}, [params]);
 
   return (
     <section>
@@ -117,7 +127,7 @@ const QuestionAssignmentPage = () => {
                   <button
                     className="cursor-pointer disabled:cursor-not-allowed text-base font-medium block w-full bg-primary/5 hover:bg-primary disabled:bg-primary/5 text-primary hover:text-white disabled:text-primary/50 border border-primary/30 hover:border-primary/60 disabled:border-primary//30 px-4 py-1.5 h-10 rounded-lg transition duration-150"
                     type="submit"
-                    disabled={selTopics.length <= 0}
+                    // disabled={selTopics.length <= 0}
                   >
                     Search
                   </button>
