@@ -1,1 +1,1 @@
-export const questionSearchableFields = ["title"];
+export const questionSearchableFields = ["title", "desc"];

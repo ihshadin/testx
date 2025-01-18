@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
-import { Select, Table } from "antd";
+import { Input, Form, Select, Table, GetProps } from "antd";
+const { Search } = Input;
 import { toast } from "sonner";
 import { getAssignColumns } from "@/utils/AntdTableColumn/TableColumns";
 import { TableRowSelection } from "antd/es/table/interface";
@@ -13,12 +14,11 @@ import {
 import { useGetAllUserQuery } from "@/redux/features/user/userApi";
 import { TUser } from "@/types/user.type";
 
-const AssignQuestions = ({
+const CompletedQuestions = ({
   questions,
   isQuesLoading,
-  handleTeacher,
-  setSearchTeacher,
-}: TQuestions) => {
+  setSearchText,
+}: any) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [reassignTeacher, setReassignTeacher] = useState([]);
   const [isBtnDisabled, setIsBtnDisabled] = useState(true);
@@ -81,52 +81,34 @@ const AssignQuestions = ({
 
   return (
     <>
-      <div className="mb-5 flex items-end justify-between gap-3">
+      <div className="mb-5 flex items-end justify-center gap-3">
         <div className="flex items-end gap-3 border border-primary/10 rounded-lg p-2">
           <div>
-            <p className="mb-1">Search Teacher</p>
-            <Select
+            <p className="mb-1">
+              Search Question by Questions Name or Description
+            </p>
+            {/* <Select
               showSearch
               mode="multiple"
               placeholder="Select from here..."
               options={mapToOptions(teachers?.data)}
-              className="!h-10 !bg-transparent *:!rounded-lg w-[300px]"
+              className="!h-10 !bg-transparent *:!rounded-lg w-[400px]"
               onChange={(value) => setSearchTeacher(value)}
+            /> */}
+            <Input
+              placeholder="input search text"
+              className="!h-10 !bg-transparent *:!rounded-lg w-[400px]"
+              // enterButton="Search"
+              // size="large"
+              onChange={(e) => setSearchText(e.target.value)}
             />
           </div>
           <div>
             <button
               className="cursor-pointer disabled:cursor-not-allowed text-base font-medium block w-full bg-primary/5 hover:bg-primary disabled:bg-primary/5 text-primary hover:text-white disabled:text-primary/50 border border-primary/30 hover:border-primary/60 disabled:border-primary//30 px-4 py-1.5 h-10 rounded-lg transition duration-150"
               type="submit"
-              onClick={() => handleTeacher()}
             >
               Search
-            </button>
-          </div>
-        </div>
-        <div className="flex items-end gap-3 border border-primary/10 rounded-lg p-2">
-          <div>
-            <p className="mb-1">Reassign Teacher</p>
-            <Select
-              showSearch
-              mode="multiple"
-              placeholder="Select from here..."
-              options={mapToOptions(teachers?.data)}
-              className="[&_.ant-select-selector]:!min-h-10 !bg-transparent *:!rounded-lg w-[300px]"
-              onChange={(teachers) => {
-                setReassignTeacher(teachers), setIsBtnDisabled(false);
-              }}
-              disabled={selectedRowKeys.length <= 0}
-            />
-          </div>
-          <div>
-            <button
-              className="cursor-pointer disabled:cursor-not-allowed text-base font-medium block w-full bg-primary/5 hover:bg-primary disabled:bg-primary/5 text-primary hover:text-white disabled:text-primary/50 border border-primary/30 hover:border-primary/60 disabled:border-primary//30 px-4 py-1.5 h-10 rounded-lg transition duration-150"
-              type="submit"
-              onClick={() => handleReassignTeacher()}
-              disabled={isBtnDisabled || selectedRowKeys.length === 0}
-            >
-              Assign
             </button>
           </div>
         </div>
@@ -144,4 +126,4 @@ const AssignQuestions = ({
   );
 };
 
-export default AssignQuestions;
+export default CompletedQuestions;
