@@ -20,6 +20,8 @@ export async function GET(req: NextRequest) {
       throw new ApiError(401, "Unauthorized");
     }
 
+    const allQuery = queryHelpers(req);
+
     await dbConnect();
     await CourseModel;
     await SubjectModel;
@@ -31,7 +33,7 @@ export async function GET(req: NextRequest) {
         .populate("courses")
         .populate("subjects")
         .populate("topics"),
-      queryHelpers(req)
+      allQuery
     )
       .filter()
       .sort()
