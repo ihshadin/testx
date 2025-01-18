@@ -33,11 +33,12 @@ export async function GET(req: NextRequest) {
         .populate("topics"),
       queryHelpers(req)
     )
+      .filter()
       .sort()
       .paginate()
       .fields();
 
-    const result = await unassignedQuestions.modelQuery;
+    const data = await unassignedQuestions.modelQuery;
     const meta = await unassignedQuestions.countTotal();
 
     return sendApiResponse(NextResponse, {
@@ -45,7 +46,7 @@ export async function GET(req: NextRequest) {
       success: true,
       message: "Retrieved unassigned questions successfully",
       meta,
-      data: result,
+      data,
     });
   } catch (error: any) {
     return handleError(error, NextResponse);
@@ -63,7 +64,7 @@ export async function PATCH(req: NextRequest) {
 
     // Get the payload from the request
     const payload = await req.json();
-    console.log(payload);
+
     const { questionIds, teachers } = payload;
 
     if (

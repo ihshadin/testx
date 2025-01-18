@@ -67,7 +67,7 @@ export async function GET(req: NextRequest) {
       .paginate()
       .fields();
 
-    const result = await topicQuery.modelQuery;
+    const data = await topicQuery.modelQuery;
     const meta = await topicQuery.countTotal();
 
     return sendApiResponse(NextResponse, {
@@ -75,7 +75,7 @@ export async function GET(req: NextRequest) {
       success: true,
       message: "Retrieve all topic successfully",
       meta,
-      data: result,
+      data,
     });
   } catch (error: any) {
     return handleError(error, NextResponse);

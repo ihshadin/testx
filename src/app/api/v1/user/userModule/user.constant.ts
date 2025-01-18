@@ -4,6 +4,11 @@ export const USER_ROLE = {
   teacher: "teacher",
   coordinator: "coordinator",
 } as const;
+export const USER_STATUS = {
+  pending: "pending",
+  approved: "approved",
+  reject: "reject",
+} as const;
 
 // Exclude 'superAdmin' and 'admin'
 export const Filtered_Roles = Object.values(USER_ROLE).filter(

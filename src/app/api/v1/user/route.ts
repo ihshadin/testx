@@ -9,26 +9,41 @@ import sendApiResponse from "@/utils/Response/sendResponse";
 import { handleError } from "@/utils/errors/handleError";
 import { TUser } from "@/types/user.type";
 import { userUpdateValidationSchema } from "./userModule/user.validation";
+import { queryHelpers } from "@/helpers/queryHelpers";
+import QueryBuilder from "@/helpers/queryBuilder";
+import { UserSearchableFields } from "./userModule/user.constant";
 
 export async function GET(req: NextRequest) {
   try {
-    // const adminVerify = verifyAdmin(req);
+    const adminVerify = verifyAdmin(req);
 
-    // if (!adminVerify) {
-    //   throw new ApiError(401, "Your are Unauthorized!");
-    // }
+    if (!adminVerify) {
+      throw new ApiError(401, "Your are Unauthorized!");
+    }
 
     await dbConnect();
 
-    const users = await UserModel.find({ isDeleted: { $ne: true } }).select(
-      "-password"
-    );
+    const allQueries = queryHelpers(req);
+
+    const userQuery = new QueryBuilder(
+      UserModel.find().select("-password"),
+      allQueries
+    )
+      .search(UserSearchableFields)
+      .filter()
+      .sort()
+      .paginate()
+      .fields();
+
+    const data = await userQuery.modelQuery;
+    const meta = await userQuery.countTotal();
 
     return sendApiResponse(NextResponse, {
       statusCode: 200,
       success: true,
       message: "Retrieved all Users",
-      data: users,
+      meta,
+      data,
     });
   } catch (error: any) {
     return handleError(error, NextResponse);

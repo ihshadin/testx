@@ -200,7 +200,7 @@ export const getUnassignColumns = ({
       title: "Status",
       dataIndex: "status",
       align: "center",
-      width: 100,
+      width: 120,
       render: (_, item: any) => (
         <p className="line-clamp-1 capitalize">{item?.status}</p>
       ),

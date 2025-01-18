@@ -10,9 +10,8 @@ import {
   useDeleteQuestionMutation,
   useUpdateAssignmentMutation,
 } from "@/redux/features/question/questionApi";
-import { mapToOptions } from "@/utils";
-import { useGetAllCourseQuery } from "@/redux/features/course/courseApi";
-import { getUserInfo } from "@/utils/localStorage/localStorageAuthManagement";
+import { useGetAllUserQuery } from "@/redux/features/user/userApi";
+import { TUser } from "@/types/user.type";
 
 type TQuestions = {
   questions: TQuestion[];
@@ -20,13 +19,14 @@ type TQuestions = {
 };
 
 const UnassignQuestions = ({ questions, isQuesLoading }: TQuestions) => {
-  // TODO: type any fix
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [isBtnDisabled, setIsBtnDisabled] = useState(true);
   const [form] = Form.useForm();
 
-  const { data: teachers, isLoading: isTeaLoading } =
-    useGetAllCourseQuery(undefined);
+  const { data: teachers, isLoading: isTeaLoading } = useGetAllUserQuery([
+    { name: "role", value: "teacher" },
+    { name: "status", value: "approved" },
+  ]);
   const [updateAssignment] = useUpdateAssignmentMutation();
 
   // Row Selection functions
@@ -74,6 +74,12 @@ const UnassignQuestions = ({ questions, isQuesLoading }: TQuestions) => {
       onsubmitErrorHandler(error, toastId);
     }
   };
+
+  const mapToOptions = (data: TUser[]) =>
+    data?.map(({ _id, first_name, last_name }) => ({
+      value: _id,
+      label: first_name + " " + last_name,
+    }));
 
   return (
     <>
