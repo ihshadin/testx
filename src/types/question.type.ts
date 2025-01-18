@@ -1,4 +1,5 @@
 import { Types } from "mongoose";
+import { Dispatch } from "react";
 
 export type TQuestion = {
   _id?: string; // PK
@@ -13,4 +14,11 @@ export type TQuestion = {
   options: string[];
   teachers?: string[];
   status: "assigned" | "unassigned" | "reassigned";
+};
+
+export type TQuestions = {
+  questions: TQuestion[];
+  isQuesLoading: boolean;
+  handleTeacher: any;
+  setSearchTeacher: Dispatch<React.SetStateAction<string>>;
 };
