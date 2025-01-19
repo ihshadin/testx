@@ -14,10 +14,10 @@ export const statusItems: MenuProps["items"] = [
     label: (
       <div className="capitalize text-sm font-medium text-accent flex items-center gap-2">
         <span className="w-2 h-2 rounded-full bg-green-600"></span>
-        Approve
+        Approved
       </div>
     ),
-    key: "approve",
+    key: "approved",
   },
   {
     label: (
@@ -94,7 +94,7 @@ export const getUsersColumns = ({
               onClick: (data) => handleUpdateStatus(data.key, record?._id),
             }}
             trigger={["click"]}
-            disabled={record?.status === "canceled"}
+            disabled={record?.status === "reject"}
           >
             <span>
               <div
@@ -105,7 +105,7 @@ export const getUsersColumns = ({
                 <p>
                   <span
                     className={`w-2 h-2 rounded-full inline-block mr-2 ${
-                      record?.status === "approve"
+                      record?.status === "approved"
                         ? "bg-teal-600"
                         : "bg-red-500"
                     }`}
@@ -119,35 +119,35 @@ export const getUsersColumns = ({
         );
       },
       filters: [
-        { text: "Approve", value: "approve" },
+        { text: "Approved", value: "approved" },
         { text: "Pending", value: "pending" },
         { text: "Reject", value: "reject" },
       ],
       onFilter: (value, record) => record.status.startsWith(value as string),
     },
-    {
-      title: "Action",
-      dataIndex: "action",
-      align: "center",
-      fixed: "right",
-      width: 100,
-      render: (_, record) => (
-        <div className="flex justify-center gap-2">
-          <Popconfirm
-            title="Delete the user"
-            description="Are you sure to delete this user?"
-            placement="topRight"
-            onConfirm={() => handleDelete(record._id)}
-            okText="Yes"
-            cancelText="No"
-          >
-            <Button>
-              <AiFillDelete fontSize={16} />
-            </Button>
-          </Popconfirm>
-        </div>
-      ),
-    },
+    // {
+    //   title: "Action",
+    //   dataIndex: "action",
+    //   align: "center",
+    //   fixed: "right",
+    //   width: 100,
+    //   render: (_, record) => (
+    //     <div className="flex justify-center gap-2">
+    //       <Popconfirm
+    //         title="Delete the user"
+    //         description="Are you sure to delete this user?"
+    //         placement="topRight"
+    //         onConfirm={() => handleDelete(record._id)}
+    //         okText="Yes"
+    //         cancelText="No"
+    //       >
+    //         <Button>
+    //           <AiFillDelete fontSize={16} />
+    //         </Button>
+    //       </Popconfirm>
+    //     </div>
+    //   ),
+    // },
   ];
 };
 
