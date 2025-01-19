@@ -22,6 +22,15 @@ const questionApi = baseApi.injectEndpoints({
       providesTags: ["question"],
     }),
 
+    getSingleQuestion: builder.query({
+      query: (id) => {
+        return {
+          url: `/question/${id}`,
+          method: "GET",
+        };
+      },
+    }),
+
     getAllUnassignQuestion: builder.query({
       query: (args) => {
         const params = new URLSearchParams();
@@ -88,6 +97,7 @@ const questionApi = baseApi.injectEndpoints({
 
 export const {
   useGetAllQuestionQuery,
+  useGetSingleQuestionQuery,
   useGetAllUnassignQuestionQuery,
   useAddQuestionMutation,
   useDeleteQuestionMutation,

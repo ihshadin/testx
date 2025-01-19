@@ -27,19 +27,16 @@ import { useGetAllCourseQuery } from "@/redux/features/course/courseApi";
 import { useGetAllSubjectQuery } from "@/redux/features/subject/subjectApi";
 import { useGetAllTopicQuery } from "@/redux/features/topic/topicApi";
 import { convertParams, mapToOptions } from "@/utils";
+import MDEditor from "@uiw/react-md-editor";
 
 const AddQuestion = () => {
   const [selCourses, setSelCourses] = useState<string[]>([]);
   const [selSubjects, setSelSubjects] = useState<string[]>([]);
   const [selTopics, setSelTopics] = useState<string[]>([]);
+  const [questionDetails, setQuestionDetails] = useState<any>("");
+  const [form] = Form.useForm();
 
   const [addQuestion] = useAddQuestionMutation();
-  const [isLoading, setIsLoading] = useState(false);
-  const [selectedRole, setSelectedRole] = useState("");
-  // const [courses, setCourses] = useState([]);
-  // const [subjects, setSubjects] = useState([]);
-  // const [topics, setTopics] = useState([]);
-  const [form] = Form.useForm();
 
   const { data: courses, isLoading: isCouLoading } =
     useGetAllCourseQuery(undefined);
@@ -64,26 +61,9 @@ const AddQuestion = () => {
   };
 
   const onSubmit = async (data: TQuestion) => {
-    // const { options, ...rest } = data;
-    // Transform options array into the desired object format
-    // const formattedOptions = options.reduce(
-    //   (
-    //     acc: Record<string, string>,
-    //     curr: { option: string },
-    //     index: number
-    //   ) => {
-    //     acc[`option-${String.fromCharCode(65 + index)}`] = curr.option;
-    //     return acc;
-    //   },
-    //   {}
-    // );
-
-    // const finalData = {
-    //   ...rest,
-    //   options: formattedOptions,
-    // };
-
     const toastId = toast.loading("Question Creating...");
+
+    data.desc = questionDetails;
 
     try {
       const res = await addQuestion(data).unwrap();
@@ -127,6 +107,36 @@ const AddQuestion = () => {
                     className="h-10 border border-[#C4CAD4] !rounded-lg"
                   />
                 </Form.Item>
+              </Col>
+            </Row>
+
+            <Row gutter={15}>
+              <Col span={24}>
+                <div className="mb-6" data-color-mode="light">
+                  <MDEditor
+                    value={questionDetails}
+                    onChange={setQuestionDetails}
+                    preview="preview"
+                    components={{
+                      toolbar: (command, disabled, executeCommand) => {
+                        if (command.keyCommand === "code") {
+                          return (
+                            <button
+                              aria-label="Insert code"
+                              disabled={disabled}
+                              onClick={(evn) => {
+                                evn.stopPropagation();
+                                executeCommand(command, command.groupName);
+                              }}
+                            >
+                              Code
+                            </button>
+                          );
+                        }
+                      },
+                    }}
+                  />
+                </div>
               </Col>
             </Row>
 
@@ -264,7 +274,7 @@ const AddQuestion = () => {
               </Col>
             </Row>
 
-            <Row gutter={15}>
+            {/* <Row gutter={15}>
               <Col span={24}>
                 <Form.Item
                   label="Question Description"
@@ -283,7 +293,7 @@ const AddQuestion = () => {
                   />
                 </Form.Item>
               </Col>
-            </Row>
+            </Row> */}
 
             <Row>
               <Col span={24}>
@@ -291,9 +301,8 @@ const AddQuestion = () => {
                   <button
                     className="cursor-pointer text-base font-medium block w-full bg-primary/5 hover:bg-primary text-primary hover:text-white border border-primary/30 hover:border-primary/60 px-4 py-2 rounded-xl transition duration-150"
                     type="submit"
-                    disabled={isLoading ? true : false}
                   >
-                    {isLoading ? "Loading..." : "Register"}
+                    Register
                   </button>
                 </div>
               </Col>

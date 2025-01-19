@@ -1,12 +1,15 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { TMenu } from "@/types/menu.type";
+import { useGetUserQuery } from "@/redux/features/user/userApi";
 
 const Menu = ({ items }: { items: TMenu[] }) => {
   const currentSlug = usePathname();
   const [activeMenu, setActiveMenu] = useState(currentSlug);
+
+  const { data, refetch } = useGetUserQuery(undefined);
 
   const getMenuItemsByRole = (role: string) => {
     if (role === "superAdmin") {
@@ -16,7 +19,11 @@ const Menu = ({ items }: { items: TMenu[] }) => {
     return items.filter((item) => item.roles.includes(role));
   };
 
-  const filteredMenu = getMenuItemsByRole("superAdmin");
+  const filteredMenu = getMenuItemsByRole(data?.data?.role || "teacher");
+
+  useEffect(() => {
+    refetch();
+  }, [data?.data?.role]);
 
   return (
     <div className="pt-4 flex flex-wrap justify-between items-center">

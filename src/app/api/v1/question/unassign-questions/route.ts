@@ -14,12 +14,6 @@ import { updateQuestionValidationSchema } from "../questionModule/question.valid
 
 export async function GET(req: NextRequest) {
   try {
-    // Verify admin
-    const adminVerify = verifyAdmin(req);
-    if (!adminVerify) {
-      throw new ApiError(401, "Unauthorized");
-    }
-
     const allQuery = queryHelpers(req);
 
     await dbConnect();
@@ -57,11 +51,6 @@ export async function GET(req: NextRequest) {
 
 export async function PATCH(req: NextRequest) {
   try {
-    const adminVerify = verifyAdmin(req);
-    if (!adminVerify) {
-      throw new ApiError(401, "You are Unauthorized");
-    }
-
     await dbConnect();
 
     // Get the payload from the request

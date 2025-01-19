@@ -65,14 +65,10 @@ export async function POST(req: NextRequest) {
 
 export async function GET(req: NextRequest) {
   try {
-    const adminVerify = verifyAdmin(req);
-    if (!adminVerify) {
-      throw new ApiError(401, "Unauthorized");
-    }
-
     await dbConnect();
     await CourseModel;
     await SubjectModel;
+    await TopicModel;
     await UserModel;
 
     const allQueries = queryHelpers(req);
@@ -81,6 +77,7 @@ export async function GET(req: NextRequest) {
       QuestionModel.find()
         .populate("courses")
         .populate("subjects")
+        .populate("topics")
         .populate("teachers"),
       allQueries
     )

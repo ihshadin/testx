@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import logo from "@/assets/sites/logo.png";
 import Image from "next/image";

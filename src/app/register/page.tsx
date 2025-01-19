@@ -12,6 +12,7 @@ import { useGetAllSubjectQuery } from "@/redux/features/subject/subjectApi";
 import { useUserRegisterRequestMutation } from "@/redux/features/auth/authApi";
 import onsubmitErrorHandler from "@/utils/errors/onsubmitErrorHandler";
 import { TUser } from "@/types/user.type";
+import { useGetUserQuery } from "@/redux/features/user/userApi";
 
 const SignUpPage = () => {
   const [selectedRole, setSelectedRole] = useState("");
@@ -25,6 +26,7 @@ const SignUpPage = () => {
     convertParams("courses", selCourses)
   );
   const [register, { isLoading }] = useUserRegisterRequestMutation();
+  const { data, refetch } = useGetUserQuery(undefined);
 
   const handleCourseChange = (courseIds: string[]) => {
     form.setFieldsValue({ subjects: [] });
@@ -42,6 +44,7 @@ const SignUpPage = () => {
         form.resetFields();
         toast.success("Register Request Send", { id: toastId });
         router.push("/");
+        refetch();
       }
     } catch (error: any) {
       onsubmitErrorHandler(error, toastId);

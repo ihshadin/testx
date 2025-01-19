@@ -20,6 +20,7 @@ export async function POST(request: Request) {
     payload.password = await bcrypt.hash(payload.password, 11);
 
     const validateUser = userValidationSchema.parse(payload);
+    console.log(validateUser);
     const user = new UserModel(validateUser);
     const result = await user.save();
 

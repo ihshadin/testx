@@ -33,6 +33,7 @@ const userSchema = new Schema<TUser>(
       type: String,
       enum: Object.values(USER_STATUS),
       required: true,
+      default: "pending",
     },
     courses: {
       type: [{ type: Schema.Types.ObjectId, ref: "Course" }],
