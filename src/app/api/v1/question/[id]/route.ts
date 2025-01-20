@@ -41,11 +41,6 @@ export async function PATCH(
 ) {
   try {
     const id = params.id;
-    const adminVerify = verifyAdmin(req);
-
-    if (!adminVerify) {
-      throw new ApiError(401, "You are Unauthorized");
-    }
 
     await dbConnect();
 

@@ -1,12 +1,13 @@
 import { TQuestion } from "@/types/question.type";
 import { model, models, Schema } from "mongoose";
+import { QUESTION_STATUS } from "./question.constant";
 
 const QuestionSchema: Schema = new Schema<TQuestion>(
   {
     question_id: {
       type: Number,
-      unique: true,
-      required: true,
+      // unique: true,
+      // required: true,
     },
     title: {
       type: String,
@@ -17,6 +18,9 @@ const QuestionSchema: Schema = new Schema<TQuestion>(
       type: String,
       required: true,
       trim: true,
+    },
+    newDesc: {
+      type: String,
     },
     domain: {
       type: String,
@@ -45,9 +49,12 @@ const QuestionSchema: Schema = new Schema<TQuestion>(
     teachers: {
       type: [{ type: Schema.Types.ObjectId, ref: "User" }],
     },
+    owner: {
+      type: { type: Schema.Types.ObjectId, ref: "User" },
+    },
     status: {
       type: String,
-      enum: ["assigned", "unassigned", "reassigned"],
+      enum: Object.values(QUESTION_STATUS),
       default: "unassigned",
     },
   },

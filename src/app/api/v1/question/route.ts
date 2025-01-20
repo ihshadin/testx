@@ -37,12 +37,12 @@ export async function POST(req: NextRequest) {
     }
 
     // Check if the question ID already exists
-    const isExistID = await QuestionModel.findOne({
-      question_id: payload?.question_id,
-    });
-    if (isExistID) {
-      throw new ApiError(409, "Question ID already exists");
-    }
+    // const isExistID = await QuestionModel.findOne({
+    //   question_id: payload?.question_id,
+    // });
+    // if (isExistID) {
+    //   throw new ApiError(409, "Question ID already exists");
+    // }
 
     // Validate the payload structure
     const validatedData = createQuestionValidationSchema.parse(payload);

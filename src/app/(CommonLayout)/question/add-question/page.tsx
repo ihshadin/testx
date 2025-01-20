@@ -64,7 +64,7 @@ const AddQuestion = () => {
     const toastId = toast.loading("Question Creating...");
 
     data.desc = questionDetails;
-
+    console.log(data);
     try {
       const res = await addQuestion(data).unwrap();
 
@@ -93,7 +93,7 @@ const AddQuestion = () => {
             layout="vertical"
           >
             <Row gutter={15}>
-              <Col span={24}>
+              <Col span={19}>
                 <Form.Item
                   label="Question Title"
                   name="title"
@@ -108,6 +108,20 @@ const AddQuestion = () => {
                   />
                 </Form.Item>
               </Col>
+
+              <Col span={5}>
+                <Form.Item
+                  name="difficulty_level"
+                  label="Difficulty Level"
+                  rules={[{ required: true, message: "Please select a level" }]}
+                >
+                  <Radio.Group size="large">
+                    <Radio.Button value="easy">Easy</Radio.Button>
+                    <Radio.Button value="medium">Medium</Radio.Button>
+                    <Radio.Button value="hard">Hard</Radio.Button>
+                  </Radio.Group>
+                </Form.Item>
+              </Col>
             </Row>
 
             <Row gutter={15}>
@@ -116,7 +130,8 @@ const AddQuestion = () => {
                   <MDEditor
                     value={questionDetails}
                     onChange={setQuestionDetails}
-                    preview="preview"
+                    preview="live"
+                    minHeight={400}
                     components={{
                       toolbar: (command, disabled, executeCommand) => {
                         if (command.keyCommand === "code") {
@@ -140,7 +155,49 @@ const AddQuestion = () => {
               </Col>
             </Row>
 
-            <Row gutter={30}>
+            {/* <Row gutter={15}>
+              <Col span={5}>
+                <Form.Item
+                  label="Question ID"
+                  name="question_id"
+                  rules={[
+                    { required: true, message: "Question ID is required" },
+                  ]}
+                >
+                  <InputNumber
+                    placeholder="Write here..."
+                    className="h-10 border border-[#C4CAD4] !rounded-lg !w-full"
+                    minLength={3}
+                    maxLength={5}
+                    prefix="Q"
+                  />
+                </Form.Item>
+              </Col>
+              <Col span={14}>
+                <Form.Item label="Domain (Optional)" name="domain">
+                  <Input
+                    type="text"
+                    placeholder="Write here..."
+                    className="h-10 border border-[#C4CAD4] !rounded-lg"
+                  />
+                </Form.Item>
+              </Col>
+              <Col span={5}>
+                <Form.Item
+                  name="difficulty_level"
+                  label="Difficulty Level"
+                  rules={[{ required: true, message: "Please select a level" }]}
+                >
+                  <Radio.Group size="large">
+                    <Radio.Button value="easy">Easy</Radio.Button>
+                    <Radio.Button value="medium">Medium</Radio.Button>
+                    <Radio.Button value="hard">Hard</Radio.Button>
+                  </Radio.Group>
+                </Form.Item>
+              </Col>
+            </Row> */}
+
+            {/* <Row gutter={30}>
               <Col span={17}>
                 <Form.List name="options">
                   {(fields, { add, remove }) => (
@@ -228,7 +285,7 @@ const AddQuestion = () => {
                   </Radio.Group>
                 </Form.Item>
               </Col>
-            </Row>
+            </Row> */}
 
             <Row gutter={15} align="bottom">
               <Col span={9}>
