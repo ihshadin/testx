@@ -41,7 +41,6 @@ export async function PATCH(
 ) {
   try {
     const id = params.id;
-
     await dbConnect();
 
     const isExist = await QuestionModel.findOne({

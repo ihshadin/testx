@@ -12,10 +12,10 @@ export const createQuestionValidationSchema = z.object({
   newDesc: z.string().optional(),
   domain: z.string().trim().optional(),
   difficulty_level: z.enum(["easy", "medium", "hard"]),
-  courses: z.string().nonempty("Courses are required"), //FK
-  subjects: z.string().nonempty("Subjects are required"), //FK
-  topics: z.string().nonempty("Topics are required"), //FK
-  teachers: z.string().optional(), //FK
+  course: z.string().nonempty("Course is required"), //FK
+  subject: z.string().nonempty("Subject is required"), //FK
+  topic: z.string().nonempty("Topic is required"), //FK
+  teacher: z.string().optional(), //FK
   owner: z.string().optional(), //FK
   comment: z.string().trim().optional(),
   images: ImageSchema.optional(),
@@ -23,10 +23,10 @@ export const createQuestionValidationSchema = z.object({
 });
 
 export const updateQuestionValidationSchema = z.object({
-  title: z.string().min(1, "Question Title is required").trim().optional(),
-  desc: z.string().min(1, "Description is required").optional(),
+  title: z.string().trim().optional(),
+  desc: z.string().optional(),
   newDesc: z.string().optional(),
-  teachers: z.string().optional(), //FK
+  teacher: z.string().optional(), //FK
   owner: z.string().optional(), //FK
   comment: z.string().trim().optional(),
   images: ImageSchema.optional(),

@@ -12,9 +12,9 @@ import { convertParams, mapToOptions } from "@/utils";
 import MDEditor from "@uiw/react-md-editor";
 
 const AddQuestion = () => {
-  const [selCourses, setSelCourses] = useState<string[]>([]);
-  const [selSubjects, setSelSubjects] = useState<string[]>([]);
-  const [selTopics, setSelTopics] = useState<string[]>([]);
+  const [selCourse, setSelCourse] = useState<string>("");
+  const [selSubject, setSelSubject] = useState<string>("");
+  const [selTopic, setSelTopic] = useState<string>("");
   const [questionDetails, setQuestionDetails] = useState<any>("");
   const [form] = Form.useForm();
 
@@ -22,37 +22,38 @@ const AddQuestion = () => {
 
   const { data: courses, isLoading: isCouLoading } =
     useGetAllCourseQuery(undefined);
-  const { data: subjects, isLoading: isSubLoading } = useGetAllSubjectQuery(
-    convertParams("courses", selCourses)
-  );
-  const { data: topics, isLoading: isToLoading } = useGetAllTopicQuery(
-    convertParams("subjects", selSubjects)
-  );
+  const { data: subjects, isLoading: isSubLoading } = useGetAllSubjectQuery([
+    { name: "course", value: selCourse },
+  ]);
+  const { data: topics, isLoading: isToLoading } = useGetAllTopicQuery([
+    { name: "subject", value: selSubject },
+  ]);
 
-  const handleCourseChange = (courseIds: string[]) => {
-    form.setFieldsValue({ subjects: [], topics: [] });
-    setSelCourses(courseIds);
-    setSelSubjects([]);
-    setSelTopics([]);
+  const handleCourseChange = (courseId: string) => {
+    form.setFieldsValue({ subject: undefined, topic: undefined });
+    setSelCourse(courseId);
+    setSelSubject("");
+    setSelTopic("");
   };
 
-  const handleSubjectChange = (courseIds: string[]) => {
-    form.setFieldsValue({ topics: [] });
-    setSelSubjects(courseIds);
-    setSelTopics([]);
+  const handleSubjectChange = (courseId: string) => {
+    form.setFieldsValue({ topic: undefined });
+    setSelSubject(courseId);
+    setSelTopic("");
   };
 
   const onSubmit = async (data: TQuestion) => {
     const toastId = toast.loading("Question Creating...");
 
     data.desc = questionDetails;
-    console.log(data);
+
     try {
       const res = await addQuestion(data).unwrap();
 
       if (res?.success) {
         toast.success("Question added successfully", { id: toastId });
         form.resetFields();
+        setQuestionDetails(" ");
       } else {
         toast.error("Something went wrong!", { id: toastId });
       }
@@ -74,7 +75,7 @@ const AddQuestion = () => {
             requiredMark={false}
             layout="vertical"
           >
-            <Row gutter={15}>
+            <Row gutter={20}>
               <Col span={19}>
                 <Form.Item
                   label="Question Title"
@@ -106,7 +107,7 @@ const AddQuestion = () => {
               </Col>
             </Row>
 
-            <Row gutter={15}>
+            <Row gutter={20}>
               <Col span={24}>
                 <div className="mb-6" data-color-mode="light">
                   <MDEditor
@@ -119,42 +120,42 @@ const AddQuestion = () => {
               </Col>
             </Row>
 
-            <Row gutter={15} align="bottom">
+            <Row gutter={20} align="bottom">
               <Col span={9}>
-                <Form.Item label="Courses" name="courses">
+                <Form.Item label="Course" name="course">
                   <Select
                     loading={isCouLoading}
                     showSearch
                     placeholder="Select from here..."
                     options={mapToOptions(courses?.data)}
-                    className="[&_.ant-select-selector]:!min-h-10 !bg-transparent *:!rounded-lg "
+                    className="[&_.ant-select-selector]:!min-h-10 !h-10 !bg-transparent *:!rounded-lg "
                     onChange={handleCourseChange}
                   />
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item label="Subjects" name="subjects">
+                <Form.Item label="Subject" name="subject">
                   <Select
                     loading={isSubLoading}
                     showSearch
                     placeholder="Select from here..."
                     options={mapToOptions(subjects?.data)}
-                    className="[&_.ant-select-selector]:!min-h-10 !bg-transparent *:!rounded-lg "
+                    className="[&_.ant-select-selector]:!min-h-10 !h-10 !bg-transparent *:!rounded-lg "
                     onChange={handleSubjectChange}
-                    disabled={selCourses.length === 0}
+                    disabled={selCourse.length === 0}
                   />
                 </Form.Item>
               </Col>
               <Col span={9}>
-                <Form.Item label="Topics" name="topics">
+                <Form.Item label="Topic" name="topic">
                   <Select
                     loading={isToLoading}
                     showSearch
                     placeholder="Select from here..."
                     options={mapToOptions(topics?.data)}
-                    className="[&_.ant-select-selector]:!min-h-10 !bg-transparent *:!rounded-lg"
-                    disabled={selSubjects.length === 0}
-                    onChange={(topicsIds) => setSelTopics(topicsIds)}
+                    className="[&_.ant-select-selector]:!min-h-10 !h-10 !bg-transparent *:!rounded-lg"
+                    disabled={selSubject.length === 0}
+                    onChange={(topicsId) => setSelTopic(topicsId)}
                   />
                 </Form.Item>
               </Col>

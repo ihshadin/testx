@@ -152,8 +152,6 @@ export const getUsersColumns = ({
 };
 
 export const getUnassignColumns = ({
-  handleUpdateStatus,
-  handleViewDetails,
   handleDelete,
 }: any): TableColumnsType<any> => {
   return [
@@ -162,12 +160,6 @@ export const getUnassignColumns = ({
       width: 50,
       align: "center",
       render: (_, __: any, index: number) => <p>{index + 1}</p>,
-    },
-    {
-      title: "Q. ID",
-      key: "question_id",
-      width: 80,
-      render: (_, item: TQuestion) => <p>Q{item?.question_id}</p>,
     },
     {
       title: "Question Name",
@@ -188,33 +180,25 @@ export const getUnassignColumns = ({
       title: "Course",
       key: "course",
       width: 150,
-      render: (_, item: any) =>
-        item?.courses?.map((course: TCourse, index: number) => (
-          <p key={index} className="line-clamp-1">
-            {course.name}
-          </p>
-        )),
+      render: (_, item: any) => (
+        <p className="line-clamp-2">{item?.course?.name}</p>
+      ),
     },
     {
       title: "Subject",
-      key: "subjects",
-      width: 120,
-      render: (_, item: any) =>
-        item?.subjects?.map((subject: TSubject, index: number) => (
-          <p key={index} className="line-clamp-1">
-            {subject.name}
-          </p>
-        )),
+      key: "subject",
+      width: 130,
+      render: (_, item: any) => (
+        <p className="line-clamp-2">{item?.subject?.name}</p>
+      ),
     },
     {
       title: "Topic",
-      width: 150,
-      render: (_, item: any) =>
-        item?.topics?.map((topic: TCourse, index: number) => (
-          <p key={index} className="line-clamp-1">
-            {topic.name}
-          </p>
-        )),
+      key: "topic",
+      width: 170,
+      render: (_, item: any) => (
+        <p className="line-clamp-2">{item?.topic?.name}</p>
+      ),
     },
     {
       title: "Status",
@@ -259,12 +243,6 @@ export const getAssignColumns = ({
       width: 50,
       align: "center",
       render: (_, __: any, index: number) => <p>{index + 1}</p>,
-    },
-    {
-      title: "Q. ID",
-      key: "question_id",
-      width: 80,
-      render: (_, item: TQuestion) => <p>Q{item?.question_id}</p>,
     },
     {
       title: "Teachers",

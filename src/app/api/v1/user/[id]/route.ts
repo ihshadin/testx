@@ -14,12 +14,6 @@ export async function GET(
   try {
     const id = params.id;
 
-    const adminVerify = verifyAdmin(req);
-
-    if (!adminVerify) {
-      throw new ApiError(401, "Your are Unauthorized!");
-    }
-
     await dbConnect();
 
     const result = await UserModel.findById(id).select("-password");
@@ -41,12 +35,6 @@ export async function PATCH(
 ) {
   try {
     const id = params.id;
-    const adminVerify = verifyAdmin(req);
-
-    if (!adminVerify) {
-      throw new ApiError(401, "You are Unauthorized");
-    }
-
     await dbConnect();
 
     const isExist = await UserModel.findOne({
@@ -59,11 +47,7 @@ export async function PATCH(
 
     const payload = await req.json();
 
-    console.log("payload--=>", payload);
-
     const validateData = userUpdateValidationSchema.parse(payload);
-
-    console.log("validateData", validateData);
 
     const result = await UserModel.findByIdAndUpdate(id, validateData, {
       new: true,

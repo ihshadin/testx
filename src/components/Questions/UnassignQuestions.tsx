@@ -54,17 +54,18 @@ const UnassignQuestions = ({ questions, isQuesLoading }: TQuestions) => {
     handleDelete,
   });
 
-  const onSubmit = async (data: any) => {
+  const handleAssignTeacher = async (data: any) => {
     const toastId = toast.loading("Assigning teacher...");
 
-    const filteredData = {
+    const updatedData = {
       questionIds: selectedRowKeys,
-      teachers: data?.teachers,
+      teacher: data?.teacher,
+      owner: data?.teacher,
       status: "assigned",
     };
 
     try {
-      const res = await updateAssignment(filteredData).unwrap();
+      const res = await updateAssignment(updatedData).unwrap();
       if (res?.success) {
         toast.success("Assigned updated successfully", { id: toastId });
         form.resetFields();
@@ -85,23 +86,22 @@ const UnassignQuestions = ({ questions, isQuesLoading }: TQuestions) => {
       <div className="mb-3">
         <Form
           form={form}
-          onFinish={onSubmit}
+          onFinish={handleAssignTeacher}
           requiredMark={false}
           layout="vertical"
         >
           <Row gutter={15} align="bottom">
-            <Col span={10}>
+            <Col span={8}>
               <Form.Item
                 label="Teacher"
-                name="teachers"
+                name="teacher"
                 style={{ marginBottom: 0 }}
               >
                 <Select
                   showSearch
-                  mode="multiple"
                   placeholder="Select from here..."
                   options={mapToOptions(teachers?.data)}
-                  className="[&_.ant-select-selector]:!min-h-10 !bg-transparent *:!rounded-lg "
+                  className="!h-10 !bg-transparent *:!rounded-lg "
                   onChange={() => setIsBtnDisabled(false)}
                   disabled={selectedRowKeys.length <= 0}
                 />
@@ -110,7 +110,7 @@ const UnassignQuestions = ({ questions, isQuesLoading }: TQuestions) => {
             <Col span={5}>
               <div>
                 <button
-                  className="cursor-pointer disabled:cursor-not-allowed text-base font-medium block w-full bg-primary/5 hover:bg-primary disabled:bg-primary/5 text-primary hover:text-white disabled:text-primary/50 border border-primary/30 hover:border-primary/60 disabled:border-primary//30 px-4 py-1.5 h-10 rounded-lg transition duration-150"
+                  className="cursor-pointer disabled:cursor-not-allowed text-base font-medium bg-primary/5 hover:bg-primary disabled:bg-primary/5 text-primary hover:text-white disabled:text-primary/50 border border-primary/30 hover:border-primary/60 disabled:border-primary//30 px-4 py-1.5 h-10 rounded-lg transition duration-150"
                   type="submit"
                   disabled={isBtnDisabled || selectedRowKeys.length === 0}
                 >

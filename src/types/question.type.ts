@@ -8,10 +8,10 @@ export type TQuestion = {
   newDesc?: string;
   domain?: string;
   difficulty_level: "easy" | "medium" | "hard";
-  courses: string; //FK
-  subjects: string; //FK
-  topics: string; //FK
-  teachers?: string; //FK
+  course: string; //FK
+  subject: string; //FK
+  topic: string; //FK
+  teacher?: string; //FK
   owner?: string; //FK
   comment?: string;
   images?: {

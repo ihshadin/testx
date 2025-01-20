@@ -6,7 +6,10 @@ import sendApiResponse from "@/utils/Response/sendResponse";
 import { handleError } from "@/utils/errors/handleError";
 import { queryHelpers } from "@/helpers/queryHelpers";
 import QueryBuilder from "@/helpers/queryBuilder";
-import { createQuestionValidationSchema } from "./questionModule/question.validation";
+import {
+  createQuestionValidationSchema,
+  updateQuestionValidationSchema,
+} from "./questionModule/question.validation";
 import { QuestionModel } from "./questionModule/question.model";
 import { questionSearchableFields } from "./questionModule/question.constant";
 import { SubjectModel } from "../subject/subjectModule/subject.model";
@@ -75,10 +78,10 @@ export async function GET(req: NextRequest) {
 
     const questionQuery = new QueryBuilder(
       QuestionModel.find()
-        .populate("courses")
-        .populate("subjects")
-        .populate("topics")
-        .populate("teachers"),
+        .populate("course")
+        .populate("subject")
+        .populate("topic")
+        .populate("teacher"),
       allQueries
     )
       .search(questionSearchableFields)
@@ -96,6 +99,67 @@ export async function GET(req: NextRequest) {
       message: "Retrieve all question successfully",
       meta,
       data,
+    });
+  } catch (error: any) {
+    return handleError(error, NextResponse);
+  }
+}
+
+export async function PATCH(req: NextRequest) {
+  try {
+    await dbConnect();
+
+    const payload = await req.json();
+
+    const { questionIds, teacher, owner, status } = payload;
+
+    if (
+      !questionIds ||
+      !Array.isArray(questionIds) ||
+      questionIds.length === 0
+    ) {
+      throw new ApiError(400, "Question IDs are required");
+    }
+
+    const validateData = updateQuestionValidationSchema.parse(payload);
+
+    if (!teacher || !Array.isArray(teacher) || teacher.length === 0) {
+      throw new ApiError(400, "Teacher are required");
+    }
+
+    const updated = await QuestionModel.updateMany(
+      { _id: { $in: questionIds } }, // Match the question IDs
+      {
+        $set: {
+          teacher,
+          owner,
+          status,
+        },
+      }
+    );
+
+    // Prepare the bulk update for the questions
+    // const bulkUpdateOps = questionIds.map((id) => ({
+    //   updateOne: {
+    //     filter: { _id: id },
+    //     update: {
+    //       $set: {
+    //         teacher: teachers,
+    //         status: status,
+    //         ...validateData,
+    //       },
+    //     },
+    //   },
+    // }));
+
+    // Execute the bulk update operation
+    // const result = await QuestionModel.bulkWrite(bulkUpdateOps);
+
+    return sendApiResponse(NextResponse, {
+      statusCode: 200,
+      success: true,
+      message: "Question Updated Successfully!",
+      data: updated,
     });
   } catch (error: any) {
     return handleError(error, NextResponse);

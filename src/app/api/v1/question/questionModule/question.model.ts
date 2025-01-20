@@ -25,22 +25,22 @@ const QuestionSchema: Schema = new Schema<TQuestion>(
       enum: ["easy", "medium", "hard"],
       required: true,
     },
-    courses: {
+    course: {
       type: Schema.Types.ObjectId,
       ref: "Course",
       required: true,
     },
-    subjects: {
+    subject: {
       type: Schema.Types.ObjectId,
       ref: "Subject",
       required: true,
     },
-    topics: {
+    topic: {
       type: Schema.Types.ObjectId,
       ref: "Topic",
       required: true,
     },
-    teachers: {
+    teacher: {
       type: Schema.Types.ObjectId,
       ref: "User",
     },

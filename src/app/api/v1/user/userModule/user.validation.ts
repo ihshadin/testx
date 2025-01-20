@@ -25,9 +25,9 @@ export const userValidationSchema = z.object({
 export const userUpdateValidationSchema = z.object({
   first_name: z.string().min(1).optional(),
   last_name: z.string().min(1).optional(),
-  email: z.string().email().optional(),
   status: z
     .enum(Object.values(USER_STATUS) as [string, ...string[]])
     .optional(),
+  role: z.enum(Object.values(USER_ROLE) as [string, ...string[]]).optional(),
   photo: z.string().optional(),
 });
