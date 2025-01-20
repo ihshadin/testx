@@ -132,24 +132,25 @@ const AddQuestion = () => {
                     onChange={setQuestionDetails}
                     preview="live"
                     minHeight={400}
-                    components={{
-                      toolbar: (command, disabled, executeCommand) => {
-                        if (command.keyCommand === "code") {
-                          return (
-                            <button
-                              aria-label="Insert code"
-                              disabled={disabled}
-                              onClick={(evn) => {
-                                evn.stopPropagation();
-                                executeCommand(command, command.groupName);
-                              }}
-                            >
-                              Code
-                            </button>
-                          );
-                        }
-                      },
-                    }}
+                    style={{ fontFamily: "Archivo" }}
+                    // components={{
+                    //   toolbar: (command, disabled, executeCommand) => {
+                    //     if (command.keyCommand === "code") {
+                    //       return (
+                    //         <button
+                    //           aria-label="Insert code"
+                    //           disabled={disabled}
+                    //           onClick={(evn) => {
+                    //             evn.stopPropagation();
+                    //             executeCommand(command, command.groupName);
+                    //           }}
+                    //         >
+                    //           Code
+                    //         </button>
+                    //       );
+                    //     }
+                    //   },
+                    // }}
                   />
                 </div>
               </Col>
