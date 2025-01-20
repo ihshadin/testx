@@ -8,7 +8,6 @@ const CourseSchema: Schema = new Schema<TCourse>(
       required: true,
       trim: true,
     },
-
     description: {
       type: String,
       trim: true,

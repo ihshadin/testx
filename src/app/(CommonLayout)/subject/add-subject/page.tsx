@@ -7,14 +7,12 @@ import { TSubject } from "@/types/subject.type";
 import { toast } from "sonner";
 import { useAddSubjectMutation } from "@/redux/features/subject/subjectApi";
 import onsubmitErrorHandler from "@/utils/errors/onsubmitErrorHandler";
+import { mapToOptions } from "@/utils";
 
 const AddSubjectPage = () => {
   const [addSubject] = useAddSubjectMutation();
   const { data: courses, isLoading } = useGetAllCourseQuery(undefined);
   const [form] = Form.useForm();
-
-  const mapToOptions = (data: TCourse[]) =>
-    data?.map(({ _id, name }) => ({ value: _id, label: name }));
 
   const onSubmit = async (data: TSubject) => {
     const toastId = toast.loading("Appointment Creating...");
@@ -82,18 +80,16 @@ const AddSubjectPage = () => {
               <Col span={24}>
                 <Form.Item
                   label="Select Course"
-                  name="courses"
+                  name="course"
                   rules={[
                     { required: true, message: "Course Selection is required" },
                   ]}
                 >
                   <Select
                     loading={isLoading}
-                    mode="multiple"
                     showSearch
                     placeholder="Select from here..."
                     options={mapToOptions(courses?.data)}
-                    // onChange={(value) => setSelectedRole(value)}
                     className="!h-10 *:!rounded-lg !bg-transparent"
                   />
                 </Form.Item>

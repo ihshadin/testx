@@ -6,6 +6,6 @@ export const createCourseValidationSchema = z.object({
 });
 
 export const updateCourseValidationSchema = z.object({
-  name: z.string().min(1, "Name is required").trim(),
+  name: z.string().trim().optional(),
   description: z.string().optional(),
 });

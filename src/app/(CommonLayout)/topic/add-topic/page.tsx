@@ -1,20 +1,18 @@
 "use client";
-import React, { useState } from "react";
-import { Col, Form, Input, Row, Select } from "antd";
+import React from "react";
+import { Col, Form, Input, Row, TreeSelect } from "antd";
 import { TTopic } from "@/types/topic.type";
 import { toast } from "sonner";
 import onsubmitErrorHandler from "@/utils/errors/onsubmitErrorHandler";
 import { useAddTopicMutation } from "@/redux/features/topic/topicApi";
 import { useGetAllSubjectQuery } from "@/redux/features/subject/subjectApi";
-import { TSubject } from "@/types/subject.type";
+import { transformToTreeData } from "@/utils/TransformData";
 
 const AddTopicPage = () => {
   const [addTopic] = useAddTopicMutation();
-  const { data: subjects, isLoading } = useGetAllSubjectQuery(undefined);
+  const { data: subjects, isLoading: isSubLoading } =
+    useGetAllSubjectQuery(undefined);
   const [form] = Form.useForm();
-
-  const mapToOptions = (data: TSubject[]) =>
-    data?.map(({ _id, name }) => ({ value: _id, label: name }));
 
   const onSubmit = async (data: TTopic) => {
     const toastId = toast.loading("Appointment Creating...");
@@ -32,6 +30,14 @@ const AddTopicPage = () => {
       onsubmitErrorHandler(error, toastId);
     }
   };
+
+  if (isSubLoading) {
+    return (
+      <div className="max-w-7xl mx-auto py-8 px-2 text-center">
+        <p className="text-primary text-xl">Loading...</p>
+      </div>
+    );
+  }
 
   return (
     <section>
@@ -82,7 +88,7 @@ const AddTopicPage = () => {
               <Col span={24}>
                 <Form.Item
                   label="Select Subject"
-                  name="subjects"
+                  name="subject"
                   rules={[
                     {
                       required: true,
@@ -90,13 +96,21 @@ const AddTopicPage = () => {
                     },
                   ]}
                 >
-                  <Select
+                  {/* <Select
                     loading={isLoading}
-                    mode="multiple"
                     showSearch
                     placeholder="Select from here..."
                     options={mapToOptions(subjects?.data)}
-                    // onChange={(value) => setSelectedRole(value)}
+                    className="!h-10 *:!rounded-lg !bg-transparent"
+                  /> */}
+                  <TreeSelect
+                    placeholder={"Select from here..."}
+                    showSearch
+                    loading={isSubLoading}
+                    treeLine={true}
+                    treeData={transformToTreeData(subjects?.data)}
+                    treeIcon={true}
+                    treeDefaultExpandAll
                     className="!h-10 *:!rounded-lg !bg-transparent"
                   />
                 </Form.Item>

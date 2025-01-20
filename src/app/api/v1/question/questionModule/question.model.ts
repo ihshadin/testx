@@ -4,11 +4,6 @@ import { QUESTION_STATUS } from "./question.constant";
 
 const QuestionSchema: Schema = new Schema<TQuestion>(
   {
-    question_id: {
-      type: Number,
-      // unique: true,
-      // required: true,
-    },
     title: {
       type: String,
       required: true,
@@ -17,7 +12,6 @@ const QuestionSchema: Schema = new Schema<TQuestion>(
     desc: {
       type: String,
       required: true,
-      trim: true,
     },
     newDesc: {
       type: String,
@@ -32,25 +26,35 @@ const QuestionSchema: Schema = new Schema<TQuestion>(
       required: true,
     },
     courses: {
-      type: [{ type: Schema.Types.ObjectId, ref: "Course" }],
+      type: Schema.Types.ObjectId,
+      ref: "Course",
       required: true,
     },
     subjects: {
-      type: [{ type: Schema.Types.ObjectId, ref: "Subject" }],
+      type: Schema.Types.ObjectId,
+      ref: "Subject",
       required: true,
     },
     topics: {
-      type: [{ type: Schema.Types.ObjectId, ref: "Topic" }],
+      type: Schema.Types.ObjectId,
+      ref: "Topic",
       required: true,
     },
-    options: {
-      type: [String],
-    },
     teachers: {
-      type: [{ type: Schema.Types.ObjectId, ref: "User" }],
+      type: Schema.Types.ObjectId,
+      ref: "User",
     },
     owner: {
-      type: { type: Schema.Types.ObjectId, ref: "User" },
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
+    comment: {
+      type: String,
+      trim: true,
+    },
+    images: {
+      id: { type: String },
+      url: { type: String },
     },
     status: {
       type: String,

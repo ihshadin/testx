@@ -26,7 +26,10 @@ export async function POST(req: NextRequest) {
     const payload = await req.json();
 
     // Check if the subject already exists
-    const isExistSubject = await SubjectModel.findOne({ name: payload?.name });
+    const isExistSubject = await SubjectModel.findOne({
+      name: payload?.name,
+      course: payload?.course,
+    });
     if (isExistSubject) {
       throw new ApiError(409, "Subject already exists");
     }
@@ -58,7 +61,7 @@ export async function GET(req: NextRequest) {
     const allQueries = queryHelpers(req);
 
     const subjectQuery = new QueryBuilder(
-      SubjectModel.find().populate("courses"),
+      SubjectModel.find().populate("course"),
       allQueries
     )
       .search(subjectSearchableFields)

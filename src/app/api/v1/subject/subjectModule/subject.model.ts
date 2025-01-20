@@ -8,14 +8,13 @@ const SubjectSchema: Schema = new Schema<TSubject>(
       required: true,
       trim: true,
     },
-
     description: {
       type: String,
       trim: true,
     },
-
-    courses: {
-      type: [{ type: Schema.Types.ObjectId, ref: "Course" }],
+    course: {
+      type: Schema.Types.ObjectId,
+      ref: "Course",
       required: true,
     },
   },
