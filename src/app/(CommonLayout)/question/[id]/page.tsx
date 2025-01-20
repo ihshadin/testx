@@ -44,11 +44,19 @@ const QuestionDetails = () => {
   const [isNeedHelp, setIsNeedHelp] = useState(false);
   const [isHold, setIsHold] = useState(false);
 
-  const { data: question } = useGetSingleQuestionQuery(id);
+  const { data: question, isLoading } = useGetSingleQuestionQuery(id);
   const { data: teachers, isLoading: isTeaLoading } = useGetAllUserQuery([
     { name: "role", value: "teacher" },
     { name: "status", value: "approved" },
   ]);
+
+  if (isLoading) {
+    return (
+      <div className="max-w-7xl mx-auto py-8 px-2 text-center">
+        <p className="text-primary text-xl">Loading...</p>
+      </div>
+    );
+  }
 
   return (
     <section>

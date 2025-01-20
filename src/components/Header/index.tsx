@@ -6,7 +6,7 @@ import Menu from "./Menu";
 import LogOut from "../Auth/LogOut";
 
 const menuItems = [
-  { label: "Dashboard", slug: "/", roles: ["admin", "teacher"] },
+  { label: "Dashboard", slug: "/", roles: ["admin", "teacher", "coordinator"] },
   // {
   //   label: "Add Question",
   //   slug: "/add-question",
@@ -14,13 +14,13 @@ const menuItems = [
   // },
   {
     label: "Question Assignment",
-    slug: "/question-assignment",
-    roles: ["admin", "teacher"],
+    slug: "/question/question-assignment",
+    roles: ["admin"],
   },
   {
     label: "Users Management",
     slug: "/users-management",
-    roles: ["admin", "coordinator"],
+    roles: ["admin"],
   },
   {
     label: "Coordinator Assignment",
@@ -28,9 +28,14 @@ const menuItems = [
     roles: ["admin"],
   },
   {
+    label: "Question Submission",
+    slug: "/question/question-submission",
+    roles: ["coordinator"],
+  },
+  {
     label: "Question Reassignment",
     slug: "/question-reassignment",
-    roles: ["admin"],
+    roles: ["admin", "coordinator"],
   },
   // {
   //   label: "Database Management",
@@ -40,7 +45,7 @@ const menuItems = [
   {
     label: "Completed Questions",
     slug: "/completed-questions",
-    roles: ["admin", "teacher"],
+    roles: ["admin"],
   },
   // { label: "Questions From Teacher", slug: "/questions-from-teacher", roles: ["admin", "teacher"] },
   // { label: "Your Profile", slug: "/profile", roles: ["admin", "teacher", "coordinator"] },

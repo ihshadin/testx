@@ -23,7 +23,7 @@ const Menu = ({ items }: { items: TMenu[] }) => {
 
   useEffect(() => {
     refetch();
-  }, [data?.data?.role]);
+  }, [data?.data?.role, refetch]);
 
   return (
     <div className="pt-4 flex flex-wrap justify-between items-center">
