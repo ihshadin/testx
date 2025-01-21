@@ -1,16 +1,24 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import UploadImageWithPreview from "@/utils/UploadImage/UploadImageWithPreview";
 import { Checkbox, Image, Select, Switch } from "antd";
 import QuestionEdit from "@/components/Questions/QuestionEdit";
-import { useParams } from "next/navigation";
-import { useGetSingleQuestionQuery } from "@/redux/features/question/questionApi";
+import { useParams, useRouter } from "next/navigation";
+import {
+  useGetSingleQuestionQuery,
+  useUpdateQuestionMutation,
+} from "@/redux/features/question/questionApi";
 import MDEditor from "@uiw/react-md-editor";
-import { mapToOptions } from "@/utils";
-import { useGetAllUserQuery } from "@/redux/features/user/userApi";
+// import { mapToOptions } from "@/utils";
+import {
+  useGetAllUserQuery,
+  useGetUserQuery,
+} from "@/redux/features/user/userApi";
 import { CheckboxChangeEventTarget } from "antd/es/checkbox/Checkbox";
 import { toast } from "sonner";
 import { uploadImageInCloudinary } from "@/utils/UploadImage/UploadImageInCloudinay";
+import onsubmitErrorHandler from "@/utils/errors/onsubmitErrorHandler";
+import { TUser } from "@/types/user.type";
 
 const galleryImages = [
   {
@@ -41,17 +49,25 @@ const galleryImages = [
 
 const QuestionDetails = () => {
   const { id } = useParams();
+  const router = useRouter();
+  const { data: user } = useGetUserQuery(undefined);
+  const { data, isLoading, refetch } = useGetSingleQuestionQuery(id);
+  const question = data?.data;
+
   const [files, setFiles] = useState([]);
   const [isImageRequired, setIsImageRequired] = useState(false);
   const [isNeedHelp, setIsNeedHelp] = useState(false);
-  const [isHold, setIsHold] = useState(false);
+  const [reassignTeacher, setReassignTeacher] = useState("");
+  const [isHold, setIsHold] = useState(
+    question?.status == "hold" ? true : false
+  );
 
-  const { data: question, isLoading } = useGetSingleQuestionQuery(id);
-  const { data: teachers, isLoading: isTeaLoading } = useGetAllUserQuery([
+  const { data: teachers } = useGetAllUserQuery([
     { name: "role", value: "teacher" },
     { name: "status", value: "approved" },
   ]);
-
+  const [updateQuestion] = useUpdateQuestionMutation();
+  console.log(user);
   const handleUpload = async () => {
     if (files.length === 0) {
       toast.error("Please select at least one image to upload.");
@@ -82,10 +98,107 @@ const QuestionDetails = () => {
     }
   };
 
+  const handleHoldStatus = async () => {
+    const toastId = toast.loading("Updating question...");
+
+    const status = question?.status == "hold" ? "assigned" : "hold";
+
+    const updatedData = {
+      id: id,
+      data: { status: status },
+    };
+
+    try {
+      const res = await updateQuestion(updatedData).unwrap();
+      if (res?.success) {
+        toast.success("Question updated successfully", { id: toastId });
+        refetch();
+      }
+    } catch (error: any) {
+      onsubmitErrorHandler(error, toastId);
+    }
+  };
+
+  const handleReassignTeacher = async () => {
+    const toastId = toast.loading("Updating question...");
+
+    const updatedData = {
+      id: id,
+      data: { teacher: reassignTeacher, status: "reassigned" },
+    };
+
+    try {
+      const res = await updateQuestion(updatedData).unwrap();
+      if (res?.success) {
+        toast.success("Question updated successfully", { id: toastId });
+        refetch();
+      }
+    } catch (error: any) {
+      onsubmitErrorHandler(error, toastId);
+    }
+  };
+
+  const handleActionAsOnlyTeacher = async () => {
+    const toastId = toast.loading("Updating question...");
+    const updatedData = {
+      id: id,
+      data: { teacher: question?.owner?.email, status: "assigned" },
+    };
+    console.log("updated data", updatedData);
+
+    try {
+      const res = await updateQuestion(updatedData).unwrap();
+      if (res?.success) {
+        toast.success("Question updated successfully", { id: toastId });
+        refetch();
+      }
+    } catch (error: any) {
+      onsubmitErrorHandler(error, toastId);
+    }
+  };
+
+  const handleActionAsOwner = async () => {
+    const toastId = toast.loading("Updating question...");
+
+    const updatedData = {
+      id: id,
+      data: { status: "verified" },
+    };
+
+    try {
+      const res = await updateQuestion(updatedData).unwrap();
+      if (res?.success) {
+        toast.success("Question updated successfully", { id: toastId });
+        router.push("/");
+      }
+    } catch (error: any) {
+      onsubmitErrorHandler(error, toastId);
+    }
+  };
+
+  const teacherEmail = question?.teacher?.email;
+  const ownerEmail = question?.owner?.email;
+  const loggedInEmail = user?.data?.email;
+
+  const fullName = (item: any) => {
+    return item?.first_name + " " + item?.last_name;
+  };
+  const mapToOptions = (data: TUser[]) =>
+    data?.map(({ _id, first_name, last_name }) => ({
+      value: _id,
+      label: first_name + " " + last_name,
+    }));
+
+  console.log(question);
+
+  useEffect(() => {
+    setIsHold(question?.status === "hold");
+  }, [question]);
+
   if (isLoading) {
     return (
-      <div className="max-w-7xl mx-auto py-8 px-2 text-center">
-        <p className="text-primary text-xl">Loading...</p>
+      <div className="max-w-7xl mx-auto py-8 px-2">
+        <p className="text-primary text-lg">Loading...</p>
       </div>
     );
   }
@@ -93,10 +206,6 @@ const QuestionDetails = () => {
   return (
     <section>
       <div className="max-w-7xl mx-auto py-8 px-2">
-        <h3 className="text-xl font-semibold mb-4">
-          <span className="mr-2 font-medium">Q. Title: </span>
-          {question?.data?.title}
-        </h3>
         <div className="text-2xl font-semibold flex items-center gap-5">
           Is Image is required?
           <Switch
@@ -175,61 +284,87 @@ const QuestionDetails = () => {
               </p>
             </div> */}
             <div data-color-mode="light">
-              <MDEditor.Markdown source={question?.data?.desc} />
+              <MDEditor.Markdown source={question?.desc} />
             </div>
           </div>
           <div className="w-[50%] border border-primary/10 rounded-lg px-3 py-3">
-            <QuestionEdit question={question?.data} />
+            <QuestionEdit question={question} />
           </div>
         </div>
 
         <div className="mt-5 border border-primary/10 rounded-lg px-3 py-3">
           <div className="flex gap-4 *:border *:border-primary/10 *:rounded-lg *:px-5 *:py-2">
-            {question?.data?.difficulty_level && (
+            {question?.difficulty_level && (
               <div>
                 <p className="font-medium">Difficulty Level</p>
-                <p className="capitalize">{question?.data?.difficulty_level}</p>
+                <p className="capitalize">{question?.difficulty_level}</p>
               </div>
             )}
-            {question?.data?.domain && (
+            {question?.domain && (
               <div>
                 <p className="font-medium">Domain</p>
-                <p className="capitalize">{question?.data?.domain}</p>
+                <p className="capitalize">{question?.domain}</p>
               </div>
             )}
-            <div>
-              <p className="font-medium">Question Status</p>
-              <p>Assigned</p>
-            </div>
-            <div>
-              <p className="font-medium">Assigned Teacher</p>
-              <p>Imam Hossain</p>
-            </div>
-            <div>
-              <p className="font-medium">Question Owner</p>
-              <p>Ahswin</p>
-            </div>
+            {question?.status && (
+              <div>
+                <p className="font-medium">Question Status</p>
+                <p className="capitalize">{question?.status}</p>
+              </div>
+            )}
+            {question?.teacher && (
+              <div>
+                <p className="font-medium">Assigned Teacher</p>
+                <p className="capitalize">{fullName(question?.teacher)}</p>
+              </div>
+            )}
+            {question?.owner && (
+              <div>
+                <p className="font-medium">Assigned Owner</p>
+                <p className="capitalize">{fullName(question?.owner)}</p>
+              </div>
+            )}
           </div>
-          <div className="mt-10">
-            <Checkbox
-              onChange={(e): any => setIsHold(e.target.checked)}
-              defaultChecked={isHold}
-              className="!text-lg"
-            >
-              I want to{" "}
-              <span className="py-0.5 px-1.5 bg-orange-100 text-orange-700 rounded">
-                Hold
-              </span>{" "}
-              this question for now
-            </Checkbox>
-            <button
-              className="cursor-pointer disabled:cursor-not-allowed text-base block mt-3 font-medium bg-primary/5 hover:bg-primary disabled:bg-primary/5 text-primary hover:text-white disabled:text-primary/50 border border-primary/30 hover:border-primary/60 disabled:border-primary//30 px-4 py-1.5 h-10 rounded-lg transition duration-150"
-              type="submit"
-              disabled={!isHold}
-            >
-              Hold Question
-            </button>
-          </div>
+          {question?.status === "hold" ? (
+            <div className="mt-10">
+              <p>
+                This is question is now{" "}
+                <span className="py-0.5 px-1.5 bg-orange-100 text-orange-700 rounded">
+                  Hold
+                </span>
+              </p>
+              <button
+                className="cursor-pointer disabled:cursor-not-allowed text-base block mt-3 font-medium bg-primary/5 hover:bg-primary disabled:bg-primary/5 text-primary hover:text-white disabled:text-primary/50 border border-primary/30 hover:border-primary/60 disabled:border-primary//30 px-4 py-1.5 h-10 rounded-lg transition duration-150"
+                type="submit"
+                onClick={() => handleHoldStatus()}
+                disabled={!isHold}
+              >
+                Release Question
+              </button>
+            </div>
+          ) : (
+            <div className="mt-10">
+              <Checkbox
+                onChange={(e): any => setIsHold(e.target.checked)}
+                checked={isHold}
+                className="!text-base"
+              >
+                I want to{" "}
+                <span className="py-0.5 px-1.5 bg-orange-100 text-orange-700 rounded">
+                  Hold
+                </span>{" "}
+                this question for now
+              </Checkbox>
+              <button
+                className="cursor-pointer disabled:cursor-not-allowed text-base block mt-3 font-medium bg-primary/5 hover:bg-primary disabled:bg-primary/5 text-primary hover:text-white disabled:text-primary/50 border border-primary/30 hover:border-primary/60 disabled:border-primary//30 px-4 py-1.5 h-10 rounded-lg transition duration-150"
+                type="submit"
+                onClick={() => handleHoldStatus()}
+                disabled={!isHold}
+              >
+                Hold Question
+              </button>
+            </div>
+          )}
           {isHold || (
             <>
               <div className="mt-10">
@@ -240,38 +375,73 @@ const QuestionDetails = () => {
                     checkedChildren="Yes"
                     unCheckedChildren="No"
                     defaultChecked={isNeedHelp}
+                    disabled={loggedInEmail === ownerEmail ? false : true}
                   />
                 </div>
                 {isNeedHelp && (
                   <div className="flex gap-5 mt-3">
                     <Select
                       showSearch
-                      mode="multiple"
                       placeholder="Select from here..."
                       options={mapToOptions(teachers?.data)}
                       className="[&_.ant-select-selector]:!min-h-10 !bg-transparent *:!rounded-lg w-[350px]"
-                      onChange={() => setIsNeedHelp(false)}
+                      onChange={(teacher) => setReassignTeacher(teacher)}
                       disabled={!isNeedHelp}
                     />
                     <button
                       className="cursor-pointer disabled:cursor-not-allowed text-base font-medium bg-primary/5 hover:bg-primary disabled:bg-primary/5 text-primary hover:text-white disabled:text-primary/50 border border-primary/30 hover:border-primary/60 disabled:border-primary//30 px-4 py-1.5 h-10 rounded-lg transition duration-150"
                       type="submit"
+                      onClick={() => handleReassignTeacher()}
                       disabled={!isNeedHelp}
                     >
-                      Assign Teacher
+                      Reassign Teacher
                     </button>
                   </div>
                 )}
               </div>
 
-              <div className="mt-10 text-center">
+              {/* <div className="mt-10 text-center">
                 <button
                   className="cursor-pointer disabled:cursor-not-allowed text-base font-medium bg-primary/5 hover:bg-primary disabled:bg-primary/5 text-primary hover:text-white disabled:text-primary/50 border border-primary/30 hover:border-primary/60 disabled:border-primary//30 px-4 py-1.5 h-10 rounded-lg transition duration-150"
                   type="submit"
-                  // disabled={question?.data?.desc === question?.data?.newDesc}
+                  // disabled={question?.desc === question?.newDesc}
                 >
-                  Submit Question
+                  Submit Question For Verify
                 </button>
+              </div> */}
+              <div className="mt-10 text-center">
+                {teacherEmail == ownerEmail ? (
+                  // Case 1: Teacher and Owner are the same
+                  <button
+                    className="cursor-pointer disabled:cursor-not-allowed text-base font-medium bg-primary/5 hover:bg-primary disabled:bg-primary/5 text-primary hover:text-white disabled:text-primary/50 border border-primary/30 hover:border-primary/60 disabled:border-primary//30 px-4 py-1.5 h-10 rounded-lg transition duration-150"
+                    onClick={() => handleActionAsOwner()}
+                  >
+                    Submit the Question for Approval
+                  </button>
+                ) : loggedInEmail === ownerEmail &&
+                  loggedInEmail !== teacherEmail ? (
+                  // Case 2: Logged-in user is the owner but not the teacher
+                  <p className="text-lg text-red-600 text-center">
+                    This is a reassigned question. Teacher is{" "}
+                    <span className="font-bold">
+                      {fullName(question?.teacher)}
+                    </span>
+                    .
+                  </p>
+                ) : (loggedInEmail === teacherEmail) !== ownerEmail ? (
+                  // Case 3: Logged-in user is the teacher
+                  <button
+                    className="cursor-pointer disabled:cursor-not-allowed text-base font-medium bg-primary/5 hover:bg-primary disabled:bg-primary/5 text-primary hover:text-white disabled:text-primary/50 border border-primary/30 hover:border-primary/60 disabled:border-primary//30 px-4 py-1.5 h-10 rounded-lg transition duration-150"
+                    onClick={() => handleActionAsOnlyTeacher()}
+                  >
+                    Submit the Question to the Owner
+                  </button>
+                ) : (
+                  // Default case: No actions available
+                  <p className="text-base text-gray-500">
+                    No actions available.
+                  </p>
+                )}
               </div>
             </>
           )}

@@ -1,14 +1,10 @@
 "use client";
-import { useEffect, useState } from "react";
-import { Col, Form, Row, Select, Table } from "antd";
-import { toast } from "sonner";
+import { useState } from "react";
+import { Table } from "antd";
 import { getTeaQuesColumns } from "@/utils/AntdTableColumn/TableColumns";
 import { TableRowSelection } from "antd/es/table/interface";
-import { TQuestion } from "@/types/question.type";
-import onsubmitErrorHandler from "@/utils/errors/onsubmitErrorHandler";
 import { useGetAllQuestionQuery } from "@/redux/features/question/questionApi";
 import { useGetUserQuery } from "@/redux/features/user/userApi";
-
 import FilterByCourse from "../Questions/FilterByCourse";
 
 const TeacherDashboard = () => {
@@ -16,8 +12,8 @@ const TeacherDashboard = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [params, setParams] = useState<any>([
     { name: "owner", value: user?.data?._id },
+    { name: "status", value: "assigned" },
   ]);
-  const [form] = Form.useForm();
 
   const { data: questions, isLoading: isQuesLoading } =
     useGetAllQuestionQuery(params);
@@ -25,6 +21,7 @@ const TeacherDashboard = () => {
   const handleFilter = (data: Record<string, unknown>) => {
     setParams([
       ...params.filter((param: any) => param?.name === "owner"),
+      ...params.filter((param: any) => param?.name === "status"),
       ...Object.entries(data)
         .filter(([, value]) => value)
         .map(([key, value]) => ({ name: key, value })),

@@ -55,7 +55,7 @@ const CoordinatorAssignment = () => {
     const toastId = toast.loading("Updating Coordinator...");
 
     const updatedData = {
-      teachers: JSON.stringify(selectedRowKeys),
+      teachers: selectedRowKeys,
       coordinator: coordinator,
     };
     console.log(updatedData);

@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { jwtHelpers } from "./jwtHelpers";
 
-export const verifyAdmin = (req: NextRequest) => {
+export const verifyCoordinator = (req: NextRequest) => {
   const accessToken = req.cookies.get("accessToken")?.value || "";
 
   if (!accessToken) {

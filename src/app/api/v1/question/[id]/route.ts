@@ -6,6 +6,8 @@ import { handleError } from "@/utils/errors/handleError";
 import { verifyAdmin } from "@/helpers/verifyAdmin";
 import { QuestionModel } from "../questionModule/question.model";
 import { updateQuestionValidationSchema } from "../questionModule/question.validation";
+import { UserModel } from "../../user/userModule/user.model";
+import { SubjectModel } from "../../subject/subjectModule/subject.model";
 
 export async function GET(
   req: NextRequest,
@@ -15,10 +17,15 @@ export async function GET(
     await dbConnect();
 
     const id = params.id;
+    await UserModel;
+    await SubjectModel;
 
     const singleQuestion = await QuestionModel.findOne({
       _id: id,
-    });
+    })
+      .populate("teacher")
+      .populate("owner")
+      .populate("subject");
 
     if (!singleQuestion) {
       throw new ApiError(404, "Question not found!");

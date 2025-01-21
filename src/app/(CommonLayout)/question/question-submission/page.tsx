@@ -1,5 +1,5 @@
-import SubQuestions from "@/components/Questions/SubQuestions";
 import React from "react";
+import SubQuestions from "@/components/Questions/SubQuestions";
 
 const QuestionSubmissionPage = () => {
   return (

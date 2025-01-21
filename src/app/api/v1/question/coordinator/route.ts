@@ -8,6 +8,8 @@ import { CourseModel } from "../../course/courseModule/course.model";
 import { SubjectModel } from "../../subject/subjectModule/subject.model";
 import { TopicModel } from "../../topic/topicModule/topic.model";
 import { UserModel } from "../../user/userModule/user.model";
+import { QuestionModel } from "../questionModule/question.model";
+import { questionSearchableFields } from "../questionModule/question.constant";
 import { jwtHelpers } from "@/helpers/jwtHelpers";
 import { Secret } from "jsonwebtoken";
 
@@ -39,20 +41,22 @@ export async function GET(req: NextRequest) {
 
     const allQueries = queryHelpers(req);
 
-    const teachersQuery = new QueryBuilder(
-      UserModel.find({ _id: { $in: teacherIds } })
+    const questionQuery = new QueryBuilder(
+      QuestionModel.find({ teacher: { $in: teacherIds } })
         .populate("course")
         .populate("subject")
-        .populate("teachers"),
+        .populate("topic")
+        .populate("teacher"),
       allQueries
     )
+      .search(questionSearchableFields)
       .filter()
       .sort()
       .paginate()
       .fields();
 
-    const data = await teachersQuery.modelQuery;
-    const meta = await teachersQuery.countTotal();
+    const data = await questionQuery.modelQuery;
+    const meta = await questionQuery.countTotal();
 
     return sendApiResponse(NextResponse, {
       statusCode: 200,

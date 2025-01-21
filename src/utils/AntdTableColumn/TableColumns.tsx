@@ -118,29 +118,29 @@ export const getUsersColumns = ({
       ],
       onFilter: (value, record) => record.status.startsWith(value as string),
     },
-    {
-      title: "Action",
-      dataIndex: "action",
-      align: "center",
-      fixed: "right",
-      width: 100,
-      render: (_, record) => (
-        <div className="flex justify-center gap-2">
-          <Popconfirm
-            title="Delete the User"
-            description="Are you sure to delete this user?"
-            placement="topRight"
-            onConfirm={() => handleDelete(record._id)}
-            okText="Yes"
-            cancelText="No"
-          >
-            <Button>
-              <AiFillDelete fontSize={16} />
-            </Button>
-          </Popconfirm>
-        </div>
-      ),
-    },
+    // {
+    //   title: "Action",
+    //   dataIndex: "action",
+    //   align: "center",
+    //   fixed: "right",
+    //   width: 100,
+    //   render: (_, record) => (
+    //     <div className="flex justify-center gap-2">
+    //       <Popconfirm
+    //         title="Delete the User"
+    //         description="Are you sure to delete this user?"
+    //         placement="topRight"
+    //         onConfirm={() => handleDelete(record._id)}
+    //         okText="Yes"
+    //         cancelText="No"
+    //       >
+    //         <Button>
+    //           <AiFillDelete fontSize={16} />
+    //         </Button>
+    //       </Popconfirm>
+    //     </div>
+    //   ),
+    // },
   ];
 };
 

@@ -14,14 +14,16 @@ import QueryBuilder from "@/helpers/queryBuilder";
 import { UserSearchableFields } from "./userModule/user.constant";
 import { CourseModel } from "../course/courseModule/course.model";
 import { SubjectModel } from "../subject/subjectModule/subject.model";
+import { verifyTeacher } from "@/helpers/verifyTeacher";
 
 export async function GET(req: NextRequest) {
   try {
-    const adminVerify = verifyAdmin(req);
+    // const adminVerify = verifyAdmin(req);
+    // const teacherVerify = verifyTeacher(req);
 
-    if (!adminVerify) {
-      throw new ApiError(401, "Your are Unauthorized!");
-    }
+    // if (!adminVerify || !teacherVerify) {
+    //   throw new ApiError(401, "Your are Unauthorized!");
+    // }
 
     await dbConnect();
     await CourseModel;
