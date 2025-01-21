@@ -241,16 +241,15 @@ export const getAssignColumns = ({
       title: "Teachers",
       key: "teachers",
       width: 150,
-      render: (_, item: any) =>
-        item?.teachers?.map((teacher: TUser, index: number) => (
-          <p key={index} className="line-clamp-1">
-            {teacher?.first_name + " " + teacher?.last_name}
-          </p>
-        )),
+      render: (_, item: any) => (
+        <p className="line-clamp-1">
+          {item?.teacher?.first_name + " " + item?.teacher?.last_name}
+        </p>
+      ),
     },
     {
       title: "Question Name",
-      key: "title",
+      key: "question_name",
       width: 250,
       render: (_, item: TQuestion) => (
         <p className="line-clamp-2">{item?.title}</p>
@@ -258,7 +257,7 @@ export const getAssignColumns = ({
     },
     {
       title: "Question Description",
-      key: "desc",
+      key: "question_desc",
       render: (_, item: TQuestion) => (
         <p className="line-clamp-2">{item?.desc}</p>
       ),
@@ -267,23 +266,17 @@ export const getAssignColumns = ({
       title: "Course",
       key: "course",
       width: 170,
-      render: (_, item: any) =>
-        item?.courses?.map((course: TCourse, index: number) => (
-          <p key={index} className="line-clamp-1">
-            {course.name}
-          </p>
-        )),
+      render: (_, item: any) => (
+        <p className="line-clamp-1">{item?.course?.name}</p>
+      ),
     },
     {
       title: "Subject",
-      key: "subjects",
+      key: "subject",
       width: 150,
-      render: (_, item: any) =>
-        item?.subjects?.map((subject: TSubject, index: number) => (
-          <p key={index} className="line-clamp-1">
-            {subject.name}
-          </p>
-        )),
+      render: (_, item: any) => (
+        <p className="line-clamp-1">{item?.subject?.name}</p>
+      ),
     },
     {
       title: "Status",
@@ -294,28 +287,6 @@ export const getAssignColumns = ({
         <p className="line-clamp-1 capitalize">{item?.status}</p>
       ),
     },
-    // {
-    //   title: "Action",
-    //   align: "center",
-    //   fixed: "right",
-    //   width: 80,
-    //   render: (_, record) => (
-    //     <div className="flex justify-center gap-2">
-    //       <Popconfirm
-    //         title="Delete the user"
-    //         description="Are you sure to delete this user?"
-    //         placement="topRight"
-    //         onConfirm={() => handleDelete(record._id)}
-    //         okText="Yes"
-    //         cancelText="No"
-    //       >
-    //         <Button>
-    //           <AiFillDelete fontSize={16} />
-    //         </Button>
-    //       </Popconfirm>
-    //     </div>
-    //   ),
-    // },
   ];
 };
 

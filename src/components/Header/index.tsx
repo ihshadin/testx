@@ -34,7 +34,7 @@ const menuItems = [
   },
   {
     label: "Question Reassignment",
-    slug: "/question-reassignment",
+    slug: "/question/question-reassignment",
     roles: ["admin", "coordinator"],
   },
   // {

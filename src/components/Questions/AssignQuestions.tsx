@@ -8,7 +8,7 @@ import { TQuestions } from "@/types/question.type";
 import onsubmitErrorHandler from "@/utils/errors/onsubmitErrorHandler";
 import {
   useDeleteQuestionMutation,
-  useUpdateAssignmentMutation,
+  useUpdateQuestionsMutation,
 } from "@/redux/features/question/questionApi";
 import { useGetAllUserQuery } from "@/redux/features/user/userApi";
 import { TUser } from "@/types/user.type";
@@ -16,18 +16,20 @@ import { TUser } from "@/types/user.type";
 const AssignQuestions = ({
   questions,
   isQuesLoading,
-  handleTeacher,
+  handleTeacherSearch,
   setSearchTeacher,
 }: TQuestions) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-  const [reassignTeacher, setReassignTeacher] = useState([]);
+  const [reassignTeacher, setReassignTeacher] = useState("");
   const [isBtnDisabled, setIsBtnDisabled] = useState(true);
 
   const { data: teachers, isLoading: isTeaLoading } = useGetAllUserQuery([
     { name: "role", value: "teacher" },
     { name: "status", value: "approved" },
   ]);
-  const [updateAssignment] = useUpdateAssignmentMutation();
+  const [updateQuestions] = useUpdateQuestionsMutation();
+  // Delete Questions
+  const [deleteQuestion] = useDeleteQuestionMutation();
 
   // Row Selection functions
   const rowSelection: TableRowSelection<any> = {
@@ -36,9 +38,6 @@ const AssignQuestions = ({
       setSelectedRowKeys(newSelectedRowKeys);
     },
   };
-
-  // Delete Questions
-  const [deleteQuestion] = useDeleteQuestionMutation();
 
   const handleDelete = async (id: string) => {
     const toastId = toast.loading("Question Deleting...");
@@ -57,16 +56,17 @@ const AssignQuestions = ({
   const handleReassignTeacher = async () => {
     const toastId = toast.loading("Assigning teacher...");
 
-    const filteredData = {
+    const updatedData = {
       questionIds: selectedRowKeys,
-      teachers: reassignTeacher,
-      status: "assigned",
+      teacher: reassignTeacher,
+      owner: reassignTeacher,
     };
 
     try {
-      const res = await updateAssignment(filteredData).unwrap();
+      const res = await updateQuestions(updatedData).unwrap();
       if (res?.success) {
         toast.success("Assigned updated successfully", { id: toastId });
+        setReassignTeacher("");
       }
     } catch (error: any) {
       onsubmitErrorHandler(error, toastId);
@@ -86,8 +86,8 @@ const AssignQuestions = ({
           <div>
             <p className="mb-1">Search Teacher</p>
             <Select
+              loading={isTeaLoading}
               showSearch
-              mode="multiple"
               placeholder="Select from here..."
               options={mapToOptions(teachers?.data)}
               className="!h-10 !bg-transparent *:!rounded-lg w-[300px]"
@@ -98,7 +98,7 @@ const AssignQuestions = ({
             <button
               className="cursor-pointer disabled:cursor-not-allowed text-base font-medium block w-full bg-primary/5 hover:bg-primary disabled:bg-primary/5 text-primary hover:text-white disabled:text-primary/50 border border-primary/30 hover:border-primary/60 disabled:border-primary//30 px-4 py-1.5 h-10 rounded-lg transition duration-150"
               type="submit"
-              onClick={() => handleTeacher()}
+              onClick={() => handleTeacherSearch()}
             >
               Search
             </button>
@@ -109,12 +109,11 @@ const AssignQuestions = ({
             <p className="mb-1">Reassign Teacher</p>
             <Select
               showSearch
-              mode="multiple"
               placeholder="Select from here..."
               options={mapToOptions(teachers?.data)}
-              className="[&_.ant-select-selector]:!min-h-10 !bg-transparent *:!rounded-lg w-[300px]"
-              onChange={(teachers) => {
-                setReassignTeacher(teachers), setIsBtnDisabled(false);
+              className="!h-10 !bg-transparent *:!rounded-lg w-[300px]"
+              onChange={(teacher) => {
+                setReassignTeacher(teacher), setIsBtnDisabled(false);
               }}
               disabled={selectedRowKeys.length <= 0}
             />
@@ -126,7 +125,7 @@ const AssignQuestions = ({
               onClick={() => handleReassignTeacher()}
               disabled={isBtnDisabled || selectedRowKeys.length === 0}
             >
-              Assign
+              Reassign
             </button>
           </div>
         </div>
