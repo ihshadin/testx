@@ -13,8 +13,8 @@ export type TUser = {
   contact_no: string;
   role: keyof typeof USER_ROLE;
   status: keyof typeof USER_STATUS;
-  courses: Types.ObjectId[]; //FK
-  subjects: Types.ObjectId[]; //FK
+  course: Types.ObjectId; //FK
+  subject: Types.ObjectId; //FK
   photo?: string;
   isDeleted: boolean;
 };

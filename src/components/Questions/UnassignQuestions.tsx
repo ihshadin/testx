@@ -8,7 +8,6 @@ import { TQuestion } from "@/types/question.type";
 import onsubmitErrorHandler from "@/utils/errors/onsubmitErrorHandler";
 import {
   useDeleteQuestionMutation,
-  useUpdateAssignmentMutation,
   useUpdateQuestionsMutation,
 } from "@/redux/features/question/questionApi";
 import { useGetAllUserQuery } from "@/redux/features/user/userApi";
@@ -99,6 +98,7 @@ const UnassignQuestions = ({ questions, isQuesLoading }: TQuestions) => {
                 style={{ marginBottom: 0 }}
               >
                 <Select
+                  loading={isTeaLoading}
                   showSearch
                   placeholder="Select from here..."
                   options={mapToOptions(teachers?.data)}

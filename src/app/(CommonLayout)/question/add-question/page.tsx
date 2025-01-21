@@ -8,7 +8,7 @@ import onsubmitErrorHandler from "@/utils/errors/onsubmitErrorHandler";
 import { useGetAllCourseQuery } from "@/redux/features/course/courseApi";
 import { useGetAllSubjectQuery } from "@/redux/features/subject/subjectApi";
 import { useGetAllTopicQuery } from "@/redux/features/topic/topicApi";
-import { convertParams, mapToOptions } from "@/utils";
+import { mapToOptions } from "@/utils";
 import MDEditor from "@uiw/react-md-editor";
 
 const AddQuestion = () => {
@@ -168,7 +168,7 @@ const AddQuestion = () => {
                     className="cursor-pointer text-base font-medium block w-full bg-primary/5 hover:bg-primary text-primary hover:text-white border border-primary/30 hover:border-primary/60 px-4 py-2 rounded-xl transition duration-150"
                     type="submit"
                   >
-                    Register
+                    Add Question
                   </button>
                 </div>
               </Col>

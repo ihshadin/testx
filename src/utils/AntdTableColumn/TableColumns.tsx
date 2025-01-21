@@ -325,6 +325,7 @@ export const getAssignColumns = ({
     // },
   ];
 };
+
 export const getTeaQuesColumns = ({
   handleUpdateStatus,
   handleViewDetails,

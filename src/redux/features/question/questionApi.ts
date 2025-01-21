@@ -74,46 +74,14 @@ const questionApi = baseApi.injectEndpoints({
 
       invalidatesTags: ["question"],
     }),
-
-    getAllUnassignQuestion: builder.query({
-      query: (args) => {
-        const params = new URLSearchParams();
-
-        if (args) {
-          args?.forEach((item: TQueryParam) => {
-            params?.append(item.name, item.value as string);
-          });
-        }
-        return {
-          url: "/question/unassign-questions",
-          method: "GET",
-          params,
-        };
-      },
-
-      providesTags: ["question"],
-    }),
-
-    updateAssignment: builder.mutation({
-      query: (args) => {
-        return {
-          url: `/question/unassign-questions`,
-          method: "PATCH",
-          body: args,
-        };
-      },
-      invalidatesTags: ["question"],
-    }),
   }),
 });
 
 export const {
   useGetAllQuestionQuery,
   useGetSingleQuestionQuery,
-  useGetAllUnassignQuestionQuery,
   useAddQuestionMutation,
   useDeleteQuestionMutation,
   useUpdateQuestionMutation,
   useUpdateQuestionsMutation,
-  useUpdateAssignmentMutation,
 } = questionApi;

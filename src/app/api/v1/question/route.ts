@@ -121,11 +121,7 @@ export async function PATCH(req: NextRequest) {
       throw new ApiError(400, "Question IDs are required");
     }
 
-    const validateData = updateQuestionValidationSchema.parse(payload);
-
-    // if (!teacher) {
-    //   throw new ApiError(400, "Teacher are required");
-    // }
+    const validateData = updateQuestionValidationSchema.parse(restData);
 
     const updated = await QuestionModel.updateMany(
       { _id: { $in: questionIds } }, // Match the question IDs
@@ -133,23 +129,6 @@ export async function PATCH(req: NextRequest) {
         $set: restData,
       }
     );
-
-    // Prepare the bulk update for the questions
-    // const bulkUpdateOps = questionIds.map((id) => ({
-    //   updateOne: {
-    //     filter: { _id: id },
-    //     update: {
-    //       $set: {
-    //         teacher: teachers,
-    //         status: status,
-    //         ...validateData,
-    //       },
-    //     },
-    //   },
-    // }));
-
-    // Execute the bulk update operation
-    // const result = await QuestionModel.bulkWrite(bulkUpdateOps);
 
     return sendApiResponse(NextResponse, {
       statusCode: 200,
