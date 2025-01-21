@@ -46,34 +46,38 @@ const AdminDashboard = () => {
       </div>
       <div className="row-span-2 bg-secondary/10 border border-secondary/30 rounded-xl px-5 py-8 flex flex-col items-center justify-center">
         <h4 className="text-2xl mb-1">Total Questions</h4>
-        <h3 className="text-4xl font-bold">{metaData?.data?.totalQuestions}</h3>
+        <h3 className="text-4xl font-bold">
+          {metaData?.data?.totalQuestions || 0}
+        </h3>
       </div>
       <div className="col-span-2 bg-secondary/10 border border-secondary/30 rounded-xl px-5 py-7 *:text-center">
         <h4 className="text-2xl mb-1">Unassign Questions</h4>
         <h3 className="text-4xl font-bold">
-          {metaData?.data?.unassignQuestions}
+          {metaData?.data?.unassignQuestions || 0}
         </h3>
       </div>
       <div className="bg-secondary/10 border border-secondary/30 rounded-xl px-5 py-7 *:text-center">
         <h4 className="text-2xl mb-1">Assign Questions</h4>
         <h3 className="text-4xl font-bold">
-          {metaData?.data?.assignQuestions}
+          {metaData?.data?.assignQuestions || 0}
         </h3>
       </div>
       <div className="bg-secondary/10 border border-secondary/30 rounded-xl px-5 py-7 *:text-center">
         <h4 className="text-2xl mb-1">Completed Questions</h4>
         <h3 className="text-4xl font-bold">
-          {metaData?.data?.completedQuestion}
+          {metaData?.data?.completedQuestion || 0}
         </h3>
       </div>
       <div className="col-span-2 bg-secondary/10 border border-secondary/30 rounded-xl px-5 py-7 *:text-center">
         <h4 className="text-2xl mb-1">Total Teachers</h4>
-        <h3 className="text-4xl font-bold">{metaData?.data?.totalTeachers}</h3>
+        <h3 className="text-4xl font-bold">
+          {metaData?.data?.totalTeachers || 0}
+        </h3>
       </div>
       <div className="bg-secondary/10 border border-secondary/30 rounded-xl px-5 py-7 *:text-center">
         <h4 className="text-2xl mb-1">Total Coordinator</h4>
         <h3 className="text-4xl font-bold">
-          {metaData?.data?.totalCoordinators}
+          {metaData?.data?.totalCoordinators || 0}
         </h3>
       </div>
     </div>
