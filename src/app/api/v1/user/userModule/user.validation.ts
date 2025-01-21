@@ -31,3 +31,10 @@ export const userUpdateValidationSchema = z.object({
   coordinator: z.string().optional(),
   teachers: z.array(z.string()).optional(),
 });
+
+export const assignCoordinatorValidationSchema = z
+  .object({
+    coordinator: z.string().min(1, "Coordinator is required"),
+    teachers: z.array(z.string()).min(1, "Teacher is required"),
+  })
+  .strict();

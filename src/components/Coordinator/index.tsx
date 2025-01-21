@@ -24,6 +24,7 @@ const CoordinatorAssignment = () => {
   const [params, setParams] = useState<any>([
     { name: "role", value: "teacher" },
     { name: "status", value: "approved" },
+    { name: "coordinator", value: "null" },
   ]);
   //   const { data: users, isLoading: isUsersLoading } =
   //     useGetAllUserQuery(params);
@@ -33,6 +34,7 @@ const CoordinatorAssignment = () => {
       { name: "role", value: "teacher" },
       { name: "status", value: "approved" },
       { name: "searchTerm", value: text },
+      { name: "coordinator", value: "null" },
     ]);
   };
   // Teachers
@@ -78,6 +80,8 @@ const CoordinatorAssignment = () => {
       teacher: reassignTeacher,
       owner: reassignTeacher,
     };
+
+    console.log("updatedData", updatedData);
 
     try {
       const res = await updateQuestions(updatedData).unwrap();

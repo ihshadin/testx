@@ -50,9 +50,11 @@ const userSchema = new Schema<TUser>(
     },
     coordinator: {
       type: String,
+      default: "null",
     },
     teachers: {
       type: [{ type: Schema.Types.ObjectId, ref: "User" }],
+      // default: [],
     },
     isDeleted: {
       type: Boolean,
