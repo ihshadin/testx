@@ -152,14 +152,18 @@ const QuestionDetails = () => {
 
         <div className="mt-5 border border-primary/10 rounded-lg px-3 py-3">
           <div className="flex gap-4 *:border *:border-primary/10 *:rounded-lg *:px-5 *:py-2">
-            <div>
-              <p className="font-medium">Difficulty Level</p>
-              <p>Medium</p>
-            </div>
-            <div>
-              <p className="font-medium">Domain</p>
-              <p>Information and Ideas</p>
-            </div>
+            {question?.data?.difficulty_level && (
+              <div>
+                <p className="font-medium">Difficulty Level</p>
+                <p className="capitalize">{question?.data?.difficulty_level}</p>
+              </div>
+            )}
+            {question?.data?.domain && (
+              <div>
+                <p className="font-medium">Domain</p>
+                <p className="capitalize">{question?.data?.domain}</p>
+              </div>
+            )}
             <div>
               <p className="font-medium">Question Status</p>
               <p>Assigned</p>
