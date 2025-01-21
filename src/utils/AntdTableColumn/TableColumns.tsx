@@ -238,8 +238,8 @@ export const getAssignColumns = ({
       render: (_, __: any, index: number) => <p>{index + 1}</p>,
     },
     {
-      title: "Teachers",
-      key: "teachers",
+      title: "Teacher",
+      key: "teacher",
       width: 150,
       render: (_, item: any) => (
         <p className="line-clamp-1">
@@ -301,8 +301,8 @@ export const getComQuesColumns = ({
       render: (_, __: any, index: number) => <p>{index + 1}</p>,
     },
     {
-      title: "Teachers",
-      key: "teachers",
+      title: "Teacher",
+      key: "teacher",
       width: 150,
       render: (_, item: any) => (
         <p className="line-clamp-1">
@@ -368,6 +368,58 @@ export const getComQuesColumns = ({
             <Button>Complete</Button>
           </Popconfirm>
         </div>
+      ),
+    },
+  ];
+};
+
+export const getTeachersColumns = ({
+  handleAction,
+}: any): TableColumnsType<any> => {
+  return [
+    {
+      title: "SL",
+      width: 50,
+      align: "center",
+      render: (_, __: any, index: number) => <p>{index + 1}</p>,
+    },
+    {
+      title: "Teacher Full Name",
+      key: "teacher",
+      render: (_, item: TUser) => (
+        <p className="line-clamp-1">
+          {item?.first_name + " " + item?.last_name}
+        </p>
+      ),
+    },
+    {
+      title: "Email Address",
+      key: "email_address",
+      width: 220,
+      render: (_, item: TUser) => <p className="line-clamp-2">{item?.email}</p>,
+    },
+    {
+      title: "Contact Number",
+      key: "contact_no",
+      width: 180,
+      render: (_, item: TUser) => (
+        <p className="line-clamp-2">{item?.contact_no}</p>
+      ),
+    },
+    {
+      title: "Course",
+      key: "course",
+      width: 220,
+      render: (_, item: any) => (
+        <p className="line-clamp-1">{item?.course?.name}</p>
+      ),
+    },
+    {
+      title: "Subject",
+      key: "subject",
+      width: 150,
+      render: (_, item: any) => (
+        <p className="line-clamp-1">{item?.subject?.name}</p>
       ),
     },
   ];

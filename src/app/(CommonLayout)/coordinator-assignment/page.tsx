@@ -1,7 +1,14 @@
 import React from "react";
+import CoordinatorAssignment from "@/components/Coordinator";
 
 const CoordinatorAssignmentPage = () => {
-  return <div>This is coordinator assignment page.</div>;
+  return (
+    <section>
+      <div className="max-w-7xl mx-auto py-8 px-2">
+        <CoordinatorAssignment />
+      </div>
+    </section>
+  );
 };
 
 export default CoordinatorAssignmentPage;

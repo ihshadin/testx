@@ -4,7 +4,7 @@ import { useGetAllQuestionQuery } from "@/redux/features/question/questionApi";
 import AssignQuestions from "@/components/Questions/AssignQuestions";
 
 const QuestionReassignmentPage = () => {
-  const [searchTeacher, setSearchTeacher] = useState([]);
+  const [searchTeacher, setSearchTeacher] = useState("");
   const [params, setParams] = useState<any>([
     { name: "status", value: "assigned" },
   ]);
