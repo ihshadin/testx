@@ -437,12 +437,6 @@ export const getTeaQuesColumns = ({
       align: "center",
       render: (_, __: any, index: number) => <p>{index + 1}</p>,
     },
-    // {
-    //   title: "Q. ID",
-    //   key: "question_id",
-    //   width: 80,
-    //   render: (_, item: TQuestion) => <p>Q{item?.question_id}</p>,
-    // },
     {
       title: "Question Name",
       key: "title",
@@ -462,33 +456,25 @@ export const getTeaQuesColumns = ({
       title: "Course",
       key: "course",
       width: 150,
-      render: (_, item: any) =>
-        item?.courses?.map((course: TCourse, index: number) => (
-          <p key={index} className="line-clamp-1">
-            {course.name}
-          </p>
-        )),
+      render: (_, item: any) => (
+        <p className="line-clamp-2">{item?.course?.name}</p>
+      ),
     },
     {
       title: "Subject",
-      key: "subjects",
+      key: "subject",
       width: 120,
-      render: (_, item: any) =>
-        item?.subjects?.map((subject: TSubject, index: number) => (
-          <p key={index} className="line-clamp-1">
-            {subject.name}
-          </p>
-        )),
+      render: (_, item: any) => (
+        <p className="line-clamp-2">{item?.subject?.name}</p>
+      ),
     },
     {
       title: "Topic",
+      key: "topic",
       width: 150,
-      render: (_, item: any) =>
-        item?.topics?.map((topic: TCourse, index: number) => (
-          <p key={index} className="line-clamp-1">
-            {topic.name}
-          </p>
-        )),
+      render: (_, item: any) => (
+        <p className="line-clamp-2">{item?.topic?.name}</p>
+      ),
     },
     {
       title: "Status",
