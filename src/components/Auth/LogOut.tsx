@@ -9,6 +9,7 @@ const LogOut = () => {
 
   const handleLogOut = async () => {
     dispatch(Logout());
+    console.log(dispatch(Logout()));
     router.push("/login");
   };
 

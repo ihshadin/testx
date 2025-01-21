@@ -5,7 +5,13 @@ import { useGetAllSubjectQuery } from "@/redux/features/subject/subjectApi";
 import { useGetAllTopicQuery } from "@/redux/features/topic/topicApi";
 import { mapToOptions } from "@/utils";
 
-const FilterByCourse = ({ handleFilter }: { handleFilter: any }) => {
+const FilterByCourse = ({
+  handleFilter,
+  hideTopic,
+}: {
+  handleFilter: any;
+  hideTopic?: boolean;
+}) => {
   const [selCourse, setSelCourse] = useState<string>("");
   const [selSubject, setSelSubject] = useState<string>("");
   const [selTopic, setSelTopic] = useState<string>("");
@@ -71,19 +77,22 @@ const FilterByCourse = ({ handleFilter }: { handleFilter: any }) => {
               />
             </Form.Item>
           </Col>
-          <Col span={8}>
-            <Form.Item label="Topic" name="topic" style={{ marginBottom: 0 }}>
-              <Select
-                loading={isToLoading}
-                showSearch
-                placeholder="Select from here..."
-                options={mapToOptions(topics?.data)}
-                className="[&_.ant-select-selector]:!min-h-10 !h-10 !bg-transparent *:!rounded-lg"
-                disabled={selSubject.length === 0}
-                onChange={(topicsId) => setSelTopic(topicsId)}
-              />
-            </Form.Item>
-          </Col>
+          {hideTopic || (
+            <Col span={8}>
+              <Form.Item label="Topic" name="topic" style={{ marginBottom: 0 }}>
+                <Select
+                  loading={isToLoading}
+                  showSearch
+                  placeholder="Select from here..."
+                  options={mapToOptions(topics?.data)}
+                  className="[&_.ant-select-selector]:!min-h-10 !h-10 !bg-transparent *:!rounded-lg"
+                  disabled={selSubject.length === 0}
+                  onChange={(topicsId) => setSelTopic(topicsId)}
+                />
+              </Form.Item>
+            </Col>
+          )}
+
           <Col span={3}>
             <div>
               <button

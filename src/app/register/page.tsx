@@ -7,7 +7,7 @@ import Link from "next/link";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useGetAllCourseQuery } from "@/redux/features/course/courseApi";
-import { convertParams, mapToOptions } from "@/utils";
+import { mapToOptions } from "@/utils";
 import { useGetAllSubjectQuery } from "@/redux/features/subject/subjectApi";
 import { useUserRegisterRequestMutation } from "@/redux/features/auth/authApi";
 import onsubmitErrorHandler from "@/utils/errors/onsubmitErrorHandler";
@@ -16,21 +16,21 @@ import { useGetUserQuery } from "@/redux/features/user/userApi";
 
 const SignUpPage = () => {
   const [selectedRole, setSelectedRole] = useState("");
-  const [selCourses, setSelCourses] = useState<string[]>([]);
+  const [selCourse, setSelCourse] = useState<string[]>([]);
   const [form] = Form.useForm();
   const router = useRouter();
 
   const { data: courses, isLoading: isCouLoading } =
     useGetAllCourseQuery(undefined);
-  const { data: subjects, isLoading: isSubLoading } = useGetAllSubjectQuery(
-    convertParams("courses", selCourses)
-  );
+  const { data: subjects, isLoading: isSubLoading } = useGetAllSubjectQuery([
+    { name: "course", value: selCourse },
+  ]);
   const [register, { isLoading }] = useUserRegisterRequestMutation();
   const { data, refetch } = useGetUserQuery(undefined);
 
-  const handleCourseChange = (courseIds: string[]) => {
-    form.setFieldsValue({ subjects: [] });
-    setSelCourses(courseIds);
+  const handleCourseChange = (courseId: string[]) => {
+    form.setFieldsValue({ subject: undefined });
+    setSelCourse(courseId);
   };
 
   const onSubmit = async (data: TUser & { agreement: boolean }) => {
@@ -151,7 +151,7 @@ const SignUpPage = () => {
                   loading={isCouLoading}
                   showSearch
                   placeholder="Select from here..."
-                  className="[&_.ant-select-selector]:!min-h-10 *:!rounded-lg !bg-transparent"
+                  className="[&_.ant-select-selector]:!min-h-10 !h-10 *:!rounded-lg !bg-transparent"
                   options={mapToOptions(courses?.data)}
                   onChange={handleCourseChange}
                 />
@@ -169,7 +169,7 @@ const SignUpPage = () => {
                   placeholder="Select from here..."
                   className="[&_.ant-select-selector]:!min-h-10 *:!rounded-lg !bg-transparent"
                   options={mapToOptions(subjects?.data)}
-                  disabled={selCourses.length === 0}
+                  disabled={selCourse.length === 0}
                 />
               </Form.Item>
             </Col>

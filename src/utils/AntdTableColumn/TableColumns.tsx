@@ -38,14 +38,14 @@ export const getUsersColumns = ({
   return [
     {
       title: "SL",
+      key: "sl",
       width: 50,
       align: "center",
       render: (_, __: any, index: number) => <p>{index + 1}</p>,
     },
     {
       title: "User Full Name",
-
-      dataIndex: "userFullName",
+      key: "user_full_name",
       render: (_, item: any) => (
         <p className="line-clamp-1">
           {item?.first_name + " " + item?.last_name}
@@ -53,27 +53,20 @@ export const getUsersColumns = ({
       ),
     },
     {
-      title: "Courses",
-      key: "courses",
-      dataIndex: "courses",
+      title: "Course",
+      key: "course",
       width: 250,
-      render: (_, item: any) =>
-        item?.courses?.map((course: TCourse, index: number) => (
-          <p key={index} className="line-clamp-1">
-            {course.name}
-          </p>
-        )),
+      render: (_, item: any) => (
+        <p className="line-clamp-1">{item?.course?.name}</p>
+      ),
     },
     {
-      title: "Subjects",
+      title: "Subject",
       key: "subject",
       width: 200,
-      render: (_, item: any) =>
-        item?.subjects?.map((subject: TCourse, index: number) => (
-          <p key={index} className="line-clamp-1">
-            {subject.name}
-          </p>
-        )),
+      render: (_, item: any) => (
+        <p className="line-clamp-1">{item?.subject?.name}</p>
+      ),
     },
     {
       title: "Role",
@@ -125,29 +118,29 @@ export const getUsersColumns = ({
       ],
       onFilter: (value, record) => record.status.startsWith(value as string),
     },
-    // {
-    //   title: "Action",
-    //   dataIndex: "action",
-    //   align: "center",
-    //   fixed: "right",
-    //   width: 100,
-    //   render: (_, record) => (
-    //     <div className="flex justify-center gap-2">
-    //       <Popconfirm
-    //         title="Delete the user"
-    //         description="Are you sure to delete this user?"
-    //         placement="topRight"
-    //         onConfirm={() => handleDelete(record._id)}
-    //         okText="Yes"
-    //         cancelText="No"
-    //       >
-    //         <Button>
-    //           <AiFillDelete fontSize={16} />
-    //         </Button>
-    //       </Popconfirm>
-    //     </div>
-    //   ),
-    // },
+    {
+      title: "Action",
+      dataIndex: "action",
+      align: "center",
+      fixed: "right",
+      width: 100,
+      render: (_, record) => (
+        <div className="flex justify-center gap-2">
+          <Popconfirm
+            title="Delete the User"
+            description="Are you sure to delete this user?"
+            placement="topRight"
+            onConfirm={() => handleDelete(record._id)}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button>
+              <AiFillDelete fontSize={16} />
+            </Button>
+          </Popconfirm>
+        </div>
+      ),
+    },
   ];
 };
 
