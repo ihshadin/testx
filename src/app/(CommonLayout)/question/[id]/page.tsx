@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import UploadImageWithPreview from "@/utils/UploadImage/UploadImageWithPreview";
-import { Checkbox, Image, Select, Switch } from "antd";
+import { Checkbox, Image, Popconfirm, Select, Switch } from "antd";
 import QuestionEdit from "@/components/Questions/QuestionEdit";
 import { useParams, useRouter } from "next/navigation";
 import {
@@ -142,7 +142,7 @@ const QuestionDetails = () => {
     const toastId = toast.loading("Updating question...");
     const updatedData = {
       id: id,
-      data: { teacher: question?.owner?.email, status: "assigned" },
+      data: { status: "assigned", teacher: question?.owner?._id },
     };
     console.log("updated data", updatedData);
 
@@ -188,8 +188,6 @@ const QuestionDetails = () => {
       value: _id,
       label: first_name + " " + last_name,
     }));
-
-  console.log(question);
 
   useEffect(() => {
     setIsHold(question?.status === "hold");
@@ -412,12 +410,18 @@ const QuestionDetails = () => {
               <div className="mt-10 text-center">
                 {teacherEmail == ownerEmail ? (
                   // Case 1: Teacher and Owner are the same
-                  <button
-                    className="cursor-pointer disabled:cursor-not-allowed text-base font-medium bg-primary/5 hover:bg-primary disabled:bg-primary/5 text-primary hover:text-white disabled:text-primary/50 border border-primary/30 hover:border-primary/60 disabled:border-primary//30 px-4 py-1.5 h-10 rounded-lg transition duration-150"
-                    onClick={() => handleActionAsOwner()}
+                  <Popconfirm
+                    title="Verify Question"
+                    description="Are you sure to send for Approval"
+                    // placement="topRight"
+                    onConfirm={() => handleActionAsOwner()}
+                    okText="Yes"
+                    cancelText="No"
                   >
-                    Submit the Question for Approval
-                  </button>
+                    <button className="cursor-pointer disabled:cursor-not-allowed text-base font-medium bg-primary/5 hover:bg-primary disabled:bg-primary/5 text-primary hover:text-white disabled:text-primary/50 border border-primary/30 hover:border-primary/60 disabled:border-primary//30 px-4 py-1.5 h-10 rounded-lg transition duration-150">
+                      Submit the Question for Approval
+                    </button>
+                  </Popconfirm>
                 ) : loggedInEmail === ownerEmail &&
                   loggedInEmail !== teacherEmail ? (
                   // Case 2: Logged-in user is the owner but not the teacher
@@ -430,12 +434,18 @@ const QuestionDetails = () => {
                   </p>
                 ) : (loggedInEmail === teacherEmail) !== ownerEmail ? (
                   // Case 3: Logged-in user is the teacher
-                  <button
-                    className="cursor-pointer disabled:cursor-not-allowed text-base font-medium bg-primary/5 hover:bg-primary disabled:bg-primary/5 text-primary hover:text-white disabled:text-primary/50 border border-primary/30 hover:border-primary/60 disabled:border-primary//30 px-4 py-1.5 h-10 rounded-lg transition duration-150"
-                    onClick={() => handleActionAsOnlyTeacher()}
+                  <Popconfirm
+                    title="Submit Question"
+                    description="Are you sure to send the owner"
+                    // placement="topRight"
+                    onConfirm={() => handleActionAsOnlyTeacher()}
+                    okText="Yes"
+                    cancelText="No"
                   >
-                    Submit the Question to the Owner
-                  </button>
+                    <button className="cursor-pointer disabled:cursor-not-allowed text-base font-medium bg-primary/5 hover:bg-primary disabled:bg-primary/5 text-primary hover:text-white disabled:text-primary/50 border border-primary/30 hover:border-primary/60 disabled:border-primary//30 px-4 py-1.5 h-10 rounded-lg transition duration-150">
+                      Submit the Question to the Owner
+                    </button>
+                  </Popconfirm>
                 ) : (
                   // Default case: No actions available
                   <p className="text-base text-gray-500">

@@ -3,25 +3,20 @@ import { useState } from "react";
 import { Table } from "antd";
 import { getTeaQuesColumns } from "@/utils/AntdTableColumn/TableColumns";
 import { TableRowSelection } from "antd/es/table/interface";
-import { useGetAllQuestionQuery } from "@/redux/features/question/questionApi";
 import { useGetUserQuery } from "@/redux/features/user/userApi";
 import FilterByCourse from "../Questions/FilterByCourse";
+import { useGetTeacherQuestionsQuery } from "@/redux/features/question/teacher";
 
 const TeacherDashboard = () => {
   const { data: user } = useGetUserQuery(undefined);
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-  const [params, setParams] = useState<any>([
-    { name: "owner", value: user?.data?._id },
-    { name: "status", value: "assigned" },
-  ]);
+  const [params, setParams] = useState<any>([]);
 
   const { data: questions, isLoading: isQuesLoading } =
-    useGetAllQuestionQuery(params);
+    useGetTeacherQuestionsQuery(params);
 
   const handleFilter = (data: Record<string, unknown>) => {
     setParams([
-      ...params.filter((param: any) => param?.name === "owner"),
-      ...params.filter((param: any) => param?.name === "status"),
       ...Object.entries(data)
         .filter(([, value]) => value)
         .map(([key, value]) => ({ name: key, value })),
