@@ -74,6 +74,17 @@ const questionApi = baseApi.injectEndpoints({
 
       invalidatesTags: ["question"],
     }),
+
+    deleteImage: builder.mutation({
+      query: (args) => {
+        return {
+          url: `/question/image/${args?.id}`,
+          method: "DELETE",
+          body: args?.url,
+        };
+      },
+      invalidatesTags: ["question"],
+    }),
   }),
 });
 
@@ -84,4 +95,5 @@ export const {
   useDeleteQuestionMutation,
   useUpdateQuestionMutation,
   useUpdateQuestionsMutation,
+  useDeleteImageMutation,
 } = questionApi;

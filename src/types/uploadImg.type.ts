@@ -1,4 +1,4 @@
 export type TUploadImage = {
-  file: any;
+  files: any;
   setFile: any;
 };

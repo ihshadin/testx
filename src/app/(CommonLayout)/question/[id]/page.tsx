@@ -5,6 +5,7 @@ import { Checkbox, Image, Popconfirm, Select, Switch } from "antd";
 import QuestionEdit from "@/components/Questions/QuestionEdit";
 import { useParams, useRouter } from "next/navigation";
 import {
+  useDeleteImageMutation,
   useGetSingleQuestionQuery,
   useUpdateQuestionMutation,
 } from "@/redux/features/question/questionApi";
@@ -19,6 +20,7 @@ import { toast } from "sonner";
 import { uploadImageInCloudinary } from "@/utils/UploadImage/UploadImageInCloudinay";
 import onsubmitErrorHandler from "@/utils/errors/onsubmitErrorHandler";
 import { TUser } from "@/types/user.type";
+import { AiFillDelete, AiOutlineDelete } from "react-icons/ai";
 
 const QuestionDetails = () => {
   const { id } = useParams();
@@ -40,7 +42,8 @@ const QuestionDetails = () => {
     { name: "status", value: "approved" },
   ]);
   const [updateQuestion] = useUpdateQuestionMutation();
-  console.log(user);
+  const [deleteImage] = useDeleteImageMutation();
+
   const handleUpload = async () => {
     if (files.length === 0) {
       toast.error("Please select at least one image to upload.");
@@ -61,7 +64,7 @@ const QuestionDetails = () => {
 
       const updatedData = {
         id: id,
-        data: { images: successfulUploads },
+        data: { images: [...question?.images, ...successfulUploads] },
       };
 
       const res = await updateQuestion(updatedData).unwrap();
@@ -70,6 +73,22 @@ const QuestionDetails = () => {
         setFiles([]);
         refetch();
       }
+    } catch (error) {
+      onsubmitErrorHandler(error, toastId);
+    }
+  };
+
+  const handleImageDelete = async (url: string) => {
+    const toastId = toast.loading("Question Deleting...");
+
+    const deleteData = {
+      id,
+      url,
+    };
+
+    try {
+      await deleteImage(deleteData).unwrap();
+      toast.success("Question Delete Successful", { id: toastId });
     } catch (error) {
       onsubmitErrorHandler(error, toastId);
     }
@@ -168,7 +187,7 @@ const QuestionDetails = () => {
 
   useEffect(() => {
     setIsHold(question?.status === "hold");
-  }, [question]);
+  }, [question?.status]);
 
   if (isLoading) {
     return (
@@ -194,7 +213,7 @@ const QuestionDetails = () => {
           <div className="mt-6">
             <div className="flex items-end gap-5">
               <div className="shrink">
-                <UploadImageWithPreview file={files} setFile={setFiles} />
+                <UploadImageWithPreview files={files} setFile={setFiles} />
               </div>
               <div className="grow">
                 <button
@@ -208,12 +227,21 @@ const QuestionDetails = () => {
             </div>
             <div className="flex flex-wrap gap-4 mt-5">
               {question?.images?.map((image: string) => (
-                <div key={image} className="rounded-xl overflow-hidden">
+                <div
+                  key={image}
+                  className="rounded-xl overflow-hidden flex flex-col"
+                >
                   <Image
                     src={image}
                     alt="Image"
-                    className="!h-[200px] w-auto rounded-xl"
+                    className="!h-[200px] w-auto"
                   />
+                  <button
+                    onClick={() => handleImageDelete(image)}
+                    className="bg-red-100 px-2 py-2 text-center"
+                  >
+                    <AiOutlineDelete className="mx-auto text-lg" />
+                  </button>
                 </div>
               ))}
             </div>
