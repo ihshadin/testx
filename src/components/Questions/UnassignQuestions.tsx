@@ -9,6 +9,7 @@ import onsubmitErrorHandler from "@/utils/errors/onsubmitErrorHandler";
 import {
   useDeleteQuestionMutation,
   useUpdateAssignmentMutation,
+  useUpdateQuestionsMutation,
 } from "@/redux/features/question/questionApi";
 import { useGetAllUserQuery } from "@/redux/features/user/userApi";
 import { TUser } from "@/types/user.type";
@@ -27,7 +28,7 @@ const UnassignQuestions = ({ questions, isQuesLoading }: TQuestions) => {
     { name: "role", value: "teacher" },
     { name: "status", value: "approved" },
   ]);
-  const [updateAssignment] = useUpdateAssignmentMutation();
+  const [updateQuestions] = useUpdateQuestionsMutation();
 
   // Row Selection functions
   const rowSelection: TableRowSelection<any> = {
@@ -65,7 +66,7 @@ const UnassignQuestions = ({ questions, isQuesLoading }: TQuestions) => {
     };
 
     try {
-      const res = await updateAssignment(updatedData).unwrap();
+      const res = await updateQuestions(updatedData).unwrap();
       if (res?.success) {
         toast.success("Assigned updated successfully", { id: toastId });
         form.resetFields();

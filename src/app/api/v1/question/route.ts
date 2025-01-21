@@ -111,7 +111,7 @@ export async function PATCH(req: NextRequest) {
 
     const payload = await req.json();
 
-    const { questionIds, teacher, owner, status } = payload;
+    const { questionIds, ...restData } = payload;
 
     if (
       !questionIds ||
@@ -123,18 +123,14 @@ export async function PATCH(req: NextRequest) {
 
     const validateData = updateQuestionValidationSchema.parse(payload);
 
-    if (!teacher || !Array.isArray(teacher) || teacher.length === 0) {
-      throw new ApiError(400, "Teacher are required");
-    }
+    // if (!teacher) {
+    //   throw new ApiError(400, "Teacher are required");
+    // }
 
     const updated = await QuestionModel.updateMany(
       { _id: { $in: questionIds } }, // Match the question IDs
       {
-        $set: {
-          teacher,
-          owner,
-          status,
-        },
+        $set: restData,
       }
     );
 

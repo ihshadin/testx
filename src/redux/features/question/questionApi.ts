@@ -31,25 +31,6 @@ const questionApi = baseApi.injectEndpoints({
       },
     }),
 
-    getAllUnassignQuestion: builder.query({
-      query: (args) => {
-        const params = new URLSearchParams();
-
-        if (args) {
-          args?.forEach((item: TQueryParam) => {
-            params?.append(item.name, item.value as string);
-          });
-        }
-        return {
-          url: "/question/unassign-questions",
-          method: "GET",
-          params,
-        };
-      },
-
-      providesTags: ["question"],
-    }),
-
     addQuestion: builder.mutation({
       query: (data) => {
         return {
@@ -82,6 +63,37 @@ const questionApi = baseApi.injectEndpoints({
       invalidatesTags: ["question"],
     }),
 
+    updateQuestions: builder.mutation({
+      query: (args) => {
+        return {
+          url: "/question",
+          method: "PATCH",
+          body: args,
+        };
+      },
+
+      invalidatesTags: ["question"],
+    }),
+
+    getAllUnassignQuestion: builder.query({
+      query: (args) => {
+        const params = new URLSearchParams();
+
+        if (args) {
+          args?.forEach((item: TQueryParam) => {
+            params?.append(item.name, item.value as string);
+          });
+        }
+        return {
+          url: "/question/unassign-questions",
+          method: "GET",
+          params,
+        };
+      },
+
+      providesTags: ["question"],
+    }),
+
     updateAssignment: builder.mutation({
       query: (args) => {
         return {
@@ -102,5 +114,6 @@ export const {
   useAddQuestionMutation,
   useDeleteQuestionMutation,
   useUpdateQuestionMutation,
+  useUpdateQuestionsMutation,
   useUpdateAssignmentMutation,
 } = questionApi;
