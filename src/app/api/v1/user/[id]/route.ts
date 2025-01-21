@@ -80,20 +80,13 @@ export async function DELETE(
 
     const isExist = await UserModel.findOne({
       _id: id,
-      isDeleted: false,
     }).select("isDeleted");
 
     if (!isExist) {
       throw new ApiError(404, "User not found!");
     }
 
-    await UserModel.findByIdAndUpdate(
-      id,
-      { isDeleted: true },
-      {
-        new: true,
-      }
-    );
+    await UserModel.findByIdAndDelete(id);
 
     return sendApiResponse(NextResponse, {
       statusCode: 200,

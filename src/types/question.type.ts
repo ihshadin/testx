@@ -25,6 +25,6 @@ export type TQuestion = {
 export type TQuestions = {
   questions: TQuestion[];
   isQuesLoading: boolean;
-  handleTeacher: any;
-  setSearchTeacher: Dispatch<React.SetStateAction<never[]>>;
+  handleTeacherSearch: any;
+  setSearchTeacher: Dispatch<React.SetStateAction<string>>;
 };

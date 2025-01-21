@@ -4,24 +4,18 @@ import { useGetAllQuestionQuery } from "@/redux/features/question/questionApi";
 import AssignQuestions from "@/components/Questions/AssignQuestions";
 
 const QuestionReassignmentPage = () => {
-  const [searchTeacher, setSearchTeacher] = useState([]);
+  const [searchTeacher, setSearchTeacher] = useState("");
   const [params, setParams] = useState<any>([
     { name: "status", value: "assigned" },
   ]);
   const { data: questions, isLoading: isQuesLoading } =
     useGetAllQuestionQuery(params);
 
-  const handleTeacher = () => {
-    setParams((prevParams: any) => {
-      const updatedParams =
-        searchTeacher.length > 0
-          ? [
-              ...prevParams.filter((param: any) => param.name !== "teachers"),
-              { name: "teachers", value: JSON.stringify(searchTeacher) },
-            ]
-          : [{ name: "status", value: "assigned" }];
-      return updatedParams;
-    });
+  const handleTeacherSearch = () => {
+    setParams([
+      { name: "status", value: "assigned" },
+      { name: "teacher", value: searchTeacher },
+    ]);
   };
 
   return (
@@ -31,7 +25,7 @@ const QuestionReassignmentPage = () => {
           <AssignQuestions
             questions={questions?.data}
             isQuesLoading={isQuesLoading}
-            handleTeacher={handleTeacher}
+            handleTeacherSearch={handleTeacherSearch}
             setSearchTeacher={setSearchTeacher}
           />
         </div>

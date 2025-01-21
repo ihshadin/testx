@@ -34,7 +34,7 @@ const menuItems = [
   },
   {
     label: "Question Reassignment",
-    slug: "/question-reassignment",
+    slug: "/question/question-reassignment",
     roles: ["admin", "coordinator"],
   },
   // {
@@ -44,7 +44,7 @@ const menuItems = [
   // },
   {
     label: "Completed Questions",
-    slug: "/completed-questions",
+    slug: "/question/question-completed",
     roles: ["admin"],
   },
   // { label: "Questions From Teacher", slug: "/questions-from-teacher", roles: ["admin", "teacher"] },

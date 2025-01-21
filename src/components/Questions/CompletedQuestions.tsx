@@ -1,83 +1,51 @@
 "use client";
-import { useState } from "react";
-import { Input, Form, Select, Table, GetProps } from "antd";
-const { Search } = Input;
+import React from "react";
+import { Input, Table } from "antd";
 import { toast } from "sonner";
-import { getAssignColumns } from "@/utils/AntdTableColumn/TableColumns";
-import { TableRowSelection } from "antd/es/table/interface";
-import { TQuestions } from "@/types/question.type";
+import { getComQuesColumns } from "@/utils/AntdTableColumn/TableColumns";
 import onsubmitErrorHandler from "@/utils/errors/onsubmitErrorHandler";
-import {
-  useDeleteQuestionMutation,
-  useUpdateAssignmentMutation,
-} from "@/redux/features/question/questionApi";
-import { useGetAllUserQuery } from "@/redux/features/user/userApi";
-import { TUser } from "@/types/user.type";
+import { useUpdateQuestionMutation } from "@/redux/features/question/questionApi";
 
 const CompletedQuestions = ({
   questions,
   isQuesLoading,
   setSearchText,
 }: any) => {
-  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-  const [reassignTeacher, setReassignTeacher] = useState([]);
-  const [isBtnDisabled, setIsBtnDisabled] = useState(true);
+  // const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 
-  const { data: teachers, isLoading: isTeaLoading } = useGetAllUserQuery([
-    { name: "role", value: "teacher" },
-    { name: "status", value: "approved" },
-  ]);
-  const [updateAssignment] = useUpdateAssignmentMutation();
+  const [updateQuestion] = useUpdateQuestionMutation();
 
   // Row Selection functions
-  const rowSelection: TableRowSelection<any> = {
-    selectedRowKeys,
-    onChange: (newSelectedRowKeys: React.Key[]) => {
-      setSelectedRowKeys(newSelectedRowKeys);
-    },
-  };
+  // const rowSelection: TableRowSelection<any> = {
+  //   selectedRowKeys,
+  //   onChange: (newSelectedRowKeys: React.Key[]) => {
+  //     setSelectedRowKeys(newSelectedRowKeys);
+  //   },
+  // };
 
-  // Delete Questions
-  const [deleteQuestion] = useDeleteQuestionMutation();
+  const handleAction = async (id: string) => {
+    const toastId = toast.loading("Question Updating...");
 
-  const handleDelete = async (id: string) => {
-    const toastId = toast.loading("Question Deleting...");
-    try {
-      await deleteQuestion(id).unwrap();
-      toast.success("Question Delete Successful", { id: toastId });
-    } catch (error) {
-      onsubmitErrorHandler(error, toastId);
-    }
-  };
-
-  const columns = getAssignColumns({
-    handleDelete,
-  });
-
-  const handleReassignTeacher = async () => {
-    const toastId = toast.loading("Assigning teacher...");
-
-    const filteredData = {
-      questionIds: selectedRowKeys,
-      teachers: reassignTeacher,
-      status: "assigned",
+    const updateData = {
+      id: id,
+      data: {
+        status: "completed",
+      },
     };
 
     try {
-      const res = await updateAssignment(filteredData).unwrap();
+      const res = await updateQuestion(updateData).unwrap();
       if (res?.success) {
-        toast.success("Assigned updated successfully", { id: toastId });
+        toast.success("Question updated successfully", { id: toastId });
       }
     } catch (error: any) {
       onsubmitErrorHandler(error, toastId);
     }
   };
 
-  const mapToOptions = (data: TUser[]) =>
-    data?.map(({ _id, first_name, last_name }) => ({
-      value: _id,
-      label: first_name + " " + last_name,
-    }));
+  const columns = getComQuesColumns({
+    handleAction,
+  });
 
   return (
     <>
@@ -87,19 +55,9 @@ const CompletedQuestions = ({
             <p className="mb-1">
               Search Question by Questions Name or Description
             </p>
-            {/* <Select
-              showSearch
-              mode="multiple"
-              placeholder="Select from here..."
-              options={mapToOptions(teachers?.data)}
-              className="!h-10 !bg-transparent *:!rounded-lg w-[400px]"
-              onChange={(value) => setSearchTeacher(value)}
-            /> */}
             <Input
               placeholder="input search text"
               className="!h-10 !bg-transparent *:!rounded-lg w-[400px]"
-              // enterButton="Search"
-              // size="large"
               onChange={(e) => setSearchText(e.target.value)}
             />
           </div>
@@ -116,7 +74,7 @@ const CompletedQuestions = ({
       <Table
         rowKey="_id"
         loading={isQuesLoading}
-        rowSelection={rowSelection}
+        // rowSelection={rowSelection}
         columns={columns}
         dataSource={questions}
         scroll={{ x: 1500 }}

@@ -38,14 +38,14 @@ export const getUsersColumns = ({
   return [
     {
       title: "SL",
+      key: "sl",
       width: 50,
       align: "center",
       render: (_, __: any, index: number) => <p>{index + 1}</p>,
     },
     {
       title: "User Full Name",
-
-      dataIndex: "userFullName",
+      key: "user_full_name",
       render: (_, item: any) => (
         <p className="line-clamp-1">
           {item?.first_name + " " + item?.last_name}
@@ -53,27 +53,20 @@ export const getUsersColumns = ({
       ),
     },
     {
-      title: "Courses",
-      key: "courses",
-      dataIndex: "courses",
+      title: "Course",
+      key: "course",
       width: 250,
-      render: (_, item: any) =>
-        item?.courses?.map((course: TCourse, index: number) => (
-          <p key={index} className="line-clamp-1">
-            {course.name}
-          </p>
-        )),
+      render: (_, item: any) => (
+        <p className="line-clamp-1">{item?.course?.name}</p>
+      ),
     },
     {
-      title: "Subjects",
+      title: "Subject",
       key: "subject",
       width: 200,
-      render: (_, item: any) =>
-        item?.subjects?.map((subject: TCourse, index: number) => (
-          <p key={index} className="line-clamp-1">
-            {subject.name}
-          </p>
-        )),
+      render: (_, item: any) => (
+        <p className="line-clamp-1">{item?.subject?.name}</p>
+      ),
     },
     {
       title: "Role",
@@ -125,29 +118,29 @@ export const getUsersColumns = ({
       ],
       onFilter: (value, record) => record.status.startsWith(value as string),
     },
-    // {
-    //   title: "Action",
-    //   dataIndex: "action",
-    //   align: "center",
-    //   fixed: "right",
-    //   width: 100,
-    //   render: (_, record) => (
-    //     <div className="flex justify-center gap-2">
-    //       <Popconfirm
-    //         title="Delete the user"
-    //         description="Are you sure to delete this user?"
-    //         placement="topRight"
-    //         onConfirm={() => handleDelete(record._id)}
-    //         okText="Yes"
-    //         cancelText="No"
-    //       >
-    //         <Button>
-    //           <AiFillDelete fontSize={16} />
-    //         </Button>
-    //       </Popconfirm>
-    //     </div>
-    //   ),
-    // },
+    {
+      title: "Action",
+      dataIndex: "action",
+      align: "center",
+      fixed: "right",
+      width: 100,
+      render: (_, record) => (
+        <div className="flex justify-center gap-2">
+          <Popconfirm
+            title="Delete the User"
+            description="Are you sure to delete this user?"
+            placement="topRight"
+            onConfirm={() => handleDelete(record._id)}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button>
+              <AiFillDelete fontSize={16} />
+            </Button>
+          </Popconfirm>
+        </div>
+      ),
+    },
   ];
 };
 
@@ -245,19 +238,18 @@ export const getAssignColumns = ({
       render: (_, __: any, index: number) => <p>{index + 1}</p>,
     },
     {
-      title: "Teachers",
-      key: "teachers",
+      title: "Teacher",
+      key: "teacher",
       width: 150,
-      render: (_, item: any) =>
-        item?.teachers?.map((teacher: TUser, index: number) => (
-          <p key={index} className="line-clamp-1">
-            {teacher?.first_name + " " + teacher?.last_name}
-          </p>
-        )),
+      render: (_, item: any) => (
+        <p className="line-clamp-1">
+          {item?.teacher?.first_name + " " + item?.teacher?.last_name}
+        </p>
+      ),
     },
     {
       title: "Question Name",
-      key: "title",
+      key: "question_name",
       width: 250,
       render: (_, item: TQuestion) => (
         <p className="line-clamp-2">{item?.title}</p>
@@ -265,7 +257,7 @@ export const getAssignColumns = ({
     },
     {
       title: "Question Description",
-      key: "desc",
+      key: "question_desc",
       render: (_, item: TQuestion) => (
         <p className="line-clamp-2">{item?.desc}</p>
       ),
@@ -274,23 +266,17 @@ export const getAssignColumns = ({
       title: "Course",
       key: "course",
       width: 170,
-      render: (_, item: any) =>
-        item?.courses?.map((course: TCourse, index: number) => (
-          <p key={index} className="line-clamp-1">
-            {course.name}
-          </p>
-        )),
+      render: (_, item: any) => (
+        <p className="line-clamp-1">{item?.course?.name}</p>
+      ),
     },
     {
       title: "Subject",
-      key: "subjects",
+      key: "subject",
       width: 150,
-      render: (_, item: any) =>
-        item?.subjects?.map((subject: TSubject, index: number) => (
-          <p key={index} className="line-clamp-1">
-            {subject.name}
-          </p>
-        )),
+      render: (_, item: any) => (
+        <p className="line-clamp-1">{item?.subject?.name}</p>
+      ),
     },
     {
       title: "Status",
@@ -301,28 +287,141 @@ export const getAssignColumns = ({
         <p className="line-clamp-1 capitalize">{item?.status}</p>
       ),
     },
-    // {
-    //   title: "Action",
-    //   align: "center",
-    //   fixed: "right",
-    //   width: 80,
-    //   render: (_, record) => (
-    //     <div className="flex justify-center gap-2">
-    //       <Popconfirm
-    //         title="Delete the user"
-    //         description="Are you sure to delete this user?"
-    //         placement="topRight"
-    //         onConfirm={() => handleDelete(record._id)}
-    //         okText="Yes"
-    //         cancelText="No"
-    //       >
-    //         <Button>
-    //           <AiFillDelete fontSize={16} />
-    //         </Button>
-    //       </Popconfirm>
-    //     </div>
-    //   ),
-    // },
+  ];
+};
+
+export const getComQuesColumns = ({
+  handleAction,
+}: any): TableColumnsType<any> => {
+  return [
+    {
+      title: "SL",
+      width: 50,
+      align: "center",
+      render: (_, __: any, index: number) => <p>{index + 1}</p>,
+    },
+    {
+      title: "Teacher",
+      key: "teacher",
+      width: 150,
+      render: (_, item: any) => (
+        <p className="line-clamp-1">
+          {item?.teacher?.first_name + " " + item?.teacher?.last_name}
+        </p>
+      ),
+    },
+    {
+      title: "Question Name",
+      key: "question_name",
+      width: 250,
+      render: (_, item: TQuestion) => (
+        <p className="line-clamp-2">{item?.title}</p>
+      ),
+    },
+    {
+      title: "Question Description",
+      key: "question_desc",
+      render: (_, item: TQuestion) => (
+        <p className="line-clamp-2">{item?.desc}</p>
+      ),
+    },
+    {
+      title: "Course",
+      key: "course",
+      width: 170,
+      render: (_, item: any) => (
+        <p className="line-clamp-1">{item?.course?.name}</p>
+      ),
+    },
+    {
+      title: "Subject",
+      key: "subject",
+      width: 150,
+      render: (_, item: any) => (
+        <p className="line-clamp-1">{item?.subject?.name}</p>
+      ),
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      align: "center",
+      width: 120,
+      render: (_, item: any) => (
+        <p className="line-clamp-1 capitalize">{item?.status}</p>
+      ),
+    },
+    {
+      title: "Action",
+      align: "center",
+      fixed: "right",
+      width: 110,
+      render: (_, record) => (
+        <div className="flex justify-center gap-2">
+          <Popconfirm
+            title="Mark as Complete"
+            description="Are you sure to complete this question?"
+            placement="topRight"
+            onConfirm={() => handleAction(record._id)}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button>Complete</Button>
+          </Popconfirm>
+        </div>
+      ),
+    },
+  ];
+};
+
+export const getTeachersColumns = ({
+  handleAction,
+}: any): TableColumnsType<any> => {
+  return [
+    {
+      title: "SL",
+      width: 50,
+      align: "center",
+      render: (_, __: any, index: number) => <p>{index + 1}</p>,
+    },
+    {
+      title: "Teacher Full Name",
+      key: "teacher",
+      render: (_, item: TUser) => (
+        <p className="line-clamp-1">
+          {item?.first_name + " " + item?.last_name}
+        </p>
+      ),
+    },
+    {
+      title: "Email Address",
+      key: "email_address",
+      width: 220,
+      render: (_, item: TUser) => <p className="line-clamp-2">{item?.email}</p>,
+    },
+    {
+      title: "Contact Number",
+      key: "contact_no",
+      width: 180,
+      render: (_, item: TUser) => (
+        <p className="line-clamp-2">{item?.contact_no}</p>
+      ),
+    },
+    {
+      title: "Course",
+      key: "course",
+      width: 220,
+      render: (_, item: any) => (
+        <p className="line-clamp-1">{item?.course?.name}</p>
+      ),
+    },
+    {
+      title: "Subject",
+      key: "subject",
+      width: 150,
+      render: (_, item: any) => (
+        <p className="line-clamp-1">{item?.subject?.name}</p>
+      ),
+    },
   ];
 };
 

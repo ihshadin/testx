@@ -21,11 +21,12 @@ const CompletedQuestionsPage = () => {
         : [{ name: "status", value: "approved" }];
       return updatedParams;
     });
+
+    console.log(params);
   };
 
   useEffect(() => {
     handleSeach();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchText]);
 
   return (

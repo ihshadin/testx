@@ -1,32 +1,49 @@
 "use client";
 import { useState } from "react";
-import { Select, Table } from "antd";
+import { Input, Select, Table } from "antd";
 import { toast } from "sonner";
-import { getAssignColumns } from "@/utils/AntdTableColumn/TableColumns";
+import {
+  getAssignColumns,
+  getTeachersColumns,
+} from "@/utils/AntdTableColumn/TableColumns";
 import { TableRowSelection } from "antd/es/table/interface";
 import { TQuestions } from "@/types/question.type";
 import onsubmitErrorHandler from "@/utils/errors/onsubmitErrorHandler";
 import {
   useDeleteQuestionMutation,
+  useGetAllQuestionQuery,
   useUpdateQuestionsMutation,
 } from "@/redux/features/question/questionApi";
 import { useGetAllUserQuery } from "@/redux/features/user/userApi";
 import { TUser } from "@/types/user.type";
 
-const AssignQuestions = ({
-  questions,
-  isQuesLoading,
-  handleTeacherSearch,
-  setSearchTeacher,
-}: TQuestions) => {
+const CoordinatorAssignment = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [reassignTeacher, setReassignTeacher] = useState("");
   const [isBtnDisabled, setIsBtnDisabled] = useState(true);
-
-  const { data: teachers, isLoading: isTeaLoading } = useGetAllUserQuery([
+  const [params, setParams] = useState<any>([
     { name: "role", value: "teacher" },
     { name: "status", value: "approved" },
   ]);
+  //   const { data: users, isLoading: isUsersLoading } =
+  //     useGetAllUserQuery(params);
+
+  const handleSearch = (text: string) => {
+    setParams([
+      { name: "role", value: "teacher" },
+      { name: "status", value: "approved" },
+      { name: "searchTerm", value: text },
+    ]);
+  };
+  // Teachers
+  const { data: teachers, isLoading: isTeaLoading } =
+    useGetAllUserQuery(params);
+  // Coordinators
+  const { data: coordinators, isLoading: isCoorLoading } = useGetAllUserQuery([
+    { name: "role", value: "coordinator" },
+    { name: "status", value: "approved" },
+  ]);
+
   const [updateQuestions] = useUpdateQuestionsMutation();
   // Delete Questions
   const [deleteQuestion] = useDeleteQuestionMutation();
@@ -49,12 +66,12 @@ const AssignQuestions = ({
     }
   };
 
-  const columns = getAssignColumns({
+  const columns = getTeachersColumns({
     handleDelete,
   });
 
-  const handleReassignTeacher = async () => {
-    const toastId = toast.loading("Assigning teacher...");
+  const handleCoordinator = async () => {
+    const toastId = toast.loading("Updating Coordinator...");
 
     const updatedData = {
       questionIds: selectedRowKeys,
@@ -65,7 +82,7 @@ const AssignQuestions = ({
     try {
       const res = await updateQuestions(updatedData).unwrap();
       if (res?.success) {
-        toast.success("Assigned updated successfully", { id: toastId });
+        toast.success("Coordinator updated successfully", { id: toastId });
         setReassignTeacher("");
       }
     } catch (error: any) {
@@ -85,32 +102,21 @@ const AssignQuestions = ({
         <div className="flex items-end gap-3 border border-primary/10 rounded-lg p-2">
           <div>
             <p className="mb-1">Search Teacher</p>
-            <Select
-              loading={isTeaLoading}
-              showSearch
-              placeholder="Select from here..."
-              options={mapToOptions(teachers?.data)}
-              className="!h-10 !bg-transparent *:!rounded-lg w-[300px]"
-              onChange={(value) => setSearchTeacher(value)}
+            <Input
+              placeholder="Search here..."
+              className="!h-10 !bg-transparent *:!rounded-lg !w-[400px]"
+              onChange={(e) => handleSearch(e.target.value)}
             />
-          </div>
-          <div>
-            <button
-              className="cursor-pointer disabled:cursor-not-allowed text-base font-medium block w-full bg-primary/5 hover:bg-primary disabled:bg-primary/5 text-primary hover:text-white disabled:text-primary/50 border border-primary/30 hover:border-primary/60 disabled:border-primary//30 px-4 py-1.5 h-10 rounded-lg transition duration-150"
-              type="submit"
-              onClick={() => handleTeacherSearch()}
-            >
-              Search
-            </button>
           </div>
         </div>
         <div className="flex items-end gap-3 border border-primary/10 rounded-lg p-2">
           <div>
-            <p className="mb-1">Reassign Teacher</p>
+            <p className="mb-1">Coordinators</p>
             <Select
+              loading={isCoorLoading}
               showSearch
               placeholder="Select from here..."
-              options={mapToOptions(teachers?.data)}
+              options={mapToOptions(coordinators?.data)}
               className="!h-10 !bg-transparent *:!rounded-lg w-[300px]"
               onChange={(teacher) => {
                 setReassignTeacher(teacher), setIsBtnDisabled(false);
@@ -122,25 +128,25 @@ const AssignQuestions = ({
             <button
               className="cursor-pointer disabled:cursor-not-allowed text-base font-medium block w-full bg-primary/5 hover:bg-primary disabled:bg-primary/5 text-primary hover:text-white disabled:text-primary/50 border border-primary/30 hover:border-primary/60 disabled:border-primary//30 px-4 py-1.5 h-10 rounded-lg transition duration-150"
               type="submit"
-              onClick={() => handleReassignTeacher()}
+              onClick={() => handleCoordinator()}
               disabled={isBtnDisabled || selectedRowKeys.length === 0}
             >
-              Reassign
+              Assign
             </button>
           </div>
         </div>
       </div>
       <Table
         rowKey="_id"
-        loading={isQuesLoading}
+        loading={isTeaLoading}
         rowSelection={rowSelection}
         columns={columns}
-        dataSource={questions}
-        scroll={{ x: 1500 }}
+        dataSource={teachers?.data}
+        // scroll={{ x: 1500 }}
         pagination={false}
       />
     </>
   );
 };
 
-export default AssignQuestions;
+export default CoordinatorAssignment;

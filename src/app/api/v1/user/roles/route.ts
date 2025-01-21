@@ -28,8 +28,8 @@ export async function GET(req: NextRequest) {
     const userQuery = new QueryBuilder(
       UserModel.find({ role: { $in: ["teacher", "coordinator"] } })
         .select("-password")
-        .populate("courses")
-        .populate("subjects"),
+        .populate("course")
+        .populate("subject"),
       allQueries
     )
       .search(UserSearchableFields)
