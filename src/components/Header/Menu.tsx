@@ -26,13 +26,13 @@ const Menu = ({ items }: { items: TMenu[] }) => {
   }, [data?.data?.role, refetch]);
 
   return (
-    <div className="pt-4 flex flex-wrap justify-between items-center">
+    <div className="pt-4 flex flex-wrap justify-start items-center gap-5">
       {filteredMenu.map((item) => (
         <Link
           href={item?.slug}
           key={item?.slug}
           onClick={() => setActiveMenu(item?.slug)}
-          className={`bg-white hover:bg-primary/5 text-primary border border-primary/30 hover:border-primary/60 px-4 py-2 rounded-xl transition duration-150 ${
+          className={`bg-white hover:bg-primary/5 text-primary border border-primary/30 hover:border-primary/60 px-3 py-1 rounded-lg transition duration-150 ${
             activeMenu === item?.slug && "!bg-primary/5 !border-primary/60"
           }`}
         >

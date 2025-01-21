@@ -39,8 +39,9 @@ const SignUpPage = () => {
     try {
       const { agreement, ...dataWithoutAgreement } = data;
 
-      const userInfo = await register(dataWithoutAgreement).unwrap();
-      if (userInfo.success) {
+      const res = await register(dataWithoutAgreement).unwrap();
+
+      if (res.success) {
         form.resetFields();
         toast.success("Register Request Send", { id: toastId });
         router.push("/");

@@ -18,7 +18,7 @@ const AdminDashboard = () => {
         <p className="text-base">It&apos;s great to see you again!</p>
         {/* <h3 className="text-4xl font-bold">1523</h3> */}
       </div>
-      <div className="col-span-3 flex gap-5">
+      {/* <div className="col-span-3 flex gap-5">
         <Link
           href={"/question/add-question"}
           className={`bg-white hover:bg-primary/5 text-primary border border-primary/30 hover:border-primary/60 px-4 py-2 rounded-xl transition duration-150`}
@@ -43,7 +43,7 @@ const AdminDashboard = () => {
         >
           Add Topic
         </Link>
-      </div>
+      </div> */}
       <div className="row-span-2 bg-secondary/10 border border-secondary/30 rounded-xl px-5 py-8 flex flex-col items-center justify-center">
         <h4 className="text-2xl mb-1">Total Questions</h4>
         <h3 className="text-4xl font-bold">

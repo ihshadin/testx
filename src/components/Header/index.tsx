@@ -28,11 +28,6 @@ const menuItems = [
     roles: ["admin"],
   },
   {
-    label: "Question Submission",
-    slug: "/question/question-submission",
-    roles: ["coordinator"],
-  },
-  {
     label: "Question Reassignment",
     slug: "/question/question-reassignment",
     roles: ["admin"],
@@ -42,18 +37,46 @@ const menuItems = [
     slug: "/question/coordinator-reassignment",
     roles: ["coordinator"],
   },
-  // {
-  //   label: "Database Management",
-  //   slug: "/database-management",
-  //   roles: ["admin", "coordinator"],
-  // },
+  {
+    label: "Question Submission",
+    slug: "/question/question-submission",
+    roles: ["coordinator"],
+  },
   {
     label: "Completed Questions",
     slug: "/question/question-completed",
     roles: ["admin"],
   },
-  // { label: "Questions From Teacher", slug: "/questions-from-teacher", roles: ["admin", "teacher"] },
-  // { label: "Your Profile", slug: "/profile", roles: ["admin", "teacher", "coordinator"] },
+  {
+    label: "Hold Questions",
+    slug: "/question/hold-question",
+    roles: ["admin"],
+  },
+  {
+    label: "Final Questions",
+    slug: "/question/final-question",
+    roles: ["admin"],
+  },
+  {
+    label: "Add Question",
+    slug: "/question/add-question",
+    roles: ["admin"],
+  },
+  {
+    label: "Add Course",
+    slug: "/course/add-course",
+    roles: ["admin"],
+  },
+  {
+    label: "Add Subject",
+    slug: "/subject/add-subject",
+    roles: ["admin"],
+  },
+  {
+    label: "Add Topic",
+    slug: "/topic/add-topic",
+    roles: ["admin"],
+  },
 ];
 
 const Header = () => {
