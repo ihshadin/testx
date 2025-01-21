@@ -16,5 +16,7 @@ export type TUser = {
   course: Types.ObjectId; //FK
   subject: Types.ObjectId; //FK
   photo?: string;
+  coordinator?: Types.ObjectId; //FK
+  teachers?: Types.ObjectId[]; //FK
   isDeleted: boolean;
 };

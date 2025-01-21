@@ -144,13 +144,12 @@ const SignUpPage = () => {
             <Col span={12}>
               <Form.Item
                 label="Select Course"
-                name="courses"
+                name="course"
                 rules={[{ required: true, message: "Course is required" }]}
               >
                 <Select
                   loading={isCouLoading}
                   showSearch
-                  mode="multiple"
                   placeholder="Select from here..."
                   className="[&_.ant-select-selector]:!min-h-10 *:!rounded-lg !bg-transparent"
                   options={mapToOptions(courses?.data)}
@@ -161,13 +160,12 @@ const SignUpPage = () => {
             <Col span={12}>
               <Form.Item
                 label="Select Subject"
-                name="subjects"
+                name="subject"
                 rules={[{ required: true, message: "Subject is required" }]}
               >
                 <Select
                   loading={isSubLoading}
                   showSearch
-                  mode="multiple"
                   placeholder="Select from here..."
                   className="[&_.ant-select-selector]:!min-h-10 *:!rounded-lg !bg-transparent"
                   options={mapToOptions(subjects?.data)}
@@ -179,24 +177,12 @@ const SignUpPage = () => {
 
           <Row gutter={15}>
             <Col span={10}>
-              {/* <Form.Item
-                label="Username"
-                name="username"
-                rules={[{ required: true, message: "Username is required" }]}
-              >
-                <Input
-                  type="text"
-                  placeholder="Write here..."
-                  className="h-10 border border-[#C4CAD4] !rounded-lg"
-                />
-              </Form.Item> */}
               <Form.Item
                 label="Select Your Role"
                 name="role"
                 rules={[{ required: true, message: "User Role is required" }]}
               >
                 <Select
-                  // loading={isDataLoading}
                   showSearch
                   placeholder="Select from here..."
                   options={userRole}
@@ -250,8 +236,8 @@ const SignUpPage = () => {
                 ]}
               >
                 <Checkbox>
-                  I agree to <a href="">Terms & Conditions</a> and
-                  <a href=""> Privacy Policy</a>
+                  I agree to <a href="#">Terms & Conditions</a> and
+                  <a href="#"> Privacy Policy</a>
                 </Checkbox>
               </Form.Item>
             </Col>
@@ -271,6 +257,7 @@ const SignUpPage = () => {
             </Col>
           </Row>
         </Form>
+
         <Row>
           <Col span={24}>
             <p className="text-center mt-5">

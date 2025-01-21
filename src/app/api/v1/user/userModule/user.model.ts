@@ -35,16 +35,24 @@ const userSchema = new Schema<TUser>(
       required: true,
       default: "pending",
     },
-    courses: {
-      type: [{ type: Schema.Types.ObjectId, ref: "Course" }],
+    course: {
+      type: Schema.Types.ObjectId,
+      ref: "Course",
       required: true,
     },
-    subjects: {
-      type: [{ type: Schema.Types.ObjectId, ref: "Subject" }],
+    subject: {
+      type: Schema.Types.ObjectId,
+      ref: "Subject",
       required: true,
     },
     photo: {
       type: String,
+    },
+    coordinator: {
+      type: String,
+    },
+    teachers: {
+      type: [{ type: Schema.Types.ObjectId, ref: "User" }],
     },
     isDeleted: {
       type: Boolean,
