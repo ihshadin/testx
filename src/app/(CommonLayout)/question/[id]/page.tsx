@@ -9,6 +9,8 @@ import MDEditor from "@uiw/react-md-editor";
 import { mapToOptions } from "@/utils";
 import { useGetAllUserQuery } from "@/redux/features/user/userApi";
 import { CheckboxChangeEventTarget } from "antd/es/checkbox/Checkbox";
+import { toast } from "sonner";
+import { uploadImageInCloudinary } from "@/utils/UploadImage/UploadImageInCloudinay";
 
 const galleryImages = [
   {
@@ -39,7 +41,7 @@ const galleryImages = [
 
 const QuestionDetails = () => {
   const { id } = useParams();
-  const [file, setFile] = useState([]);
+  const [files, setFiles] = useState([]);
   const [isImageRequired, setIsImageRequired] = useState(false);
   const [isNeedHelp, setIsNeedHelp] = useState(false);
   const [isHold, setIsHold] = useState(false);
@@ -49,6 +51,36 @@ const QuestionDetails = () => {
     { name: "role", value: "teacher" },
     { name: "status", value: "approved" },
   ]);
+
+  const handleUpload = async () => {
+    if (files.length === 0) {
+      toast.error("Please select at least one image to upload.");
+      return;
+    }
+
+    const toastId = toast("Uploading images...");
+
+    try {
+      const uploadPromises = files.map((file) => uploadImageInCloudinary(file));
+      const uploadedImages = await Promise.all(uploadPromises);
+
+      console.log("Uploaded Image URL--=>", uploadedImages);
+      const successfulUploads = uploadedImages.filter((url) => url); // Filter out failed uploads
+
+      toast.success(
+        `${successfulUploads.length} image(s) uploaded successfully.`,
+        { id: toastId }
+      );
+
+      console.log("Uploaded Image URLs:", successfulUploads);
+      setFiles([]);
+    } catch (error) {
+      console.error("Upload error:", error);
+      toast.error("Failed to upload images. Please try again.", {
+        id: toastId,
+      });
+    }
+  };
 
   if (isLoading) {
     return (
@@ -78,10 +110,11 @@ const QuestionDetails = () => {
           <div className="mt-6">
             <div className="flex items-end gap-5">
               <div className="shrink">
-                <UploadImageWithPreview setFile={setFile} />
+                <UploadImageWithPreview setFile={setFiles} />
               </div>
               <div className="grow">
                 <button
+                  onClick={handleUpload}
                   className="cursor-pointer text-base font-medium ml-auto bg-primary/5 hover:bg-primary text-primary hover:text-white border border-primary/30 hover:border-primary/60 px-5 py-2 rounded-xl transition duration-150"
                   type="submit"
                 >
