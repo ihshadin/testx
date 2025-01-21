@@ -2,24 +2,16 @@
 import { useState } from "react";
 import { Input, Select, Table } from "antd";
 import { toast } from "sonner";
-import {
-  getAssignColumns,
-  getTeachersColumns,
-} from "@/utils/AntdTableColumn/TableColumns";
+import { getTeachersColumns } from "@/utils/AntdTableColumn/TableColumns";
 import { TableRowSelection } from "antd/es/table/interface";
-import { TQuestions } from "@/types/question.type";
 import onsubmitErrorHandler from "@/utils/errors/onsubmitErrorHandler";
-import {
-  useDeleteQuestionMutation,
-  useGetAllQuestionQuery,
-  useUpdateQuestionsMutation,
-} from "@/redux/features/question/questionApi";
 import { useGetAllUserQuery } from "@/redux/features/user/userApi";
 import { TUser } from "@/types/user.type";
+import { useUpdateCoordinatorMutation } from "@/redux/features/user/coordinator";
 
 const CoordinatorAssignment = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-  const [reassignTeacher, setReassignTeacher] = useState("");
+  const [coordinator, setCoordinator] = useState("");
   const [isBtnDisabled, setIsBtnDisabled] = useState(true);
   const [params, setParams] = useState<any>([
     { name: "role", value: "teacher" },
@@ -46,9 +38,8 @@ const CoordinatorAssignment = () => {
     { name: "status", value: "approved" },
   ]);
 
-  const [updateQuestions] = useUpdateQuestionsMutation();
-  // Delete Questions
-  const [deleteQuestion] = useDeleteQuestionMutation();
+  //   Update Coordinator
+  const [updateCoordinator] = useUpdateCoordinatorMutation();
 
   // Row Selection functions
   const rowSelection: TableRowSelection<any> = {
@@ -58,36 +49,22 @@ const CoordinatorAssignment = () => {
     },
   };
 
-  const handleDelete = async (id: string) => {
-    const toastId = toast.loading("Question Deleting...");
-    try {
-      await deleteQuestion(id).unwrap();
-      toast.success("Question Delete Successful", { id: toastId });
-    } catch (error) {
-      onsubmitErrorHandler(error, toastId);
-    }
-  };
-
-  const columns = getTeachersColumns({
-    handleDelete,
-  });
+  const columns = getTeachersColumns({});
 
   const handleCoordinator = async () => {
     const toastId = toast.loading("Updating Coordinator...");
 
     const updatedData = {
-      questionIds: selectedRowKeys,
-      teacher: reassignTeacher,
-      owner: reassignTeacher,
+      teachers: JSON.stringify(selectedRowKeys),
+      coordinator: coordinator,
     };
-
-    console.log("updatedData", updatedData);
-
+    console.log(updatedData);
     try {
-      const res = await updateQuestions(updatedData).unwrap();
+      console.log("check from inside try");
+      const res = await updateCoordinator(updatedData).unwrap();
       if (res?.success) {
         toast.success("Coordinator updated successfully", { id: toastId });
-        setReassignTeacher("");
+        setCoordinator("");
       }
     } catch (error: any) {
       onsubmitErrorHandler(error, toastId);
@@ -122,8 +99,8 @@ const CoordinatorAssignment = () => {
               placeholder="Select from here..."
               options={mapToOptions(coordinators?.data)}
               className="!h-10 !bg-transparent *:!rounded-lg w-[300px]"
-              onChange={(teacher) => {
-                setReassignTeacher(teacher), setIsBtnDisabled(false);
+              onChange={(value) => {
+                setCoordinator(value), setIsBtnDisabled(false);
               }}
               disabled={selectedRowKeys.length <= 0}
             />
