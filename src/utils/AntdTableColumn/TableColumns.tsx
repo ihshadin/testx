@@ -290,6 +290,89 @@ export const getAssignColumns = ({
   ];
 };
 
+export const getComQuesColumns = ({
+  handleAction,
+}: any): TableColumnsType<any> => {
+  return [
+    {
+      title: "SL",
+      width: 50,
+      align: "center",
+      render: (_, __: any, index: number) => <p>{index + 1}</p>,
+    },
+    {
+      title: "Teachers",
+      key: "teachers",
+      width: 150,
+      render: (_, item: any) => (
+        <p className="line-clamp-1">
+          {item?.teacher?.first_name + " " + item?.teacher?.last_name}
+        </p>
+      ),
+    },
+    {
+      title: "Question Name",
+      key: "question_name",
+      width: 250,
+      render: (_, item: TQuestion) => (
+        <p className="line-clamp-2">{item?.title}</p>
+      ),
+    },
+    {
+      title: "Question Description",
+      key: "question_desc",
+      render: (_, item: TQuestion) => (
+        <p className="line-clamp-2">{item?.desc}</p>
+      ),
+    },
+    {
+      title: "Course",
+      key: "course",
+      width: 170,
+      render: (_, item: any) => (
+        <p className="line-clamp-1">{item?.course?.name}</p>
+      ),
+    },
+    {
+      title: "Subject",
+      key: "subject",
+      width: 150,
+      render: (_, item: any) => (
+        <p className="line-clamp-1">{item?.subject?.name}</p>
+      ),
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      align: "center",
+      width: 120,
+      render: (_, item: any) => (
+        <p className="line-clamp-1 capitalize">{item?.status}</p>
+      ),
+    },
+    {
+      title: "Action",
+      align: "center",
+      fixed: "right",
+      width: 110,
+      render: (_, record) => (
+        <div className="flex justify-center gap-2">
+          <Popconfirm
+            title="Mark as Complete"
+            description="Are you sure to complete this question?"
+            placement="topRight"
+            onConfirm={() => handleAction(record._id)}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button>Complete</Button>
+          </Popconfirm>
+        </div>
+      ),
+    },
+  ];
+};
+
 export const getTeaQuesColumns = ({
   handleUpdateStatus,
   handleViewDetails,
