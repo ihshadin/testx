@@ -20,33 +20,6 @@ import { uploadImageInCloudinary } from "@/utils/UploadImage/UploadImageInCloudi
 import onsubmitErrorHandler from "@/utils/errors/onsubmitErrorHandler";
 import { TUser } from "@/types/user.type";
 
-const galleryImages = [
-  {
-    _id: "1",
-    url: "https://images.pexels.com/photos/20263436/pexels-photo-20263436/free-photo-of-revel-atlantic-city-hotel-in-atlantic-city-in-usa.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-  },
-  {
-    _id: "2",
-    url: "https://images.pexels.com/photos/28295577/pexels-photo-28295577/free-photo-of-sunday-morning.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-  },
-  {
-    _id: "3",
-    url: "https://images.pexels.com/photos/13828941/pexels-photo-13828941.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-  },
-  {
-    _id: "4",
-    url: "https://images.pexels.com/photos/29971353/pexels-photo-29971353/free-photo-of-serene-woodland-scene-in-english-forest.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-  },
-  {
-    _id: "5",
-    url: "https://images.pexels.com/photos/30135170/pexels-photo-30135170/free-photo-of-mystical-forest-in-madeira-with-sunlit-moss.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-  },
-  // {
-  //   _id: "6",
-  //   url: "https://images.pexels.com/photos/27906872/pexels-photo-27906872/free-photo-of-a-bird-flying-over-the-ocean-at-sunset.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-  // },
-];
-
 const QuestionDetails = () => {
   const { id } = useParams();
   const router = useRouter();
@@ -74,27 +47,31 @@ const QuestionDetails = () => {
       return;
     }
 
-    const toastId = toast("Uploading images...");
+    const toastId = toast.loading("Uploading images...");
 
     try {
-      const uploadPromises = files.map((file) => uploadImageInCloudinary(file));
-      const uploadedImages = await Promise.all(uploadPromises);
-
-      console.log("Uploaded Image URL--=>", uploadedImages);
-      const successfulUploads = uploadedImages.filter((url) => url); // Filter out failed uploads
-
-      toast.success(
-        `${successfulUploads.length} image(s) uploaded successfully.`,
-        { id: toastId }
+      const uploadPromises = files.map(
+        async (file) => await uploadImageInCloudinary(file)
       );
+      const uploadedImages = await Promise.all(uploadPromises);
+      const successfulUploads = uploadedImages.filter((url) => url);
 
-      console.log("Uploaded Image URLs:", successfulUploads);
-      setFiles([]);
+      if (successfulUploads.length === 0)
+        toast.error("image upload failed", { id: toastId });
+
+      const updatedData = {
+        id: id,
+        data: { images: successfulUploads },
+      };
+
+      const res = await updateQuestion(updatedData).unwrap();
+      if (res?.success) {
+        toast.success("image(s) uploaded successfully", { id: toastId });
+        setFiles([]);
+        refetch();
+      }
     } catch (error) {
-      console.error("Upload error:", error);
-      toast.error("Failed to upload images. Please try again.", {
-        id: toastId,
-      });
+      onsubmitErrorHandler(error, toastId);
     }
   };
 
@@ -217,7 +194,7 @@ const QuestionDetails = () => {
           <div className="mt-6">
             <div className="flex items-end gap-5">
               <div className="shrink">
-                <UploadImageWithPreview setFile={setFiles} />
+                <UploadImageWithPreview file={files} setFile={setFiles} />
               </div>
               <div className="grow">
                 <button
@@ -230,10 +207,10 @@ const QuestionDetails = () => {
               </div>
             </div>
             <div className="flex flex-wrap gap-4 mt-5">
-              {galleryImages.map((image) => (
-                <div key={image?._id} className="rounded-xl overflow-hidden">
+              {question?.images?.map((image: string) => (
+                <div key={image} className="rounded-xl overflow-hidden">
                   <Image
-                    src={image?.url}
+                    src={image}
                     alt="Image"
                     className="!h-[200px] w-auto rounded-xl"
                   />

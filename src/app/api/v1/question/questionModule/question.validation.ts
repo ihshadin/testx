@@ -1,11 +1,6 @@
 import { z } from "zod";
 import { QUESTION_STATUS } from "./question.constant";
 
-const ImageSchema = z.object({
-  id: z.string(),
-  url: z.string().url(),
-});
-
 export const createQuestionValidationSchema = z.object({
   title: z.string().min(1, "Question Title is required").trim(),
   desc: z.string().min(1, "Description is required"),
@@ -18,7 +13,7 @@ export const createQuestionValidationSchema = z.object({
   teacher: z.string().optional(), //FK
   owner: z.string().optional(), //FK
   comment: z.string().trim().optional(),
-  images: ImageSchema.optional(),
+  images: z.array(z.string().url()).optional(),
   status: z.nativeEnum(QUESTION_STATUS).optional(),
 });
 
@@ -29,6 +24,6 @@ export const updateQuestionValidationSchema = z.object({
   teacher: z.string().optional(), //FK
   owner: z.string().optional(), //FK
   comment: z.string().trim().optional(),
-  images: ImageSchema.optional(),
+  images: z.array(z.string().url()).optional(),
   status: z.nativeEnum(QUESTION_STATUS).optional(),
 });

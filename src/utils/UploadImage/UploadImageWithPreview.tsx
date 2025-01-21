@@ -3,8 +3,13 @@ import { GetProp, Upload, UploadFile, UploadProps, message } from "antd";
 import { TUploadImage } from "@/types/uploadImg.type";
 import { IoCloudUploadOutline } from "react-icons/io5";
 
-const UploadImageWithPreview = ({ setFile }: TUploadImage) => {
+const UploadImageWithPreview = ({ file, setFile }: TUploadImage) => {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
+
+  // Sync with parent when `fileList` changes
+  useEffect(() => {
+    setFile(fileList);
+  }, [fileList, setFile, file]);
 
   const props: UploadProps = {
     name: "file",
@@ -50,6 +55,16 @@ const UploadImageWithPreview = ({ setFile }: TUploadImage) => {
   //   setPreviewImage(file.url || (file.preview as string));
   //   setPreviewOpen(true);
   // };
+
+  // Sync with parent component when `files` is cleared
+  // useEffect(() => {
+  //   if (file.length === 0) {
+  //     setFile([]); // Ensure the parent is updated as well
+  //   }
+  //   if (fileList.length === 0) {
+  //     setFile([]); // Ensure the parent is updated as well
+  //   }
+  // }, [fileList, setFile, file]);
 
   return (
     <>

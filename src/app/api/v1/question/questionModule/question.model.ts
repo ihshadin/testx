@@ -52,10 +52,7 @@ const QuestionSchema: Schema = new Schema<TQuestion>(
       type: String,
       trim: true,
     },
-    images: {
-      id: { type: String },
-      url: { type: String },
-    },
+    images: [String],
     status: {
       type: String,
       enum: Object.values(QUESTION_STATUS),

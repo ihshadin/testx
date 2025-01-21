@@ -15,10 +15,7 @@ export type TQuestion = {
   teacher?: Types.ObjectId; //FK
   owner?: Types.ObjectId; //FK
   comment?: string;
-  images?: {
-    id: string;
-    url: string;
-  };
+  images?: string[];
   status: keyof typeof QUESTION_STATUS;
 };
 

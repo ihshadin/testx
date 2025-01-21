@@ -1,4 +1,5 @@
 "use client";
+import { useLogoutMutation } from "@/redux/features/auth/authApi";
 import { Logout } from "@/redux/features/auth/authSlice";
 import { useAppDispatch } from "@/redux/hooks";
 import { useRouter } from "next/navigation";
@@ -6,10 +7,11 @@ import { useRouter } from "next/navigation";
 const LogOut = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const [logoutUser] = useLogoutMutation();
 
   const handleLogOut = async () => {
+    await logoutUser("");
     dispatch(Logout());
-    console.log(dispatch(Logout()));
     router.push("/login");
   };
 
