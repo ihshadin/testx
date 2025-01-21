@@ -1,4 +1,5 @@
 import { QUESTION_STATUS } from "@/app/api/v1/question/questionModule/question.constant";
+import { Types } from "mongoose";
 import { Dispatch } from "react";
 
 export type TQuestion = {
@@ -8,11 +9,11 @@ export type TQuestion = {
   newDesc?: string;
   domain?: string;
   difficulty_level: "easy" | "medium" | "hard";
-  course: string; //FK
-  subject: string; //FK
-  topic: string; //FK
-  teacher?: string; //FK
-  owner?: string; //FK
+  course: Types.ObjectId; //FK
+  subject: Types.ObjectId; //FK
+  topic: Types.ObjectId; //FK
+  teacher?: Types.ObjectId; //FK
+  owner?: Types.ObjectId; //FK
   comment?: string;
   images?: {
     id: string;

@@ -27,18 +27,18 @@ const QuestionSchema: Schema = new Schema<TQuestion>(
     },
     course: {
       type: Schema.Types.ObjectId,
-      ref: "Course",
       required: true,
+      ref: "Course",
     },
     subject: {
       type: Schema.Types.ObjectId,
-      ref: "Subject",
       required: true,
+      ref: "Subject",
     },
     topic: {
       type: Schema.Types.ObjectId,
-      ref: "Topic",
       required: true,
+      ref: "Topic",
     },
     teacher: {
       type: Schema.Types.ObjectId,

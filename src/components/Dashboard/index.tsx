@@ -16,6 +16,8 @@ const DashboardContainer = () => {
   switch (user.role) {
     case "admin":
       return <AdminDashboard />;
+    case "superAdmin":
+      return <AdminDashboard />;
     case "teacher":
       return <TeacherDashboard />;
     case "coordinator":
