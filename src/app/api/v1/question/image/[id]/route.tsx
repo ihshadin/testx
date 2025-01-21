@@ -3,8 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { ApiError } from "next/dist/server/api-utils";
 import sendApiResponse from "@/utils/Response/sendResponse";
 import { handleError } from "@/utils/errors/handleError";
-import { QuestionModel } from "../questionModule/question.model";
-import { updateQuestionValidationSchema } from "../questionModule/question.validation";
+import { QuestionModel } from "../../questionModule/question.model";
+import { updateQuestionValidationSchema } from "../../questionModule/question.validation";
 
 export async function PUT(
   req: NextRequest,
@@ -56,6 +56,8 @@ export async function DELETE(
 ) {
   try {
     const id = params.id;
+
+    console.log("DELETE----=>");
 
     await dbConnect();
 
