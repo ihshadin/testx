@@ -1,26 +1,36 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import UploadImageWithPreview from "@/utils/UploadImage/UploadImageWithPreview";
-import { Checkbox, Image, Popconfirm, Select, Switch } from "antd";
+import {
+  Button,
+  Checkbox,
+  Image,
+  Input,
+  Popconfirm,
+  Select,
+  Switch,
+} from "antd";
 import QuestionEdit from "@/components/Questions/QuestionEdit";
 import { useParams, useRouter } from "next/navigation";
-import {
-  useDeleteImageMutation,
-  useGetSingleQuestionQuery,
-  useUpdateQuestionMutation,
-} from "@/redux/features/question/questionApi";
 import MDEditor from "@uiw/react-md-editor";
-// import { mapToOptions } from "@/utils";
-import {
-  useGetAllUserQuery,
-  useGetUserQuery,
-} from "@/redux/features/user/userApi";
-import { CheckboxChangeEventTarget } from "antd/es/checkbox/Checkbox";
 import { toast } from "sonner";
 import { uploadImageInCloudinary } from "@/utils/UploadImage/UploadImageInCloudinay";
 import onsubmitErrorHandler from "@/utils/errors/onsubmitErrorHandler";
 import { TUser } from "@/types/user.type";
-import { AiFillDelete, AiOutlineDelete } from "react-icons/ai";
+import { AiOutlineDelete } from "react-icons/ai";
+import {
+  useGetSingleQuestionQuery,
+  useUpdateQuestionMutation,
+} from "@/redux/features/question/questionApi";
+import {
+  useDeleteImageMutation,
+  useUpdateImageMutation,
+} from "@/redux/features/question/image";
+import {
+  useGetAllUserQuery,
+  useGetUserQuery,
+} from "@/redux/features/user/userApi";
+import { CiSquareMinus } from "react-icons/ci";
 
 const QuestionDetails = () => {
   const { id } = useParams();
@@ -33,6 +43,8 @@ const QuestionDetails = () => {
   const [isImageRequired, setIsImageRequired] = useState(false);
   const [isNeedHelp, setIsNeedHelp] = useState(false);
   const [reassignTeacher, setReassignTeacher] = useState("");
+  const [link, setLink] = useState("");
+  const [activeTab, setActiveTab] = useState("image");
   const [isHold, setIsHold] = useState(
     question?.status == "hold" ? true : false
   );
@@ -42,6 +54,7 @@ const QuestionDetails = () => {
     { name: "status", value: "approved" },
   ]);
   const [updateQuestion] = useUpdateQuestionMutation();
+  const [updateImage] = useUpdateImageMutation();
   const [deleteImage] = useDeleteImageMutation();
 
   const handleUpload = async () => {
@@ -57,6 +70,7 @@ const QuestionDetails = () => {
         async (file) => await uploadImageInCloudinary(file)
       );
       const uploadedImages = await Promise.all(uploadPromises);
+
       const successfulUploads = uploadedImages.filter((url) => url);
 
       if (successfulUploads.length === 0)
@@ -64,10 +78,36 @@ const QuestionDetails = () => {
 
       const updatedData = {
         id: id,
-        data: { images: [...question?.images, ...successfulUploads] },
+        data: successfulUploads,
       };
 
-      const res = await updateQuestion(updatedData).unwrap();
+      const res = await updateImage(updatedData).unwrap();
+      if (res?.success) {
+        toast.success("image(s) uploaded successfully", { id: toastId });
+        setFiles([]);
+        refetch();
+      }
+    } catch (error) {
+      onsubmitErrorHandler(error, toastId);
+    }
+  };
+
+  const handleSubmitLinks = async () => {
+    const toastId = toast.loading("Uploading images...");
+
+    try {
+      const successfulUploads = [link];
+      console.log(successfulUploads);
+
+      if (successfulUploads.length === 0)
+        toast.error("image upload failed", { id: toastId });
+
+      const updatedData = {
+        id: id,
+        data: successfulUploads,
+      };
+
+      const res = await updateImage(updatedData).unwrap();
       if (res?.success) {
         toast.success("image(s) uploaded successfully", { id: toastId });
         setFiles([]);
@@ -81,14 +121,11 @@ const QuestionDetails = () => {
   const handleImageDelete = async (url: string) => {
     const toastId = toast.loading("Question Deleting...");
 
-    const deleteData = {
-      id,
-      url,
-    };
-
+    const deleteData = { id, url };
     try {
-      await deleteImage(deleteData).unwrap();
+      const res = await deleteImage(deleteData).unwrap();
       toast.success("Question Delete Successful", { id: toastId });
+      refetch();
     } catch (error) {
       onsubmitErrorHandler(error, toastId);
     }
@@ -211,20 +248,64 @@ const QuestionDetails = () => {
         </div>
         {isImageRequired && (
           <div className="mt-6">
-            <div className="flex items-end gap-5">
-              <div className="shrink">
-                <UploadImageWithPreview files={files} setFile={setFiles} />
-              </div>
-              <div className="grow">
+            <div>
+              <div className="flex gap-2 mb-5">
                 <button
-                  onClick={handleUpload}
-                  className="cursor-pointer text-base font-medium ml-auto bg-primary/5 hover:bg-primary text-primary hover:text-white border border-primary/30 hover:border-primary/60 px-5 py-2 rounded-xl transition duration-150"
+                  onClick={() => setActiveTab("image")}
+                  className={`cursor-pointer text-base font-medium bg-primary/5 hover:bg-primary/15 text-primary/70 hover:text-primary/80 border border-primary/10 hover:border-primary/60 px-3 py-1 rounded-lg transition duration-150 ${
+                    activeTab === "image" &&
+                    "!bg-primary/15 text-primary/80 border-primary/60"
+                  }`}
                   type="submit"
                 >
-                  Upload Images
+                  Images Upload
+                </button>
+                <button
+                  onClick={() => setActiveTab("link")}
+                  className={`cursor-pointer text-base font-medium bg-primary/5 hover:bg-primary/15 text-primary/70 hover:text-primary/80 border border-primary/10 hover:border-primary/60 px-3 py-1 rounded-lg transition duration-150 ${
+                    activeTab === "link" &&
+                    "!bg-primary/15 text-primary/80 border-primary/60"
+                  }`}
+                  type="submit"
+                >
+                  Submit Links
                 </button>
               </div>
+              {activeTab === "image" && (
+                <div className="flex items-end gap-5">
+                  <div className="shrink">
+                    <UploadImageWithPreview files={files} setFile={setFiles} />
+                  </div>
+                  <div className="grow">
+                    <button
+                      onClick={handleUpload}
+                      className="cursor-pointer text-base font-medium ml-auto bg-primary/5 hover:bg-primary text-primary hover:text-white border border-primary/30 hover:border-primary/60 px-5 py-2 rounded-xl transition duration-150"
+                      type="submit"
+                    >
+                      Upload Images
+                    </button>
+                  </div>
+                </div>
+              )}
+              {activeTab === "link" && (
+                <div className="flex flex-row gap-2 w-2/3">
+                  <Input
+                    onChange={(e) => setLink(e?.target?.value)}
+                    placeholder="Add Image Link"
+                    size="large"
+                    className="grow-0"
+                  />
+                  <button
+                    onClick={handleSubmitLinks}
+                    className="shrink-0 cursor-pointer text-base font-medium bg-primary/5 hover:bg-primary text-primary hover:text-white border border-primary/30 hover:border-primary/60 px-5 py-2 rounded-xl transition duration-150"
+                    type="submit"
+                  >
+                    Submit The Link
+                  </button>
+                </div>
+              )}
             </div>
+
             <div className="flex flex-wrap gap-4 mt-5">
               {question?.images?.map((image: string) => (
                 <div
