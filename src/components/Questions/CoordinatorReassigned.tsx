@@ -72,7 +72,7 @@ const CoordinatorReassigned = ({
       onsubmitErrorHandler(error, toastId);
     }
   };
-  console.log(teachers);
+
   const mapToOptions = (data: TUser[]) =>
     data?.map(({ _id, first_name, last_name }) => ({
       value: _id,

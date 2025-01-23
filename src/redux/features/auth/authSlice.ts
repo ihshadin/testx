@@ -1,12 +1,11 @@
-import { TUser } from "@/types/user.type";
 import { createSlice } from "@reduxjs/toolkit";
 
-// export type TUser = {
-//   id: number;
-//   admin: boolean;
-//   churchId: number;
-//   iat: number;
-// };
+export type TUser = {
+  id: number;
+  admin: boolean;
+  churchId: number;
+  iat: number;
+};
 
 type TInitialState = {
   user: null | TUser;

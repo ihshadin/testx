@@ -6,7 +6,9 @@ import type Entity from "@ant-design/cssinjs/es/Cache";
 import { useServerInsertedHTML } from "next/navigation";
 import { ConfigProvider } from "antd";
 import { Provider } from "react-redux";
-import { store } from "@/redux/store";
+import { persistor, store } from "@/redux/store";
+import { PersistGate } from "redux-persist/integration/react";
+import LoadingComponent from "@/utils/Loading";
 
 const AntdProvider = ({ children }: React.PropsWithChildren) => {
   const cache = React.useMemo<Entity>(() => createCache(), []);
@@ -37,7 +39,9 @@ const AntdProvider = ({ children }: React.PropsWithChildren) => {
   return (
     <StyleProvider cache={cache}>
       <Provider store={store}>
-        <ConfigProvider theme={theme}>{children}</ConfigProvider>
+        <PersistGate loading={<LoadingComponent />} persistor={persistor}>
+          <ConfigProvider theme={theme}>{children}</ConfigProvider>
+        </PersistGate>
       </Provider>
     </StyleProvider>
   );

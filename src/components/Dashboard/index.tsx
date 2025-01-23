@@ -5,13 +5,19 @@ import { useSelector } from "react-redux";
 import AdminDashboard from "./AdminDashboard";
 import TeacherDashboard from "./TeacherDashboard";
 import CoordinatorDashboard from "./CoordinatorDashboard";
+import LoadingComponent from "@/utils/Loading";
+import { useAppSelector } from "@/redux/hooks";
+import { useSelectCurrentUser } from "@/redux/features/auth/authSlice";
+import PendingUserDashboard from "../PendingUser/Index";
 
 const DashboardContainer = () => {
-  const { data, refetch } = useGetUserQuery(undefined);
+  const user = useAppSelector(useSelectCurrentUser);
 
-  const user = useSelector((state: any) => data?.data);
+  if (!user) return <LoadingComponent />;
 
-  if (!user) return <div>Loading...</div>;
+  if (user && user?.status === "pending") {
+    return <PendingUserDashboard />;
+  }
 
   switch (user.role) {
     case "admin":
@@ -23,7 +29,7 @@ const DashboardContainer = () => {
     case "coordinator":
       return <CoordinatorDashboard />;
     default:
-      return <div>Unauthorized</div>; // Handle unknown roles
+      return <LoadingComponent />; // Handle unknown roles
   }
 };
 

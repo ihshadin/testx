@@ -237,8 +237,8 @@ const SignUpPage = () => {
                 ]}
               >
                 <Checkbox>
-                  I agree to <a href="#">Terms & Conditions</a> and
-                  <a href="#"> Privacy Policy</a>
+                  I agree to <Link href="#">Terms & Conditions</Link> and
+                  <Link href="#"> Privacy Policy</Link>
                 </Checkbox>
               </Form.Item>
             </Col>

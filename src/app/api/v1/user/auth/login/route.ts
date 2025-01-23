@@ -30,6 +30,7 @@ export async function POST(request: Request) {
       {
         email,
         role: user.role,
+        status: user.status,
       },
       process.env.JWT_SECRET as Secret,
       process.env.JWT_EXPIRES_IN as string

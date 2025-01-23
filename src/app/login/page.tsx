@@ -24,11 +24,8 @@ const SignInPage = () => {
       const res = await login(data).unwrap();
       const user = verifyToken(res?.data?.accessToken);
       dispatch(setUser({ user: user, token: res?.data?.accessToken }));
-
-      if (user) {
-        toast.success("Logged In successful!", { id: toastId });
-        router.push("/");
-      }
+      toast.success("Logged In successful!", { id: toastId });
+      router.push("/");
     } catch (error: any) {
       onsubmitErrorHandler(error, toastId);
     }
