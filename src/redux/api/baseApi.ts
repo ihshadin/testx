@@ -1,18 +1,9 @@
-import {
-  BaseQueryApi,
-  BaseQueryFn,
-  createApi,
-  DefinitionType,
-  FetchArgs,
-  fetchBaseQuery,
-} from "@reduxjs/toolkit/query/react";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { getUserInfo } from "@/utils/localStorage/localStorageAuthManagement";
-import { RootState } from "../store";
-import { Logout, setUser } from "../features/auth/authSlice";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "http://localhost:3000/api/v1",
-  // baseUrl: "https://testx-admin.vercel.app/api/v1",
+  // baseUrl: "http://localhost:3000/api/v1",
+  baseUrl: "https://testx-admin.vercel.app/api/v1",
   credentials: "include",
   prepareHeaders: (headers) => {
     const token = getUserInfo();

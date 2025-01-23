@@ -9,7 +9,6 @@ import {
   useGetRolesUserQuery,
   useUpdateUserMutation,
 } from "@/redux/features/user/userApi";
-import FilterUsers from "./FilterUsers";
 import onsubmitErrorHandler from "@/utils/errors/onsubmitErrorHandler";
 import FilterByCourse from "../Questions/FilterByCourse";
 
