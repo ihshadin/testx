@@ -22,7 +22,7 @@ export async function GET(req: NextRequest) {
     await UserModel;
 
     const token = req.cookies.get("accessToken")?.value || "";
-    const decoded = jwtHelpers.verifyToken(
+    const decoded: any = jwtHelpers.verifyToken(
       token as string,
       process.env.JWT_SECRET as Secret
     );

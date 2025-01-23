@@ -4,14 +4,11 @@ import logo from "@/assets/sites/logo.png";
 import Image from "next/image";
 import Menu from "./Menu";
 import LogOut from "../Auth/LogOut";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { useSelectCurrentUser } from "@/redux/features/auth/authSlice";
 
 const menuItems = [
   { label: "Dashboard", slug: "/", roles: ["admin", "teacher", "coordinator"] },
-  // {
-  //   label: "Add Question",
-  //   slug: "/add-question",
-  //   roles: ["admin"],
-  // },
   {
     label: "Question Assignment",
     slug: "/question/question-assignment",
@@ -80,6 +77,9 @@ const menuItems = [
 ];
 
 const Header = () => {
+  const user = useAppSelector(useSelectCurrentUser);
+  console.log(user);
+
   return (
     <header>
       <div className="max-w-7xl mx-auto py-3 px-2">

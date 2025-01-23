@@ -6,11 +6,9 @@ import {
   FetchArgs,
   fetchBaseQuery,
 } from "@reduxjs/toolkit/query/react";
-import {
-  getUserInfo,
-  removeFromLocalStorage,
-  storeUserInfo,
-} from "@/utils/localStorage/localStorageAuthManagement";
+import { getUserInfo } from "@/utils/localStorage/localStorageAuthManagement";
+import { RootState } from "../store";
+import { Logout, setUser } from "../features/auth/authSlice";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: "http://localhost:3000/api/v1",
@@ -54,11 +52,18 @@ const baseQueryWithRefreshToken: BaseQueryFn<
     const data = await res.json();
 
     if (data?.data?.accessToken) {
-      await storeUserInfo(data?.data?.accessToken);
+      const user = (api.getState() as RootState).auth.user;
+
+      api.dispatch(
+        setUser({
+          user,
+          token: data?.data?.accessToken,
+        })
+      );
 
       result = await baseQuery(args, api, extraOptions);
     } else {
-      await removeFromLocalStorage();
+      api.dispatch(Logout());
     }
   }
 

@@ -27,7 +27,7 @@ const SignInPage = () => {
 
       if (user) {
         toast.success("Logged In successful!", { id: toastId });
-        router.push(`/`);
+        router.push("/");
       }
     } catch (error: any) {
       onsubmitErrorHandler(error, toastId);
