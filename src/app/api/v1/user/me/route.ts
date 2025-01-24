@@ -26,8 +26,7 @@ export async function GET(request: NextRequest) {
 
     const result = await UserModel.findOne({
       email: decoded.email,
-      isDeleted: false,
-    }).select("-password -isDeleted -__v");
+    }).select("-password -__v");
 
     return sendApiResponse(NextResponse, {
       statusCode: 200,

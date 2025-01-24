@@ -80,7 +80,6 @@ export async function PATCH(request: NextRequest) {
 
     const isUserExist = await UserModel.findOne({
       email: decoded.email,
-      isDeleted: false,
     }).select("email");
 
     if (!isUserExist) {

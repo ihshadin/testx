@@ -18,6 +18,14 @@ export const userValidationSchema = z.object({
   photo: z.string().optional(),
   coordinator: z.string().optional(),
   teachers: z.array(z.string()).optional(),
+  resetCode: z
+    .number()
+    .int()
+    .min(100000, { message: "Reset code must be a 6-digit number" })
+    .max(999999, { message: "Reset code must be a 6-digit number" })
+    .nullable()
+    .optional(),
+  resetCodeExpires: z.date().nullable().optional(),
 });
 
 export const userUpdateValidationSchema = z.object({
@@ -30,6 +38,14 @@ export const userUpdateValidationSchema = z.object({
   photo: z.string().optional(),
   coordinator: z.string().optional(),
   teachers: z.array(z.string()).optional(),
+  resetCode: z
+    .number()
+    .int()
+    .min(100000, { message: "Reset code must be a 6-digit number" })
+    .max(999999, { message: "Reset code must be a 6-digit number" })
+    .nullable()
+    .optional(),
+  resetCodeExpires: z.date().nullable().optional(),
 });
 
 export const assignCoordinatorValidationSchema = z

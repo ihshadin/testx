@@ -20,8 +20,9 @@ export async function POST(request: Request) {
 
     // password check
     const isCorrectPassword = bcrypt.compareSync(password, user.password);
+    const isRightPassword = password === user.password;
 
-    if (!isCorrectPassword) {
+    if (!isCorrectPassword || isRightPassword) {
       throw new ApiError(409, "Password not matched!");
     }
 
@@ -37,7 +38,7 @@ export async function POST(request: Request) {
     );
 
     //TODO: hide this password
-    user.password = null;
+    // user.password = null;
 
     const response = NextResponse.json({
       message: "Login success!",

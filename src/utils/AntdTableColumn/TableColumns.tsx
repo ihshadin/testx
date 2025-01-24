@@ -1,8 +1,6 @@
-import { TCourse } from "@/types/course.type";
 import { TQuestion } from "@/types/question.type";
-import { TSubject } from "@/types/subject.type";
 import { TUser } from "@/types/user.type";
-import { MenuProps } from "antd";
+import { Input, MenuProps } from "antd";
 import { TableColumnsType } from "antd";
 import { Dropdown, Button, Popconfirm } from "antd";
 import Link from "next/link";
@@ -32,8 +30,6 @@ export const statusItems: MenuProps["items"] = [
 
 export const getUsersColumns = ({
   handleUpdateStatus,
-  handleViewDetails,
-  handleDelete,
 }: any): TableColumnsType<any> => {
   return [
     {
@@ -53,9 +49,25 @@ export const getUsersColumns = ({
       ),
     },
     {
+      title: "Email Address",
+      dataIndex: "email",
+      width: 220,
+      // render: (_, item: any) => (
+      //   <p className="line-clamp-1">{item?.course?.name}</p>
+      // ),
+    },
+    {
+      title: "Contact No",
+      dataIndex: "contact_no",
+      width: 150,
+      // render: (_, item: any) => (
+      //   <p className="line-clamp-1">{item?.course?.name}</p>
+      // ),
+    },
+    {
       title: "Course",
       key: "course",
-      width: 250,
+      width: 200,
       render: (_, item: any) => (
         <p className="line-clamp-1">{item?.course?.name}</p>
       ),
@@ -63,7 +75,7 @@ export const getUsersColumns = ({
     {
       title: "Subject",
       key: "subject",
-      width: 200,
+      width: 150,
       render: (_, item: any) => (
         <p className="line-clamp-1">{item?.subject?.name}</p>
       ),
@@ -71,13 +83,14 @@ export const getUsersColumns = ({
     {
       title: "Role",
       key: "role",
-      dataIndex: "role",
-      width: 130,
+      width: 100,
+      render: (_, item: any) => (
+        <p className="line-clamp-1 capitalize">{item?.role}</p>
+      ),
     },
     {
       title: "Status",
       key: "status",
-      fixed: "right",
       width: 150,
       render: (record: any) => {
         return (
@@ -117,6 +130,22 @@ export const getUsersColumns = ({
         { text: "Reject", value: "reject" },
       ],
       onFilter: (value, record) => record.status.startsWith(value as string),
+    },
+    {
+      title: "Reset Code",
+      key: "resetCode",
+      fixed: "right",
+      width: 130,
+      render: (_, item: TUser) => (
+        <p className="line-clamp-1 capitalize 20">
+          {/* {item?.password?.slice(0, 10)} */}
+          <Input.Password
+            value={item?.resetCode || "..."}
+            className="hover:!border-transparent focus:!border-transparent"
+            readOnly
+          />
+        </p>
+      ),
     },
     // {
     //   title: "Action",
@@ -440,7 +469,17 @@ export const getTeaQuesColumns = ({
     {
       title: "Question Name",
       key: "title",
-      width: 300,
+      width: 180,
+      render: (_, item: any) => (
+        <p className="line-clamp-2">
+          {item?.teacher?.first_name + " " + item?.teacher?.last_name}
+        </p>
+      ),
+    },
+    {
+      title: "Question Name",
+      key: "title",
+      width: 250,
       render: (_, item: TQuestion) => (
         <p className="line-clamp-2">{item?.title}</p>
       ),

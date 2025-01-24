@@ -12,9 +12,9 @@ import { setUser } from "@/redux/features/auth/authSlice";
 import onsubmitErrorHandler from "@/utils/errors/onsubmitErrorHandler";
 
 const SignInPage = () => {
-  const [login] = useLoginMutation();
   const [form] = Form.useForm();
   const router = useRouter();
+  const [login] = useLoginMutation();
   const dispatch = useAppDispatch();
 
   const onSubmit = async (data: any) => {
@@ -93,10 +93,22 @@ const SignInPage = () => {
         </Form>
         <Row>
           <Col span={24}>
-            <p className="text-center mt-5">
-              Don&apos;t have an account?
-              <Link href="/register"> Register Request</Link>
-            </p>
+            <div className="mt-5 flex gap-2 items-center justify-between">
+              <p className="text-center">
+                Don&apos;t have an account?
+                <Link href="/register" className="text-blue-500">
+                  {" "}
+                  Register
+                </Link>
+              </p>
+              <p className="text-center">
+                Forgot password?
+                <Link href="/reset-password" className="text-blue-500">
+                  {" "}
+                  Click here
+                </Link>
+              </p>
+            </div>
           </Col>
         </Row>
       </div>

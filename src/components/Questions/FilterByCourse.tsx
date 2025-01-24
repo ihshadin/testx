@@ -19,12 +19,12 @@ const FilterByCourse = ({
 
   const { data: courses, isLoading: isCouLoading } =
     useGetAllCourseQuery(undefined);
-  const { data: subjects, isLoading: isSubLoading } = useGetAllSubjectQuery([
-    { name: "course", value: selCourse },
-  ]);
-  const { data: topics, isLoading: isToLoading } = useGetAllTopicQuery([
-    { name: "subject", value: selSubject },
-  ]);
+  const { data: subjects, isLoading: isSubLoading } = useGetAllSubjectQuery(
+    selCourse && [{ name: "course", value: selCourse }]
+  );
+  const { data: topics, isLoading: isToLoading } = useGetAllTopicQuery(
+    selSubject && [{ name: "subject", value: selSubject }]
+  );
 
   const handleCourseChange = (courseId: string) => {
     form.setFieldsValue({ subject: undefined, topic: undefined });

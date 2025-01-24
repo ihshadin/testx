@@ -18,5 +18,12 @@ export type TUser = {
   photo?: string;
   coordinator?: Types.ObjectId; //FK
   teachers?: Types.ObjectId[]; //FK
-  isDeleted: boolean;
+  resetCode?: number;
+  resetCodeExpires?: Date;
+};
+export type TResetPassword = {
+  resetCode: number;
+  email: string;
+  newPassword: string;
+  confirmPassword: string;
 };

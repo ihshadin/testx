@@ -18,15 +18,15 @@ const AllUsersList = () => {
   const { data: users } = useGetRolesUserQuery(params);
   const [updateUser] = useUpdateUserMutation();
   const [deleteUser] = useDeleteUserMutation();
+  console.log(users);
 
-  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-
-  const rowSelection: TableRowSelection<any> = {
-    selectedRowKeys,
-    onChange: (newSelectedRowKeys: React.Key[]) => {
-      setSelectedRowKeys(newSelectedRowKeys);
-    },
-  };
+  // const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+  // const rowSelection: TableRowSelection<any> = {
+  //   selectedRowKeys,
+  //   onChange: (newSelectedRowKeys: React.Key[]) => {
+  //     setSelectedRowKeys(newSelectedRowKeys);
+  //   },
+  // };
 
   // Delete User
   const handleDelete = async (id: string) => {
@@ -40,7 +40,6 @@ const AllUsersList = () => {
   };
 
   // Update Status
-
   const handleUpdateStatus = async (status: string, id: string) => {
     const toastId = toast.loading("Status Updating...");
     try {
@@ -80,9 +79,10 @@ const AllUsersList = () => {
       </div>
       <Table
         rowKey={"_id"}
-        rowSelection={rowSelection}
+        // rowSelection={rowSelection}
         columns={columns}
         dataSource={users?.data}
+        scroll={{ x: 1450 }}
         pagination={false}
       />
     </>

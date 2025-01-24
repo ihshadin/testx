@@ -56,10 +56,8 @@ const userSchema = new Schema<TUser>(
       type: [{ type: Schema.Types.ObjectId, ref: "User" }],
       // default: [],
     },
-    isDeleted: {
-      type: Boolean,
-      default: false,
-    },
+    resetCode: { type: Number, default: null },
+    resetCodeExpires: { type: Date, default: null },
   },
   {
     timestamps: true,
