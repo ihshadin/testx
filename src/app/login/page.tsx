@@ -26,6 +26,7 @@ const SignInPage = () => {
       dispatch(setUser({ user: user, token: res?.data?.accessToken }));
       toast.success("Logged In successful!", { id: toastId });
       router.push("/");
+      form.resetFields();
     } catch (error: any) {
       onsubmitErrorHandler(error, toastId);
     }

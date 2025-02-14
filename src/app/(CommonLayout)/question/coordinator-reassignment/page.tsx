@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { useGetQuestionsQuery } from "@/redux/features/question/coordinator";
 import CoordinatorReassigned from "@/components/Questions/CoordinatorReassigned";
+import CustomPagination from "@/utils/Pagination";
 
 const CoordinatorQuestionReassignment = () => {
   const [searchTeacher, setSearchTeacher] = useState("");
@@ -28,6 +29,11 @@ const CoordinatorQuestionReassignment = () => {
             handleTeacherSearch={handleTeacherSearch}
             setSearchTeacher={setSearchTeacher}
           />
+          {questions?.meta?.totalPage > 1 && (
+            <div className="mt-8 lg:mt-12">
+              <CustomPagination meta={questions?.meta} setParams={setParams} />
+            </div>
+          )}
         </div>
       </div>
     </section>

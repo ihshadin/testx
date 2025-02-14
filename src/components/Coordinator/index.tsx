@@ -8,6 +8,7 @@ import onsubmitErrorHandler from "@/utils/errors/onsubmitErrorHandler";
 import { useGetAllUserQuery } from "@/redux/features/user/userApi";
 import { TUser } from "@/types/user.type";
 import { useUpdateCoordinatorMutation } from "@/redux/features/user/coordinator";
+import CustomPagination from "@/utils/Pagination";
 
 const CoordinatorAssignment = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
@@ -30,8 +31,7 @@ const CoordinatorAssignment = () => {
     ]);
   };
   // Teachers
-  const { data: teachers, isLoading: isTeaLoading } =
-    useGetAllUserQuery(params);
+  const { data, isLoading: isTeaLoading } = useGetAllUserQuery(params);
   // Coordinators
   const { data: coordinators, isLoading: isCoorLoading } = useGetAllUserQuery([
     { name: "role", value: "coordinator" },
@@ -122,10 +122,15 @@ const CoordinatorAssignment = () => {
         loading={isTeaLoading}
         rowSelection={rowSelection}
         columns={columns}
-        dataSource={teachers?.data}
+        dataSource={data?.data}
         // scroll={{ x: 1500 }}
         pagination={false}
       />
+      {data?.meta?.totalPage > 1 && (
+        <div className="mt-8 lg:mt-12">
+          <CustomPagination meta={data?.meta} setParams={setParams} />
+        </div>
+      )}
     </>
   );
 };

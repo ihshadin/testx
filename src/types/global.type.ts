@@ -9,3 +9,8 @@ export type IMeta = {
   total: number;
   totalPage: number;
 };
+
+export type TPagination = {
+  meta: IMeta;
+  setParams: any;
+};

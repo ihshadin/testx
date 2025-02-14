@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import UnassignQuestions from "@/components/Questions/UnassignQuestions";
 import { useGetAllQuestionQuery } from "@/redux/features/question/questionApi";
 import FilterByCourse from "@/components/Questions/FilterByCourse";
+import CustomPagination from "@/utils/Pagination";
 
 const QuestionAssignmentPage = () => {
   const [params, setParams] = useState<any>([
@@ -30,6 +31,11 @@ const QuestionAssignmentPage = () => {
             questions={questions?.data}
             isQuesLoading={isQuesLoading}
           />
+          {questions?.meta?.totalPage > 1 && (
+            <div className="mt-8 lg:mt-12">
+              <CustomPagination meta={questions?.meta} setParams={setParams} />
+            </div>
+          )}
         </div>
       </div>
     </section>

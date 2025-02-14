@@ -11,14 +11,14 @@ import {
 } from "@/redux/features/user/userApi";
 import onsubmitErrorHandler from "@/utils/errors/onsubmitErrorHandler";
 import FilterByCourse from "../Questions/FilterByCourse";
+import CustomPagination from "@/utils/Pagination";
 
 const AllUsersList = () => {
   const [params, setParams] = useState<any>([]);
 
-  const { data: users } = useGetRolesUserQuery(params);
+  const { data } = useGetRolesUserQuery(params);
   const [updateUser] = useUpdateUserMutation();
   const [deleteUser] = useDeleteUserMutation();
-  console.log(users);
 
   // const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   // const rowSelection: TableRowSelection<any> = {
@@ -81,10 +81,15 @@ const AllUsersList = () => {
         rowKey={"_id"}
         // rowSelection={rowSelection}
         columns={columns}
-        dataSource={users?.data}
+        dataSource={data?.data}
         scroll={{ x: 1450 }}
         pagination={false}
       />
+      {data?.meta?.totalPage > 1 && (
+        <div className="mt-8 lg:mt-12">
+          <CustomPagination meta={data?.meta} setParams={setParams} />
+        </div>
+      )}
     </>
   );
 };

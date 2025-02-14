@@ -12,6 +12,7 @@ import {
 } from "@/redux/features/question/questionApi";
 import { useGetAllUserQuery } from "@/redux/features/user/userApi";
 import { TUser } from "@/types/user.type";
+import CustomPagination from "@/utils/Pagination";
 
 type TQuestions = {
   questions: TQuestion[];
@@ -23,7 +24,7 @@ const UnassignQuestions = ({ questions, isQuesLoading }: TQuestions) => {
   const [isBtnDisabled, setIsBtnDisabled] = useState(true);
   const [form] = Form.useForm();
 
-  const { data: teachers, isLoading: isTeaLoading } = useGetAllUserQuery([
+  const { data, isLoading: isTeaLoading } = useGetAllUserQuery([
     { name: "role", value: "teacher" },
     { name: "status", value: "approved" },
   ]);
@@ -101,7 +102,7 @@ const UnassignQuestions = ({ questions, isQuesLoading }: TQuestions) => {
                   loading={isTeaLoading}
                   showSearch
                   placeholder="Select from here..."
-                  options={mapToOptions(teachers?.data)}
+                  options={mapToOptions(data?.data)}
                   className="!h-10 !bg-transparent *:!rounded-lg "
                   onChange={() => setIsBtnDisabled(false)}
                   disabled={selectedRowKeys.length <= 0}

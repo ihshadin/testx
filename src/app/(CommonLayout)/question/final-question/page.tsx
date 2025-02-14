@@ -3,10 +3,12 @@ import React, { useState } from "react";
 import { getHoldQuestionsColumns } from "@/utils/AntdTableColumn/TableColumns";
 import { Table } from "antd";
 import { useGetAllQuestionQuery } from "@/redux/features/question/questionApi";
+import CustomPagination from "@/utils/Pagination";
 
 const FinalQuestionsPage = () => {
   const [params, setParams] = useState<any>([
     { name: "status", value: "completed" },
+    { name: "limit", value: 3 },
   ]);
 
   const { data: questions, isLoading: isQuesLoading } =
@@ -24,6 +26,11 @@ const FinalQuestionsPage = () => {
           scroll={{ x: 1500 }}
           pagination={false}
         />
+        {questions?.meta?.totalPage > 1 && (
+          <div className="mt-8 lg:mt-12">
+            <CustomPagination meta={questions?.meta} setParams={setParams} />
+          </div>
+        )}
       </div>
     </section>
   );

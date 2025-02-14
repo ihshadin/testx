@@ -1,6 +1,6 @@
 "use client";
-import { useEffect, useState } from "react";
-import { Col, Form, Popconfirm, Row, Select, Table } from "antd";
+import { useState } from "react";
+import { Popconfirm, Select, Table } from "antd";
 import { toast } from "sonner";
 import { getTeaQuesColumns } from "@/utils/AntdTableColumn/TableColumns";
 import { TableRowSelection } from "antd/es/table/interface";
@@ -10,6 +10,7 @@ import { useGetQuestionsQuery } from "@/redux/features/question/coordinator";
 import { useUpdateQuestionsMutation } from "@/redux/features/question/questionApi";
 import { TUser } from "@/types/user.type";
 import { useGetTeachersQuery } from "@/redux/features/user/coordinator";
+import CustomPagination from "@/utils/Pagination";
 
 const SubQuestions = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
@@ -167,6 +168,11 @@ const SubQuestions = () => {
         scroll={{ x: 1500 }}
         pagination={false}
       />
+      {questions?.meta?.totalPage > 1 && (
+        <div className="mt-8 lg:mt-12">
+          <CustomPagination meta={questions?.meta} setParams={setParams} />
+        </div>
+      )}
     </>
   );
 };

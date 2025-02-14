@@ -2,11 +2,13 @@
 import React, { useEffect, useState } from "react";
 import { useGetAllQuestionQuery } from "@/redux/features/question/questionApi";
 import CompletedQuestions from "@/components/Questions/CompletedQuestions";
+import CustomPagination from "@/utils/Pagination";
 
 const CompletedQuestionsPage = () => {
   const [searchText, setSearchText] = useState("");
   const [params, setParams] = useState<any>([
     { name: "status", value: "approved" },
+    { name: "limit", value: 3 },
   ]);
   const { data: questions, isLoading: isQuesLoading } =
     useGetAllQuestionQuery(params);
@@ -37,6 +39,11 @@ const CompletedQuestionsPage = () => {
             isQuesLoading={isQuesLoading}
             setSearchText={setSearchText}
           />
+          {questions?.meta?.totalPage > 1 && (
+            <div className="mt-8 lg:mt-12">
+              <CustomPagination meta={questions?.meta} setParams={setParams} />
+            </div>
+          )}
         </div>
       </div>
     </section>

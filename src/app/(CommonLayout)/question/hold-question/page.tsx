@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { useGetAllQuestionQuery } from "@/redux/features/question/questionApi";
 import HoldQuestions from "@/components/Questions/HoldQuestions";
+import CustomPagination from "@/utils/Pagination";
 
 const HoldQuestionPage = () => {
   const [params, setParams] = useState<any>([
@@ -19,6 +20,11 @@ const HoldQuestionPage = () => {
             questions={questions?.data}
             isQuesLoading={isQuesLoading}
           />
+          {questions?.meta?.totalPage > 1 && (
+            <div className="mt-8 lg:mt-12">
+              <CustomPagination meta={questions?.meta} setParams={setParams} />
+            </div>
+          )}
         </div>
       </div>
     </section>

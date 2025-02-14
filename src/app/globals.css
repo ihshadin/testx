@@ -5,3 +5,6 @@
 .w-md-editor-text-input * {
   font-family: "Archivo", sans-serif !important;
 }
+.ant-pagination * {
+  font-family: inherit !important;
+}

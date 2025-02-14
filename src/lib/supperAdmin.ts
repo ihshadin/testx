@@ -9,6 +9,8 @@ let superUser = {
   email: "superAdmin@gmail.com",
   role: USER_ROLE.superAdmin,
   contact_no: "123456789",
+  course: "678bcaf276c8314db2b7dffc",
+  subject: "678bcaf276c8314db2b7dffc",
 };
 
 const seedSuperAdmin = async () => {
