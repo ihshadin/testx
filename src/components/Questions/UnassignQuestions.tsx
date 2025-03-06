@@ -4,7 +4,6 @@ import { Col, Form, Row, Select, Table } from "antd";
 import { toast } from "sonner";
 import { getUnassignColumns } from "@/utils/AntdTableColumn/TableColumns";
 import { TableRowSelection } from "antd/es/table/interface";
-import { TQuestion } from "@/types/question.type";
 import onsubmitErrorHandler from "@/utils/errors/onsubmitErrorHandler";
 import {
   useDeleteQuestionMutation,
@@ -12,14 +11,12 @@ import {
 } from "@/redux/features/question/questionApi";
 import { useGetAllUserQuery } from "@/redux/features/user/userApi";
 import { TUser } from "@/types/user.type";
-import CustomPagination from "@/utils/Pagination";
+import { TUnassignQuestions } from "@/types/question.type";
 
-type TQuestions = {
-  questions: TQuestion[];
-  isQuesLoading: boolean;
-};
-
-const UnassignQuestions = ({ questions, isQuesLoading }: TQuestions) => {
+const UnassignQuestions = ({
+  questions,
+  isQuesLoading,
+}: TUnassignQuestions) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [isBtnDisabled, setIsBtnDisabled] = useState(true);
   const [form] = Form.useForm();
@@ -53,6 +50,7 @@ const UnassignQuestions = ({ questions, isQuesLoading }: TQuestions) => {
 
   const columns = getUnassignColumns({
     handleDelete,
+    meta: questions?.meta,
   });
 
   const handleAssignTeacher = async (data: any) => {
@@ -128,7 +126,7 @@ const UnassignQuestions = ({ questions, isQuesLoading }: TQuestions) => {
         loading={isQuesLoading}
         rowSelection={rowSelection}
         columns={columns}
-        dataSource={questions}
+        dataSource={questions?.data}
         scroll={{ x: 1500 }}
         pagination={false}
       />

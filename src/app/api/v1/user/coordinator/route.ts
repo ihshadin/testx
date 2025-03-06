@@ -51,8 +51,8 @@ export async function GET(req: NextRequest) {
       .paginate()
       .fields();
 
-    const data = await teachersQuery.modelQuery;
     const meta = await teachersQuery.countTotal();
+    const data = await teachersQuery.modelQuery;
 
     return sendApiResponse(NextResponse, {
       statusCode: 200,

@@ -51,6 +51,7 @@ const AssignQuestions = ({
 
   const columns = getAssignColumns({
     handleDelete,
+    meta: questions?.meta,
   });
 
   const handleReassignTeacher = async () => {
@@ -135,7 +136,7 @@ const AssignQuestions = ({
         loading={isQuesLoading}
         rowSelection={rowSelection}
         columns={columns}
-        dataSource={questions}
+        dataSource={questions?.data}
         scroll={{ x: 1500 }}
         pagination={false}
       />

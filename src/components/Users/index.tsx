@@ -70,6 +70,7 @@ const AllUsersList = () => {
   const columns = getUsersColumns({
     handleUpdateStatus,
     handleDelete,
+    meta: data?.meta,
   });
 
   return (

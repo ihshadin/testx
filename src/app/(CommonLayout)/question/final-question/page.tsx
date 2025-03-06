@@ -13,7 +13,7 @@ const FinalQuestionsPage = () => {
 
   const { data: questions, isLoading: isQuesLoading } =
     useGetAllQuestionQuery(params);
-  const columns = getHoldQuestionsColumns({});
+  const columns = getHoldQuestionsColumns({ meta: questions?.meta });
   return (
     <section>
       <div className="max-w-7xl mx-auto py-8 px-2">

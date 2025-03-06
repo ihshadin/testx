@@ -30,6 +30,7 @@ export const statusItems: MenuProps["items"] = [
 
 export const getUsersColumns = ({
   handleUpdateStatus,
+  meta,
 }: any): TableColumnsType<any> => {
   return [
     {
@@ -37,7 +38,8 @@ export const getUsersColumns = ({
       key: "sl",
       width: 50,
       align: "center",
-      render: (_, __: any, index: number) => <p>{index + 1}</p>,
+      render: (_: any, __: any, index: number) =>
+        (meta.page - 1) * meta.limit + index + 1,
     },
     {
       title: "User Full Name",
@@ -175,13 +177,15 @@ export const getUsersColumns = ({
 
 export const getUnassignColumns = ({
   handleDelete,
+  meta,
 }: any): TableColumnsType<any> => {
   return [
     {
       title: "SL",
       width: 50,
       align: "center",
-      render: (_, __: any, index: number) => <p>{index + 1}</p>,
+      render: (_: any, __: any, index: number) =>
+        (meta.page - 1) * meta.limit + index + 1,
     },
     {
       title: "Question Name",
@@ -258,13 +262,15 @@ export const getUnassignColumns = ({
 
 export const getAssignColumns = ({
   handleDelete,
+  meta,
 }: any): TableColumnsType<any> => {
   return [
     {
       title: "SL",
       width: 50,
       align: "center",
-      render: (_, __: any, index: number) => <p>{index + 1}</p>,
+      render: (_: any, __: any, index: number) =>
+        (meta.page - 1) * meta.limit + index + 1,
     },
     {
       title: "Teacher",
@@ -321,13 +327,15 @@ export const getAssignColumns = ({
 
 export const getComQuesColumns = ({
   handleAction,
+  meta,
 }: any): TableColumnsType<any> => {
   return [
     {
       title: "SL",
       width: 50,
       align: "center",
-      render: (_, __: any, index: number) => <p>{index + 1}</p>,
+      render: (_: any, __: any, index: number) =>
+        (meta.page - 1) * meta.limit + index + 1,
     },
     {
       title: "Teacher",
@@ -404,13 +412,15 @@ export const getComQuesColumns = ({
 
 export const getTeachersColumns = ({
   handleAction,
+  meta,
 }: any): TableColumnsType<any> => {
   return [
     {
       title: "SL",
       width: 50,
       align: "center",
-      render: (_, __: any, index: number) => <p>{index + 1}</p>,
+      render: (_: any, __: any, index: number) =>
+        (meta.page - 1) * meta.limit + index + 1,
     },
     {
       title: "Teacher Full Name",
@@ -454,13 +464,14 @@ export const getTeachersColumns = ({
   ];
 };
 
-export const getTeaQuesColumns = ({}: any): TableColumnsType<any> => {
+export const getTeaQuesColumns = ({ meta }: any): TableColumnsType<any> => {
   return [
     {
       title: "SL",
       width: 50,
       align: "center",
-      render: (_, __: any, index: number) => <p>{index + 1}</p>,
+      render: (_: any, __: any, index: number) =>
+        (meta.page - 1) * meta.limit + index + 1,
     },
     {
       title: "Question Name",
@@ -537,14 +548,15 @@ export const getTeaQuesColumns = ({}: any): TableColumnsType<any> => {
 };
 
 export const getHoldQuestionsColumns = ({
-  handleDelete,
+  meta,
 }: any): TableColumnsType<any> => {
   return [
     {
       title: "SL",
       width: 50,
       align: "center",
-      render: (_, __: any, index: number) => <p>{index + 1}</p>,
+      render: (_: any, __: any, index: number) =>
+        (meta.page - 1) * meta.limit + index + 1,
     },
     {
       title: "Teacher",

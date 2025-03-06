@@ -3,7 +3,7 @@ export type TQueryParam = {
   value: boolean | React.Key;
 };
 
-export type IMeta = {
+export type TMeta = {
   page: number;
   limit: number;
   total: number;
@@ -11,6 +11,6 @@ export type IMeta = {
 };
 
 export type TPagination = {
-  meta: IMeta;
+  meta: TMeta;
   setParams: any;
 };

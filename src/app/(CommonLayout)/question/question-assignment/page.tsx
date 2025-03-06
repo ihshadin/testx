@@ -28,7 +28,7 @@ const QuestionAssignmentPage = () => {
         <div className="flex flex-col gap-5">
           <FilterByCourse handleFilter={handleFilter} />
           <UnassignQuestions
-            questions={questions?.data}
+            questions={questions}
             isQuesLoading={isQuesLoading}
           />
           {questions?.meta?.totalPage > 1 && (

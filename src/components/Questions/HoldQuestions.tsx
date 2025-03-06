@@ -2,17 +2,11 @@
 import { useState } from "react";
 import { Col, Form, Row, Select, Table } from "antd";
 import { toast } from "sonner";
-import {
-  getHoldQuestionsColumns,
-  getUnassignColumns,
-} from "@/utils/AntdTableColumn/TableColumns";
+import { getHoldQuestionsColumns } from "@/utils/AntdTableColumn/TableColumns";
 import { TableRowSelection } from "antd/es/table/interface";
 import { TQuestion } from "@/types/question.type";
 import onsubmitErrorHandler from "@/utils/errors/onsubmitErrorHandler";
-import {
-  useDeleteQuestionMutation,
-  useUpdateQuestionsMutation,
-} from "@/redux/features/question/questionApi";
+import { useUpdateQuestionsMutation } from "@/redux/features/question/questionApi";
 import { useGetAllUserQuery } from "@/redux/features/user/userApi";
 import { TUser } from "@/types/user.type";
 
@@ -40,7 +34,7 @@ const HoldQuestions = ({ questions, isQuesLoading }: TQuestions) => {
     },
   };
 
-  const columns = getHoldQuestionsColumns({});
+  const columns = getHoldQuestionsColumns({ meta: teachers?.meta });
 
   const handleAssignTeacher = async (data: any) => {
     const toastId = toast.loading("Assigning teacher...");

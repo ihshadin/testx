@@ -24,7 +24,7 @@ const CoordinatorQuestionReassignment = () => {
       <div className="max-w-7xl mx-auto py-8 px-2">
         <div className="">
           <CoordinatorReassigned
-            questions={questions?.data}
+            questions={questions}
             isQuesLoading={isQuesLoading}
             handleTeacherSearch={handleTeacherSearch}
             setSearchTeacher={setSearchTeacher}

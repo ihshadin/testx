@@ -49,7 +49,7 @@ const CoordinatorAssignment = () => {
     },
   };
 
-  const columns = getTeachersColumns({});
+  const columns = getTeachersColumns({ meta: data?.meta });
 
   const handleCoordinator = async () => {
     const toastId = toast.loading("Updating Coordinator...");

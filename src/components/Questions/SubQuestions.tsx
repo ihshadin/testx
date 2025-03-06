@@ -85,7 +85,7 @@ const SubQuestions = () => {
     }
   };
 
-  const columns = getTeaQuesColumns({});
+  const columns = getTeaQuesColumns({ meta: questions?.meta });
 
   const mapToOptions = (data: TUser[]) =>
     data?.map(({ _id, first_name, last_name }) => ({

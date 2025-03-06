@@ -30,7 +30,8 @@ const TeacherDashboard = () => {
     },
   };
 
-  const columns = getTeaQuesColumns({});
+  const columns = getTeaQuesColumns({ meta: questions?.meta });
+  console.log(questions?.meta);
 
   return (
     <>

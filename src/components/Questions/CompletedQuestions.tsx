@@ -47,6 +47,7 @@ const CompletedQuestions = ({
 
   const columns = getComQuesColumns({
     handleAction,
+    meta: questions?.meta,
   });
 
   return (
