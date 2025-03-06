@@ -17,6 +17,7 @@ import { useSelectCurrentUser } from "@/redux/features/auth/authSlice";
 import LoadingComponent from "@/utils/Loading";
 import ImageUploadSection from "@/components/Questions/ImageUpload";
 import ActionButtons from "@/components/Questions/ActionButtons";
+import FeedbackContainer from "@/components/Questions/Feedback";
 
 const QuestionDetails = () => {
   const { id } = useParams();
@@ -223,6 +224,7 @@ const QuestionDetails = () => {
               </button>
             </div>
           )}
+          <FeedbackContainer question={question} />
           {isHold || (
             <>
               <div className="mt-10">

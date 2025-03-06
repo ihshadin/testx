@@ -474,7 +474,7 @@ export const getTeaQuesColumns = ({ meta }: any): TableColumnsType<any> => {
         (meta.page - 1) * meta.limit + index + 1,
     },
     {
-      title: "Question Name",
+      title: "Teacher Name",
       key: "title",
       width: 180,
       render: (_, item: any) => (

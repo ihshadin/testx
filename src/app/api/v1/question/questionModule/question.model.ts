@@ -1,3 +1,4 @@
+import { TFeedback } from "@/types/question.type";
 import { TQuestion } from "@/types/question.type";
 import { model, models, Schema } from "mongoose";
 import { QUESTION_STATUS } from "./question.constant";
@@ -58,6 +59,14 @@ const QuestionSchema: Schema = new Schema<TQuestion>(
       enum: Object.values(QUESTION_STATUS),
       default: "unassigned",
     },
+    feedbacks: [
+      {
+        f_name: { type: String, required: true },
+        f_role: { type: String, required: true },
+        f_date: { type: String, required: true },
+        f_text: { type: String, required: true },
+      },
+    ],
   },
   {
     timestamps: true,

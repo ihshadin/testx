@@ -63,6 +63,17 @@ const questionApi = baseApi.injectEndpoints({
       invalidatesTags: ["question"],
     }),
 
+    updateQuestionFeedback: builder.mutation({
+      query: (args) => {
+        return {
+          url: `/question/${args?.id}/feedback`,
+          method: "PATCH",
+          body: args?.data,
+        };
+      },
+      invalidatesTags: ["question"],
+    }),
+
     updateQuestions: builder.mutation({
       query: (args) => {
         return {
@@ -83,5 +94,6 @@ export const {
   useAddQuestionMutation,
   useDeleteQuestionMutation,
   useUpdateQuestionMutation,
+  useUpdateQuestionFeedbackMutation,
   useUpdateQuestionsMutation,
 } = questionApi;

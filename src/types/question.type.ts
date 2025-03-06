@@ -3,6 +3,13 @@ import { Types } from "mongoose";
 import { Dispatch } from "react";
 import { TMeta } from "./global.type";
 
+export type TFeedback = {
+  f_name: string;
+  f_role: string;
+  f_date: string;
+  f_text: string;
+};
+
 export type TQuestion = {
   _id?: string; // PK
   title: string;
@@ -18,6 +25,7 @@ export type TQuestion = {
   comment?: string;
   images?: string[];
   status: keyof typeof QUESTION_STATUS;
+  feedbacks?: TFeedback[];
 };
 
 export type QuestionResponse = {

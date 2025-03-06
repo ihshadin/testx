@@ -15,6 +15,18 @@ export const createQuestionValidationSchema = z.object({
   comment: z.string().trim().optional(),
   images: z.array(z.string().url()).optional(),
   status: z.nativeEnum(QUESTION_STATUS).optional(),
+  feedbacks: z
+    .array(
+      z
+        .object({
+          f_name: z.string().min(1, "Feedback name is required"),
+          f_role: z.string().min(1, "Feedback role is required"),
+          f_date: z.string().min(1, "Feedback date is required"),
+          f_text: z.string().min(1, "Feedback text is required"),
+        })
+        .optional()
+    )
+    .optional(),
 });
 
 export const updateQuestionValidationSchema = z.object({
@@ -26,4 +38,16 @@ export const updateQuestionValidationSchema = z.object({
   comment: z.string().trim().optional(),
   images: z.array(z.string().url()).optional(),
   status: z.nativeEnum(QUESTION_STATUS).optional(),
+  feedbacks: z
+    .array(
+      z
+        .object({
+          f_name: z.string().min(1, "Feedback name is required"),
+          f_role: z.string().min(1, "Feedback role is required"),
+          f_date: z.string().min(1, "Feedback date is required"),
+          f_text: z.string().min(1, "Feedback text is required"),
+        })
+        .optional()
+    )
+    .optional(),
 });

@@ -78,7 +78,7 @@ const ActionButtons = ({ id, question, refetch }: any) => {
   const teacherEmail = question?.teacher?.email;
   const ownerEmail = question?.owner?.email;
   const loggedInEmail = user?.email;
-  console.log(teacherEmail === loggedInEmail && ownerEmail === loggedInEmail);
+
   return (
     <>
       <div className="mt-10 text-center">
