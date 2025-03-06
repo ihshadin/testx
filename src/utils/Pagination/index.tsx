@@ -12,15 +12,15 @@ export const itemRender: PaginationProps["itemRender"] = (
 ) => {
   if (type === "prev") {
     return (
-      <a className="flex items-center gap-1">
-        <FiChevronLeft className="text-lg" /> Prev
+      <a className="flex items-center gap-0.5">
+        <FiChevronLeft className="text-base" /> Prev
       </a>
     );
   }
   if (type === "next") {
     return (
-      <a className="flex items-center gap-1">
-        Next <FiChevronRight className="text-lg" />
+      <a className="flex items-center gap-0.5">
+        Next <FiChevronRight className="text-base" />
       </a>
     );
   }

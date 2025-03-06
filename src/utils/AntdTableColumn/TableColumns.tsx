@@ -454,11 +454,7 @@ export const getTeachersColumns = ({
   ];
 };
 
-export const getTeaQuesColumns = ({
-  handleUpdateStatus,
-  handleViewDetails,
-  handleDelete,
-}: any): TableColumnsType<any> => {
+export const getTeaQuesColumns = ({}: any): TableColumnsType<any> => {
   return [
     {
       title: "SL",

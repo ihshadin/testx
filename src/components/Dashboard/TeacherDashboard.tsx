@@ -3,12 +3,11 @@ import { useState } from "react";
 import { Table } from "antd";
 import { getTeaQuesColumns } from "@/utils/AntdTableColumn/TableColumns";
 import { TableRowSelection } from "antd/es/table/interface";
-import { useGetUserQuery } from "@/redux/features/user/userApi";
 import FilterByCourse from "../Questions/FilterByCourse";
 import { useGetTeacherQuestionsQuery } from "@/redux/features/question/teacher";
+import CustomPagination from "@/utils/Pagination";
 
 const TeacherDashboard = () => {
-  const { data: user } = useGetUserQuery(undefined);
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [params, setParams] = useState<any>([]);
 
@@ -47,6 +46,11 @@ const TeacherDashboard = () => {
         scroll={{ x: 1500 }}
         pagination={false}
       />
+      {questions?.meta?.totalPage > 1 && (
+        <div className="mt-8 lg:mt-12">
+          <CustomPagination meta={questions?.meta} setParams={setParams} />
+        </div>
+      )}
     </>
   );
 };
