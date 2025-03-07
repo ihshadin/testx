@@ -67,6 +67,10 @@ const QuestionSchema: Schema = new Schema<TQuestion>(
         f_text: { type: String, required: true },
       },
     ],
+    qId: {
+      type: Number,
+      required: true,
+    },
   },
   {
     timestamps: true,

@@ -16,6 +16,7 @@ import { TUnassignQuestions } from "@/types/question.type";
 const UnassignQuestions = ({
   questions,
   isQuesLoading,
+  getColumnSearchProps,
 }: TUnassignQuestions) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [isBtnDisabled, setIsBtnDisabled] = useState(true);
@@ -51,6 +52,7 @@ const UnassignQuestions = ({
   const columns = getUnassignColumns({
     handleDelete,
     meta: questions?.meta,
+    getColumnSearchProps,
   });
 
   const handleAssignTeacher = async (data: any) => {

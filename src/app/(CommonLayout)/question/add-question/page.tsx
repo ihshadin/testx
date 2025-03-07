@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { Col, Form, Input, Radio, Row, Select } from "antd";
+import { Col, Form, Input, InputNumber, Radio, Row, Select } from "antd";
 import { TQuestion } from "@/types/question.type";
 import { useAddQuestionMutation } from "@/redux/features/question/questionApi";
 import { toast } from "sonner";
@@ -76,7 +76,23 @@ const AddQuestion = () => {
             layout="vertical"
           >
             <Row gutter={20}>
-              <Col span={19}>
+              <Col span={2}>
+                <Form.Item
+                  label="Q. ID"
+                  name="qId"
+                  rules={[{ required: true, message: "Required" }]}
+                >
+                  <InputNumber
+                    type="number"
+                    placeholder="1234"
+                    className="h-10 border border-[#C4CAD4] !rounded-lg"
+                    prefix="Q"
+                    max={9999}
+                  />
+                </Form.Item>
+              </Col>
+
+              <Col span={17}>
                 <Form.Item
                   label="Question Title"
                   name="title"

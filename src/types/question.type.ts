@@ -26,6 +26,7 @@ export type TQuestion = {
   images?: string[];
   status: keyof typeof QUESTION_STATUS;
   feedbacks?: TFeedback[];
+  qId: number;
 };
 
 export type QuestionResponse = {
@@ -45,4 +46,5 @@ export type TQuestions = {
 export type TUnassignQuestions = {
   questions: QuestionResponse;
   isQuesLoading: boolean;
+  getColumnSearchProps: any;
 };

@@ -178,6 +178,7 @@ export const getUsersColumns = ({
 export const getUnassignColumns = ({
   handleDelete,
   meta,
+  getColumnSearchProps,
 }: any): TableColumnsType<any> => {
   return [
     {
@@ -186,6 +187,17 @@ export const getUnassignColumns = ({
       align: "center",
       render: (_: any, __: any, index: number) =>
         (meta.page - 1) * meta.limit + index + 1,
+    },
+    {
+      title: "Q. ID",
+      dataIndex: "qId",
+      key: "qId",
+      width: 100,
+      sorter: (a: TQuestion, b: TQuestion) => Number(a.qId) - Number(b.qId),
+      ...getColumnSearchProps(),
+      render: (_, item: TQuestion) => (
+        <p className="line-clamp-2">Q{item?.qId}</p>
+      ),
     },
     {
       title: "Question Name",

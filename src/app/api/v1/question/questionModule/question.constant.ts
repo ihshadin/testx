@@ -8,4 +8,4 @@ export const QUESTION_STATUS = {
   completed: "completed",
 } as const;
 
-export const questionSearchableFields = ["title", "desc"];
+export const questionSearchableFields = ["title", "desc", "qId"];

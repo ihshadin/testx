@@ -27,6 +27,7 @@ export const createQuestionValidationSchema = z.object({
         .optional()
     )
     .optional(),
+  qId: z.number().min(1, "Question ID is required"),
 });
 
 export const updateQuestionValidationSchema = z.object({
