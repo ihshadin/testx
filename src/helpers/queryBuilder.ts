@@ -29,23 +29,21 @@ class QueryBuilder<T> {
     const searchTerm = this?.query?.searchTerm?.toString();
     if (searchTerm) {
       this.modelQuery = this?.modelQuery?.find({
-        $or: [
-          ...searchableFields.map((field) => {
-            // Use $regex for string fields and flexible matching for qId
-            if (field === "qId") {
-              return {
-                $or: [
-                  { [field]: searchTerm }, // If searchTerm is treated as a string
-                  { [field]: Number(searchTerm) }, // If searchTerm can be a number
-                ],
-              };
-            }
-
-            return {
-              [field]: { $regex: searchTerm, $options: "i" },
-            };
-          }),
-        ],
+        $or: searchableFields.map((field) => {
+          // Convert numeric fields to string for comparison
+          return {
+            $expr: {
+              $regexMatch: {
+                input: { $toString: `$${field}` }, // Convert qId to string
+                regex: searchTerm,
+                options: "i", // Case-insensitive match
+              },
+            },
+          };
+          return {
+            [field]: { $regex: searchTerm, $options: "i" }, // Perform regex match on other fields
+          };
+        }),
       });
     }
 

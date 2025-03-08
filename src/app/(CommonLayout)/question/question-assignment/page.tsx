@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import UnassignQuestions from "@/components/Questions/UnassignQuestions";
 import { useGetAllQuestionQuery } from "@/redux/features/question/questionApi";
 import FilterByCourse from "@/components/Questions/FilterByCourse";
@@ -9,10 +9,10 @@ import { FiSearch } from "react-icons/fi";
 import Highlighter from "react-highlight-words";
 
 const QuestionAssignmentPage = () => {
+  const [searchText, setSearchText] = useState("");
   const [params, setParams] = useState<any>([
     { name: "status", value: "unassigned" },
   ]);
-  const [searchText, setSearchText] = useState("");
 
   const { data: questions, isLoading: isQuesLoading } =
     useGetAllQuestionQuery(params);
@@ -35,7 +35,7 @@ const QuestionAssignmentPage = () => {
 
   const getColumnSearchProps = (): TableColumnType => ({
     filterDropdown: ({ close }) => (
-      <div className="p-2 flex flex-col w-[195px]">
+      <div className="p-2 flex flex-col w-[165px]">
         <Input
           placeholder={`Search by ID`}
           value={searchText}
@@ -48,21 +48,18 @@ const QuestionAssignmentPage = () => {
             type="primary"
             onClick={() => handleSearch()}
             size="small"
-            // style={{ width: 90 }}
+            style={{ width: 70 }}
           >
             Search
           </Button>
-          <Button onClick={() => setSearchText("")} size="small">
-            Reset
-          </Button>
           <Button
-            // type="link"
-            size="small"
             onClick={() => {
               close();
             }}
+            size="small"
+            style={{ width: 70 }}
           >
-            close
+            Close
           </Button>
         </Space>
       </div>
