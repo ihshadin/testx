@@ -11,6 +11,7 @@ import { FiSearch } from "react-icons/fi";
 
 const TeacherDashboard = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+  const [sortOrder, setSortOrder] = useState<string>("");
   const [searchText, setSearchText] = useState("");
   const [params, setParams] = useState<any>([]);
 
@@ -87,6 +88,20 @@ const TeacherDashboard = () => {
       ),
   });
 
+  const handleSortOrder = () => {
+    const nextSortOrder =
+      sortOrder === "" ? "qId" : sortOrder === "qId" ? "-qId" : "";
+    setSortOrder(nextSortOrder);
+
+    const updatedParams = params.filter((param: any) => param.name !== "sort");
+
+    if (nextSortOrder) {
+      updatedParams.push({ name: "sort", value: nextSortOrder });
+    }
+
+    setParams(updatedParams);
+  };
+
   const columns = getTeaQuesColumns({
     meta: questions?.meta,
     getColumnSearchProps,
@@ -105,6 +120,7 @@ const TeacherDashboard = () => {
         dataSource={questions?.data}
         scroll={{ x: 1500 }}
         pagination={false}
+        onChange={handleSortOrder}
       />
       {questions?.meta?.totalPage > 1 && (
         <div className="mt-8 lg:mt-12">

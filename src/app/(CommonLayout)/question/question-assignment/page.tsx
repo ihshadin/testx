@@ -9,6 +9,7 @@ import { FiSearch } from "react-icons/fi";
 import Highlighter from "react-highlight-words";
 
 const QuestionAssignmentPage = () => {
+  const [sortOrder, setSortOrder] = useState<string>("");
   const [searchText, setSearchText] = useState("");
   const [params, setParams] = useState<any>([
     { name: "status", value: "unassigned" },
@@ -80,6 +81,20 @@ const QuestionAssignmentPage = () => {
       ),
   });
 
+  const handleSortOrder = () => {
+    const nextSortOrder =
+      sortOrder === "" ? "qId" : sortOrder === "qId" ? "-qId" : "";
+    setSortOrder(nextSortOrder);
+
+    const updatedParams = params.filter((param: any) => param.name !== "sort");
+
+    if (nextSortOrder) {
+      updatedParams.push({ name: "sort", value: nextSortOrder });
+    }
+
+    setParams(updatedParams);
+  };
+
   return (
     <section>
       <div className="max-w-7xl mx-auto py-8 px-2">
@@ -89,6 +104,7 @@ const QuestionAssignmentPage = () => {
             questions={questions}
             isQuesLoading={isQuesLoading}
             getColumnSearchProps={getColumnSearchProps}
+            handleSortOrder={handleSortOrder}
           />
           {questions?.meta?.totalPage > 1 && (
             <div className="mt-8 lg:mt-12">

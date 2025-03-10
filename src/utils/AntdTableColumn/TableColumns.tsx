@@ -193,7 +193,7 @@ export const getUnassignColumns = ({
       dataIndex: "qId",
       key: "qId",
       width: 100,
-      sorter: (a: TQuestion, b: TQuestion) => Number(a.qId) - Number(b.qId),
+      sorter: true,
       ...getColumnSearchProps(),
       render: (_, item: TQuestion) => (
         <p className="line-clamp-2">Q{item?.qId}</p>
@@ -303,7 +303,7 @@ export const getAssignColumns = ({
       dataIndex: "qId",
       key: "qId",
       width: 100,
-      sorter: (a: TQuestion, b: TQuestion) => Number(a.qId) - Number(b.qId),
+      sorter: true,
       ...getColumnSearchProps(),
       render: (_, item: TQuestion) => (
         <p className="line-clamp-2">Q{item?.qId}</p>
@@ -531,7 +531,7 @@ export const getTeaQuesColumns = ({
       dataIndex: "qId",
       key: "qId",
       width: 100,
-      sorter: (a: TQuestion, b: TQuestion) => Number(a.qId) - Number(b.qId),
+      sorter: true,
       ...getColumnSearchProps(),
       render: (_, item: TQuestion) => (
         <p className="line-clamp-2">Q{item?.qId}</p>

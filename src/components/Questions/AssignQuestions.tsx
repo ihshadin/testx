@@ -19,6 +19,7 @@ const AssignQuestions = ({
   handleTeacherSearch,
   setSearchTeacher,
   getColumnSearchProps,
+  handleSortOrder,
 }: TQuestions) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [reassignTeacher, setReassignTeacher] = useState("");
@@ -141,6 +142,7 @@ const AssignQuestions = ({
         dataSource={questions?.data}
         scroll={{ x: 1500 }}
         pagination={false}
+        onChange={handleSortOrder}
       />
     </>
   );

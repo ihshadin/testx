@@ -17,6 +17,7 @@ const UnassignQuestions = ({
   questions,
   isQuesLoading,
   getColumnSearchProps,
+  handleSortOrder,
 }: TUnassignQuestions) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [isBtnDisabled, setIsBtnDisabled] = useState(true);
@@ -131,6 +132,7 @@ const UnassignQuestions = ({
         dataSource={questions?.data}
         scroll={{ x: 1500 }}
         pagination={false}
+        onChange={handleSortOrder}
       />
     </>
   );

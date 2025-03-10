@@ -27,6 +27,7 @@ const SubQuestions = () => {
   const [reassignTeacher, setReassignTeacher] = useState("");
   const [isBtnDisabled, setIsBtnDisabled] = useState(true);
   const [searchText, setSearchText] = useState("");
+  const [sortOrder, setSortOrder] = useState<string>("");
 
   const [params, setParams] = useState<any>([
     { name: "status", value: "verified" },
@@ -150,6 +151,20 @@ const SubQuestions = () => {
       ),
   });
 
+  const handleSortOrder = () => {
+    const nextSortOrder =
+      sortOrder === "" ? "qId" : sortOrder === "qId" ? "-qId" : "";
+    setSortOrder(nextSortOrder);
+
+    const updatedParams = params.filter((param: any) => param.name !== "sort");
+
+    if (nextSortOrder) {
+      updatedParams.push({ name: "sort", value: nextSortOrder });
+    }
+
+    setParams(updatedParams);
+  };
+
   const columns = getTeaQuesColumns({
     meta: questions?.meta,
     getColumnSearchProps,
@@ -235,6 +250,7 @@ const SubQuestions = () => {
         dataSource={questions?.data}
         scroll={{ x: 1500 }}
         pagination={false}
+        onChange={handleSortOrder}
       />
       {questions?.meta?.totalPage > 1 && (
         <div className="mt-8 lg:mt-12">

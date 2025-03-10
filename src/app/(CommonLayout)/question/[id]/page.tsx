@@ -235,7 +235,10 @@ const QuestionDetails = () => {
                     checkedChildren="Yes"
                     unCheckedChildren="No"
                     defaultChecked={isNeedHelp}
-                    disabled={user?.email === ownerEmail ? false : true}
+                    disabled={
+                      !(user?.email === ownerEmail) ||
+                      question?.status === "reassigned"
+                    }
                   />
                 </div>
                 {isNeedHelp && (
@@ -252,7 +255,9 @@ const QuestionDetails = () => {
                       className="cursor-pointer disabled:cursor-not-allowed text-base font-medium bg-primary/5 hover:bg-primary disabled:bg-primary/5 text-primary hover:text-white disabled:text-primary/50 border border-primary/30 hover:border-primary/60 disabled:border-primary//30 px-4 py-1.5 h-10 rounded-lg transition duration-150"
                       type="submit"
                       onClick={() => handleReassignTeacher()}
-                      disabled={!isNeedHelp}
+                      disabled={
+                        !isNeedHelp || question?.status === "reassigned"
+                      }
                     >
                       Reassign Teacher
                     </button>
