@@ -1,6 +1,14 @@
 "use client";
 import { useState } from "react";
-import { Popconfirm, Select, Table } from "antd";
+import {
+  Button,
+  Input,
+  Popconfirm,
+  Select,
+  Space,
+  Table,
+  TableColumnType,
+} from "antd";
 import { toast } from "sonner";
 import { getTeaQuesColumns } from "@/utils/AntdTableColumn/TableColumns";
 import { TableRowSelection } from "antd/es/table/interface";
@@ -11,11 +19,14 @@ import { useUpdateQuestionsMutation } from "@/redux/features/question/questionAp
 import { TUser } from "@/types/user.type";
 import { useGetTeachersQuery } from "@/redux/features/user/coordinator";
 import CustomPagination from "@/utils/Pagination";
+import Highlighter from "react-highlight-words";
+import { FiSearch } from "react-icons/fi";
 
 const SubQuestions = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [reassignTeacher, setReassignTeacher] = useState("");
   const [isBtnDisabled, setIsBtnDisabled] = useState(true);
+  const [searchText, setSearchText] = useState("");
 
   const [params, setParams] = useState<any>([
     { name: "status", value: "verified" },
@@ -85,7 +96,64 @@ const SubQuestions = () => {
     }
   };
 
-  const columns = getTeaQuesColumns({ meta: questions?.meta });
+  const handleSearch = () => {
+    setParams([
+      ...params.filter((param: any) => param?.name === "status"),
+      ...(searchText ? [{ name: "searchTerm", value: searchText }] : []),
+    ]);
+  };
+
+  const getColumnSearchProps = (): TableColumnType => ({
+    filterDropdown: ({ close }) => (
+      <div className="p-2 flex flex-col w-[165px]">
+        <Input
+          placeholder={`Search by ID`}
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+          prefix="Q"
+          style={{ marginBottom: 8, width: "100%" }}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() => handleSearch()}
+            size="small"
+            style={{ width: 70 }}
+          >
+            Search
+          </Button>
+          <Button
+            onClick={() => {
+              close();
+            }}
+            size="small"
+            style={{ width: 70 }}
+          >
+            Close
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered: boolean) => (
+      <FiSearch style={{ color: filtered ? "#1677ff" : undefined }} />
+    ),
+    render: (text) =>
+      searchText ? (
+        <Highlighter
+          highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
+          searchWords={[searchText]}
+          autoEscape
+          textToHighlight={text ? text.toString() : ""}
+        />
+      ) : (
+        text
+      ),
+  });
+
+  const columns = getTeaQuesColumns({
+    meta: questions?.meta,
+    getColumnSearchProps,
+  });
 
   const mapToOptions = (data: TUser[]) =>
     data?.map(({ _id, first_name, last_name }) => ({

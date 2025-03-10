@@ -248,6 +248,19 @@ export const getUnassignColumns = ({
       ),
     },
     {
+      title: "View",
+      align: "center",
+      fixed: "right",
+      width: 80,
+      render: (_, record) => (
+        <div className="flex justify-center gap-2">
+          <Button>
+            <Link href={`/question/${record._id}`}>View</Link>
+          </Button>
+        </div>
+      ),
+    },
+    {
       title: "Action",
       align: "center",
       fixed: "right",
@@ -275,6 +288,7 @@ export const getUnassignColumns = ({
 export const getAssignColumns = ({
   handleDelete,
   meta,
+  getColumnSearchProps,
 }: any): TableColumnsType<any> => {
   return [
     {
@@ -283,6 +297,17 @@ export const getAssignColumns = ({
       align: "center",
       render: (_: any, __: any, index: number) =>
         (meta.page - 1) * meta.limit + index + 1,
+    },
+    {
+      title: "Q. ID",
+      dataIndex: "qId",
+      key: "qId",
+      width: 100,
+      sorter: (a: TQuestion, b: TQuestion) => Number(a.qId) - Number(b.qId),
+      ...getColumnSearchProps(),
+      render: (_, item: TQuestion) => (
+        <p className="line-clamp-2">Q{item?.qId}</p>
+      ),
     },
     {
       title: "Teacher",
@@ -332,6 +357,19 @@ export const getAssignColumns = ({
       width: 120,
       render: (_, item: any) => (
         <p className="line-clamp-1 capitalize">{item?.status}</p>
+      ),
+    },
+    {
+      title: "Action",
+      align: "center",
+      fixed: "right",
+      width: 80,
+      render: (_, record) => (
+        <div className="flex justify-center gap-2">
+          <Button>
+            <Link href={`/question/${record._id}`}>View</Link>
+          </Button>
+        </div>
       ),
     },
   ];
@@ -476,7 +514,10 @@ export const getTeachersColumns = ({
   ];
 };
 
-export const getTeaQuesColumns = ({ meta }: any): TableColumnsType<any> => {
+export const getTeaQuesColumns = ({
+  meta,
+  getColumnSearchProps,
+}: any): TableColumnsType<any> => {
   return [
     {
       title: "SL",
@@ -484,6 +525,17 @@ export const getTeaQuesColumns = ({ meta }: any): TableColumnsType<any> => {
       align: "center",
       render: (_: any, __: any, index: number) =>
         (meta.page - 1) * meta.limit + index + 1,
+    },
+    {
+      title: "Q. ID",
+      dataIndex: "qId",
+      key: "qId",
+      width: 100,
+      sorter: (a: TQuestion, b: TQuestion) => Number(a.qId) - Number(b.qId),
+      ...getColumnSearchProps(),
+      render: (_, item: TQuestion) => (
+        <p className="line-clamp-2">Q{item?.qId}</p>
+      ),
     },
     {
       title: "Teacher Name",

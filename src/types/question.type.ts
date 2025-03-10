@@ -42,6 +42,7 @@ export type TQuestions = {
   isQuesLoading: boolean;
   handleTeacherSearch: any;
   setSearchTeacher: Dispatch<React.SetStateAction<string>>;
+  getColumnSearchProps: any;
 };
 export type TUnassignQuestions = {
   questions: QuestionResponse;

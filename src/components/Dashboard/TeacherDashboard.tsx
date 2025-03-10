@@ -1,14 +1,17 @@
 "use client";
 import { useState } from "react";
-import { Table } from "antd";
+import { Button, Input, Space, Table, TableColumnType } from "antd";
 import { getTeaQuesColumns } from "@/utils/AntdTableColumn/TableColumns";
 import { TableRowSelection } from "antd/es/table/interface";
 import FilterByCourse from "../Questions/FilterByCourse";
 import { useGetTeacherQuestionsQuery } from "@/redux/features/question/teacher";
 import CustomPagination from "@/utils/Pagination";
+import Highlighter from "react-highlight-words";
+import { FiSearch } from "react-icons/fi";
 
 const TeacherDashboard = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+  const [searchText, setSearchText] = useState("");
   const [params, setParams] = useState<any>([]);
 
   const { data: questions, isLoading: isQuesLoading } =
@@ -30,7 +33,64 @@ const TeacherDashboard = () => {
     },
   };
 
-  const columns = getTeaQuesColumns({ meta: questions?.meta });
+  const handleSearch = () => {
+    setParams([
+      ...params.filter((param: any) => param?.name === "status"),
+      ...(searchText ? [{ name: "searchTerm", value: searchText }] : []),
+    ]);
+  };
+
+  const getColumnSearchProps = (): TableColumnType => ({
+    filterDropdown: ({ close }) => (
+      <div className="p-2 flex flex-col w-[165px]">
+        <Input
+          placeholder={`Search by ID`}
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+          prefix="Q"
+          style={{ marginBottom: 8, width: "100%" }}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() => handleSearch()}
+            size="small"
+            style={{ width: 70 }}
+          >
+            Search
+          </Button>
+          <Button
+            onClick={() => {
+              close();
+            }}
+            size="small"
+            style={{ width: 70 }}
+          >
+            Close
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered: boolean) => (
+      <FiSearch style={{ color: filtered ? "#1677ff" : undefined }} />
+    ),
+    render: (text) =>
+      searchText ? (
+        <Highlighter
+          highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
+          searchWords={[searchText]}
+          autoEscape
+          textToHighlight={text ? text.toString() : ""}
+        />
+      ) : (
+        text
+      ),
+  });
+
+  const columns = getTeaQuesColumns({
+    meta: questions?.meta,
+    getColumnSearchProps,
+  });
 
   return (
     <>

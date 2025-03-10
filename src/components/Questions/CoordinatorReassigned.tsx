@@ -18,6 +18,7 @@ const CoordinatorReassigned = ({
   isQuesLoading,
   handleTeacherSearch,
   setSearchTeacher,
+  getColumnSearchProps,
 }: TQuestions) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [reassignTeacher, setReassignTeacher] = useState("");
@@ -52,6 +53,7 @@ const CoordinatorReassigned = ({
   const columns = getAssignColumns({
     handleDelete,
     meta: questions?.meta,
+    getColumnSearchProps,
   });
 
   const handleReassignTeacher = async () => {
